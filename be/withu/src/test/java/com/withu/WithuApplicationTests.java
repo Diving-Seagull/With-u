@@ -1,10 +1,10 @@
-package com.boomerang;
+package com.withu;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BoomerangApplicationTests {
+class WithuApplicationTests {
 
 	@Test
 	void contextLoads() {
