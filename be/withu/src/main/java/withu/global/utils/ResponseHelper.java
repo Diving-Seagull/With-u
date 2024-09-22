@@ -14,8 +14,8 @@ public class ResponseHelper {
     private ResponseHelper() {
     }
 
-    public static <T> ResponseEntity<T> createResponse(T objects) {
-        return new ResponseEntity<>(objects, HttpStatus.OK);
+    public static <T> ResponseEntity<T> createResponse(T object, HttpStatus status) {
+        return new ResponseEntity<>(object, status);
     }
 
     public static ResponseEntity<SimpleResultResponseDto> createSimpleResponse(ResultCode resultCode) {
@@ -23,7 +23,6 @@ public class ResponseHelper {
         return ResponseEntity.status(resultCode.getStatus())
                 .body(resultResponseDto);
     }
-
 
     public static ResponseEntity<SimpleResultResponseDto> createSimpleResponse(ResultCode resultCode, Map<String, String> headers) {
         var resultResponseDto = new SimpleResultResponseDto(resultCode);
