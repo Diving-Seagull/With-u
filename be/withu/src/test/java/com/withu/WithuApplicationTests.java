@@ -9,5 +9,4 @@ class WithuApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
