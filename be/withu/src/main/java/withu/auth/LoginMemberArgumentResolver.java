@@ -42,7 +42,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         }
 
         String memberEmail = jwtUtil.extractMemberEmail(token);
-        return memberService.getMemberByEmail(memberEmail);
+        return memberService.getMemberEntityByEmail(memberEmail);
     }
 
     private String extractToken(NativeWebRequest request) {
