@@ -3,7 +3,9 @@ package withu.auth.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import withu.auth.client.GoogleClient;
 import withu.auth.client.KakaoClient;
+import withu.auth.dto.GoogleUserInfo;
 import withu.auth.dto.KakaoUserInfo;
 import withu.auth.dto.TokenResponseDto;
 import withu.global.utils.JwtUtil;
@@ -18,6 +20,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
     private final KakaoClient kakaoClient;
+    private final GoogleClient googleClient;
 
     @Transactional
     public TokenResponseDto kakaoLogin(String kakaoAccessToken) {
@@ -40,6 +43,25 @@ public class AuthService {
             .name(kakaoUserInfo.getNickname())
             .profile(kakaoUserInfo.getProfileImageUrl())
             .socialType(SocialType.KAKAO)
+            .build();
+        return memberRepository.save(newMember);
+    }
+
+    @Transactional
+    public TokenResponseDto googleLogin(String googleAccessToken) {
+        GoogleUserInfo googleUserInfo = googleClient.getGoogleUserInfo(googleAccessToken);
+        Member member = memberRepository.findByEmail(googleUserInfo.getEmail())
+            .orElseGet(() -> registerNewGoogleMember(googleUserInfo));
+        String jwtToken = jwtUtil.generateToken(member.getEmail());
+        return new TokenResponseDto(jwtToken);
+    }
+
+    private Member registerNewGoogleMember(GoogleUserInfo googleUserInfo) {
+        Member newMember = Member.builder()
+            .email(googleUserInfo.getEmail())
+            .name(googleUserInfo.getName())
+            .profile(googleUserInfo.getPicture())
+            .socialType(SocialType.GOOGLE)
             .build();
         return memberRepository.save(newMember);
     }
