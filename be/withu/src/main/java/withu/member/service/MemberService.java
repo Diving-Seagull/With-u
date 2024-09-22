@@ -16,7 +16,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public Member getMemberByEmail(String memberEmail) {
+    public Member getMemberEntityByEmail(String memberEmail) {
         return memberRepository.findByEmail(memberEmail)
             .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
     }
@@ -28,5 +28,10 @@ public class MemberService {
             .profile(member.getProfile())
             .socialType(member.getSocialType())
             .build();
+    }
+
+    public MemberResponseDto getMemberByEmail(String memberEmail) {
+        return MemberResponseDto.toDto(memberRepository.findByEmail(memberEmail)
+            .orElseThrow(() -> new CustomException(USER_NOT_FOUND)));
     }
 }
