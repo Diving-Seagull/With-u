@@ -5,6 +5,16 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+//API Key Loading
+def dotenv = new Properties()
+def envFile = file("${rootProject.projectDir}/../assets/config/.env")
+if(envFile.exists()){
+    envFile.withInputStream { stream -> dotenv.load(stream) }
+}
+else {
+    throw new FileNotFoundException("Could not find .env file at ${envFile.path}")
+}
+
 android {
     namespace = "com.divingseagull.withu"
     compileSdk = flutter.compileSdkVersion
@@ -28,6 +38,12 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        def kakaoKey = dotenv['KAKAO_APP_KEY']
+        if (kakaoKey == null) {
+            throw new GradleException("KAKAO_NATIVE_APP_KEY not found in .env file")
+        }
+        manifestPlaceholders += [YOUR_KAKAO_NATIVE_APP_KEY: kakaoKey]
     }
 
     buildTypes {
