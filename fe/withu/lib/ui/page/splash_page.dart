@@ -12,7 +12,7 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<SplashViewModel>(
         create: (_) => SplashViewModel(
-          kakaoLoginApi: KakaoLoginApi(),
+          KakaoLoginApi(),
         ),
         child: SplashView());
   }

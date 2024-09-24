@@ -5,6 +5,8 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/ui/viewmodel/login_viewmodel.dart';
 
+import '../../data/model/token_dto.dart';
+
 class LoginView extends StatelessWidget {
   late LoginViewModel viewModel;
 
@@ -31,8 +33,11 @@ class LoginView extends StatelessWidget {
   Widget _kakaoLoginBtn(BuildContext context) => Padding(
       padding: const EdgeInsets.all(3.0),
       child: CupertinoButton.filled(
-      onPressed: () {
-        context.read<LoginViewModel>().kakaoLogin();
+      onPressed: () async {
+        TokenDto? jwt = await context.read<LoginViewModel>().kakaoLogin();
+        if(jwt != null) {
+          print('로그인 성공 $jwt');
+        }
       }, child: Text('카카오 로그인'),
     )
   );
