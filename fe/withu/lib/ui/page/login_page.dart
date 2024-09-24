@@ -11,9 +11,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<LoginViewModel>(
-        create: (_) => LoginViewModel(
-          kakaoLoginApi: KakaoLoginApi(),
-        ),
+        create: (_) => LoginViewModel(),
         child: LoginView());
   }
 }

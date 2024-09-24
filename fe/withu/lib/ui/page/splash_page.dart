@@ -11,9 +11,7 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<SplashViewModel>(
-        create: (_) => SplashViewModel(
-          KakaoLoginApi(),
-        ),
+        create: (_) => SplashViewModel(),
         child: SplashView());
   }
 }
