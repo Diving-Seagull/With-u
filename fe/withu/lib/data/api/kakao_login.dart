@@ -8,9 +8,10 @@ class KakaoLoginApi {
     // 카카오톡 설치 여부 확인
     if (await isKakaoTalkInstalled()) {
       try {
-        await UserApi.instance.loginWithKakaoTalk();
+        OAuthToken token = await UserApi.instance.loginWithKakaoTalk();
+        TokenManagerProvider.instance.manager.setToken(token);
         print('카카오톡으로 로그인 성공');
-        return api.accessTokenInfo();
+        return token;
       } catch (error) {
         print('카카오톡으로 로그인 실패 $error');
 
@@ -22,9 +23,10 @@ class KakaoLoginApi {
 
         // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인
         try {
-          await UserApi.instance.loginWithKakaoAccount();
+          OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
           print('카카오계정으로 로그인 성공');
-          return api.accessTokenInfo();
+          TokenManagerProvider.instance.manager.setToken(token);
+          return token;
         } catch (error) {
           print('카카오계정으로 로그인 실패 $error');
         }
@@ -33,9 +35,10 @@ class KakaoLoginApi {
     // 카카오톡이 설치되어 있지 않다면 카카오계정으로 로그인
     else {
       try {
-        await UserApi.instance.loginWithKakaoAccount();
+        OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
         print('카카오계정으로 로그인 성공');
-        return api.accessTokenInfo();
+        TokenManagerProvider.instance.manager.setToken(token);
+        return token;
       } catch (error) {
         print('카카오계정으로 로그인 실패 $error');
       }
@@ -48,7 +51,7 @@ class KakaoLoginApi {
       try {
         AccessTokenInfo tokenInfo = await UserApi.instance.accessTokenInfo();
         print('토큰 유효성 체크 성공 ${tokenInfo.id} ${tokenInfo.expiresIn}');
-        return tokenInfo;
+        return TokenManagerProvider.instance.manager.getToken();
       } catch (error) {
         if (error is KakaoException && error.isInvalidTokenError()) {
           print('토큰 만료 $error');

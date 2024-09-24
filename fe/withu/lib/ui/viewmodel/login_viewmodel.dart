@@ -2,38 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:withu/data/api/kakao_login.dart';
 
-import '../../data/repository/UserRepository.dart';
+import '../../data/model/token_dto.dart';
+import '../../data/repository/login_repository.dart';
 
 class LoginViewModel with ChangeNotifier {
-  User? _user;
   KakaoLoginApi kakaoLoginApi;
 
-  User? get user => _user;
-
-  late final UserRepository _userRepository;
+  late final LoginRepository _loginRepository;
 
   LoginViewModel({required this.kakaoLoginApi}) {
-    _userRepository = UserRepository();
+    _loginRepository = LoginRepository();
   }
 
   // 카카오 로그인
-  void kakaoLogin() async {
-    kakaoLoginApi.signWithKakao().then((user) {
-      // 반환된 값이 NULL이 아니라면
-      // 정보 전달
-      if (user != null) {
-        _user = user;
-        notifyListeners();
-      }
-    });
-  }
-
-  // 카카오 토큰 유효성 검사
-  void kakaoRecentLogin() async {
-    kakaoLoginApi.checkRecentLogin().then((token){
-      if(token != null){
-        print('액세스 토큰 정보 전달됨');
-      }
-    });
+  Future<TokenDto?> kakaoLogin() async {
+    OAuthToken? token = await kakaoLoginApi.signWithKakao();
+    if(token != null) {
+      print(token.accessToken);
+      return await _loginRepository.getJwtToken(token.accessToken, "kakao");
+    }
   }
 }
