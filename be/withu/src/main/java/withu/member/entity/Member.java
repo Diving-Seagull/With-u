@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -43,7 +44,8 @@ public class Member {
     private LocalDateTime updatedAt;
 
     @Builder
-    private Member(String email, String name, String profile, SocialType socialType) {
+    private Member(Long id, String email, String name, String profile, SocialType socialType) {
+        this.id = id;
         this.email = email;
         this.name = name;
         this.profile = profile;
