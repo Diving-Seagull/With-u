@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -25,6 +26,7 @@ import withu.member.enums.SocialType;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,6 +39,10 @@ public class Member {
     private SocialType socialType;
     private String firebaseToken;
 
+    @Column(nullable = false)
+    @ColumnDefault("true")
+    private boolean isEnabled = true;
+
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -44,11 +50,16 @@ public class Member {
     private LocalDateTime updatedAt;
 
     @Builder
-    private Member(String email, String name, String profile, SocialType socialType, String firebaseToken) {
+    private Member(Long id, String email, String name, String profile, SocialType socialType, String firebaseToken) {
+        this.id = id;
         this.email = email;
         this.name = name;
         this.profile = profile;
         this.socialType = socialType;
         this.firebaseToken = firebaseToken;
+    }
+
+    public void disable() {
+        this.isEnabled = false;
     }
 }

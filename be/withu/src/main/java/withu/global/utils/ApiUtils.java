@@ -19,6 +19,7 @@ public class ApiUtils {
     @Setter
     @AllArgsConstructor
     public static class ApiSuccess<T> {
+
         private final T data;
     }
 
@@ -26,6 +27,7 @@ public class ApiUtils {
     @Setter
     @AllArgsConstructor
     public static class ApiFail {
+
         private final String message;
         private final int errorCode;
     }

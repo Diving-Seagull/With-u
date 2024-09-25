@@ -14,12 +14,10 @@ public enum ExceptionCode {
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다."),
 
 
-
     // 잘못된 접근
     SOCIAL_TOKEN_MISSING(HttpStatus.BAD_REQUEST, "소셜 토큰이 제공되지 않았습니다."),
     FIREBASE_TOKEN_MISSING(HttpStatus.BAD_REQUEST, "파이어베이스 토큰이 제공되지 않았습니다."),
     BAD_APPROACH(HttpStatus.BAD_REQUEST, "잘못된 접근입니다.");
-
 
 
     private final HttpStatus httpStatus;

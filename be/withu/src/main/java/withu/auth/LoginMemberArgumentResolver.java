@@ -36,13 +36,12 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
             throw new CustomException(SOCIAL_TOKEN_MISSING);
         }
 
-
         if (jwtUtil.isTokenExpired(token)) {
             throw new CustomException(TOKEN_EXPIRED);
         }
 
         String memberEmail = jwtUtil.extractMemberEmail(token);
-        return memberService.getMemberByEmail(memberEmail);
+        return memberService.getMemberEntityByEmail(memberEmail);
     }
 
     private String extractToken(NativeWebRequest request) {

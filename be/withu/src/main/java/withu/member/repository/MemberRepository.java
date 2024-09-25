@@ -7,6 +7,7 @@ import withu.member.entity.Member;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
+
     boolean existsById(Long id);
 
     Optional<Member> findByEmail(String email);
