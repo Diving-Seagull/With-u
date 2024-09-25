@@ -35,6 +35,7 @@ public class Member {
     private String profile;
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
+    private String firebaseToken;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -43,10 +44,11 @@ public class Member {
     private LocalDateTime updatedAt;
 
     @Builder
-    private Member(String email, String name, String profile, SocialType socialType) {
+    private Member(String email, String name, String profile, SocialType socialType, String firebaseToken) {
         this.email = email;
         this.name = name;
         this.profile = profile;
         this.socialType = socialType;
+        this.firebaseToken = firebaseToken;
     }
 }
