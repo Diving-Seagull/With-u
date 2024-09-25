@@ -39,19 +39,23 @@ public class MemberService {
 
     @Transactional
     public MemberResponseDto updateMemberInfo(Member member, MemberUpdateRequestDto updateRequestDto) {
-        // todo
-//        // 이름과 프로필 수정
-//        member.updateInfo(updateRequestDto.getName(), updateRequestDto.getProfile());
-//
-//        // 수정된 회원 정보 저장
-//        Member newMember = memberRepository.save(member);
-
-        // 수정된 정보를 DTO로 반환
-        return MemberResponseDto.builder()
+        Member updatedMember = Member.builder()
+            .id(member.getId())
             .email(member.getEmail())
-            .name(member.getName())
-            .profile(member.getProfile())
+            .name(updateRequestDto.getName() != null && !updateRequestDto.getName().isEmpty()
+                ? updateRequestDto.getName() : member.getName())
+            .profile(updateRequestDto.getProfile() != null && !updateRequestDto.getProfile().isEmpty()
+                ? updateRequestDto.getProfile() : member.getProfile())
             .socialType(member.getSocialType())
+            .build();
+
+        Member savedMember = memberRepository.save(updatedMember);
+
+        return MemberResponseDto.builder()
+            .email(savedMember.getEmail())
+            .name(savedMember.getName())
+            .profile(savedMember.getProfile())
+            .socialType(savedMember.getSocialType())
             .build();
     }
 }
