@@ -26,6 +26,7 @@ import withu.member.enums.SocialType;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -54,5 +55,9 @@ public class Member {
         this.name = name;
         this.profile = profile;
         this.socialType = socialType;
+    }
+
+    public void disable() {
+        this.isEnabled = false;
     }
 }

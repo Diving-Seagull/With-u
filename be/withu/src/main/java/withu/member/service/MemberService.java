@@ -18,11 +18,13 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    @Transactional
     public Member getMemberEntityByEmail(String memberEmail) {
         return memberRepository.findByEmail(memberEmail)
             .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
     }
 
+    @Transactional
     public MemberResponseDto getMember(Member member) {
         return MemberResponseDto.builder()
             .email(member.getEmail())
@@ -32,6 +34,7 @@ public class MemberService {
             .build();
     }
 
+    @Transactional
     public MemberResponseDto getMemberByEmail(String memberEmail) {
         return MemberResponseDto.toDto(memberRepository.findByEmail(memberEmail)
             .orElseThrow(() -> new CustomException(USER_NOT_FOUND)));
@@ -57,5 +60,11 @@ public class MemberService {
             .profile(savedMember.getProfile())
             .socialType(savedMember.getSocialType())
             .build();
+    }
+
+    @Transactional
+    public void deleteMember(Member member) {
+        member.disable();
+        memberRepository.save(member);
     }
 }
