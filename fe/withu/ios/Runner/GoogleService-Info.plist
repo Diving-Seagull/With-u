@@ -2,13 +2,33 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CLIENT_ID</key>
-	<string>335235912554-vu4tcj7ng4kj2cie9ovh1hb50dqdo3re.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.335235912554-vu4tcj7ng4kj2cie9ovh1hb50dqdo3re</string>
+	<string>com.googleusercontent.apps.965562953187-r9pih0bc1jfj4ufof2lnsvri605k3tmq</string>
+	<key>CLIENT_ID</key>
+	<string>965562953187-r9pih0bc1jfj4ufof2lnsvri605k3tmq.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAYqrKxbVPFnDXq5VnW-ZwBNNqE-LXauBw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>965562953187</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.divingseagull.withu</string>
+	<key>PROJECT_ID</key>
+	<string>withu-c6383</string>
+	<key>STORAGE_BUCKET</key>
+	<string>withu-c6383.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:965562953187:ios:24ab13a92a4bd778e504d6</string>
 </dict>
 </plist>
