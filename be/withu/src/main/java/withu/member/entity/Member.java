@@ -37,6 +37,7 @@ public class Member {
     private String profile;
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
+    private String firebaseToken;
 
     @Column(nullable = false)
     @ColumnDefault("true")
@@ -49,12 +50,13 @@ public class Member {
     private LocalDateTime updatedAt;
 
     @Builder
-    private Member(Long id, String email, String name, String profile, SocialType socialType) {
+    private Member(Long id, String email, String name, String profile, SocialType socialType, String firebaseToken) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.profile = profile;
         this.socialType = socialType;
+        this.firebaseToken = firebaseToken;
     }
 
     public void disable() {

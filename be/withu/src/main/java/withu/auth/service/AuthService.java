@@ -7,7 +7,10 @@ import withu.auth.client.GoogleClient;
 import withu.auth.client.KakaoClient;
 import withu.auth.dto.GoogleUserInfo;
 import withu.auth.dto.KakaoUserInfo;
+import withu.auth.dto.SocialAuthRequestDto;
 import withu.auth.dto.TokenResponseDto;
+import withu.global.exception.CustomException;
+import withu.global.exception.ExceptionCode;
 import withu.global.utils.JwtUtil;
 import withu.member.entity.Member;
 import withu.member.enums.SocialType;
@@ -23,45 +26,51 @@ public class AuthService {
     private final GoogleClient googleClient;
 
     @Transactional
-    public TokenResponseDto kakaoLogin(String kakaoAccessToken) {
-        // 1. 카카오 액세스 토큰을 사용하여 사용자 정보 가져오기
-        KakaoUserInfo kakaoUserInfo = kakaoClient.getKakaoUserInfo(kakaoAccessToken);
+    public TokenResponseDto kakakoAuth(SocialAuthRequestDto requestDto) {
+        KakaoUserInfo kakaoUserInfo = kakaoClient.getKakaoUserInfo(requestDto.getSocialToken());
 
-        // 2. 사용자 정보로 DB에서 멤버 찾기 또는 새로 생성
         Member member = memberRepository.findByEmail(kakaoUserInfo.getEmail())
-            .orElseGet(() -> registerNewKakaoMember(kakaoUserInfo));
+            .orElseGet(() -> registerNewKakaoMember(kakaoUserInfo, requestDto.getFirebaseToken()));
 
-        // 3. JWT 토큰 생성
         String jwtToken = jwtUtil.generateToken(member.getEmail());
-
         return new TokenResponseDto(jwtToken);
     }
 
-    private Member registerNewKakaoMember(KakaoUserInfo kakaoUserInfo) {
+    @Transactional
+    public TokenResponseDto googleAuth(SocialAuthRequestDto requestDto) {
+        GoogleUserInfo googleUserInfo = googleClient.getGoogleUserInfo(requestDto.getSocialToken());
+
+        Member member = memberRepository.findByEmail(googleUserInfo.getEmail())
+            .orElseGet(() -> registerNewGoogleMember(googleUserInfo, requestDto.getFirebaseToken()));
+
+        String jwtToken = jwtUtil.generateToken(member.getEmail());
+        return new TokenResponseDto(jwtToken);
+    }
+
+    private Member registerNewKakaoMember(KakaoUserInfo kakaoUserInfo, String firebaseToken) {
+        if (firebaseToken == null) {
+            throw new CustomException(ExceptionCode.FIREBASE_TOKEN_MISSING);
+        }
         Member newMember = Member.builder()
             .email(kakaoUserInfo.getEmail())
             .name(kakaoUserInfo.getNickname())
             .profile(kakaoUserInfo.getProfileImageUrl())
             .socialType(SocialType.KAKAO)
+            .firebaseToken(firebaseToken)
             .build();
         return memberRepository.save(newMember);
     }
 
-    @Transactional
-    public TokenResponseDto googleLogin(String googleAccessToken) {
-        GoogleUserInfo googleUserInfo = googleClient.getGoogleUserInfo(googleAccessToken);
-        Member member = memberRepository.findByEmail(googleUserInfo.getEmail())
-            .orElseGet(() -> registerNewGoogleMember(googleUserInfo));
-        String jwtToken = jwtUtil.generateToken(member.getEmail());
-        return new TokenResponseDto(jwtToken);
-    }
-
-    private Member registerNewGoogleMember(GoogleUserInfo googleUserInfo) {
+    private Member registerNewGoogleMember(GoogleUserInfo googleUserInfo, String firebaseToken) {
+        if (firebaseToken == null) {
+            throw new IllegalArgumentException("Firebase token is required for signup");
+        }
         Member newMember = Member.builder()
             .email(googleUserInfo.getEmail())
             .name(googleUserInfo.getName())
             .profile(googleUserInfo.getPicture())
             .socialType(SocialType.GOOGLE)
+            .firebaseToken(firebaseToken)
             .build();
         return memberRepository.save(newMember);
     }
