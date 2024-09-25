@@ -7,10 +7,16 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import withu.global.exception.CustomException;
 import withu.global.utils.ApiUtils;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<?> handleCustomException(CustomException e) {
+        return new ResponseEntity<>(e.body(), e.status());
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> unknownServerError(Exception e) {

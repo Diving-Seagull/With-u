@@ -20,6 +20,7 @@ public class GoogleClient {
         headers.setBearerAuth(accessToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        return restTemplate.exchange(GOOGLE_USER_INFO_URI, HttpMethod.GET, entity, GoogleUserInfo.class).getBody();
+        return restTemplate.exchange(GOOGLE_USER_INFO_URI, HttpMethod.GET, entity,
+            GoogleUserInfo.class).getBody();
     }
 }
