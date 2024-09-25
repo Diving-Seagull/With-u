@@ -32,12 +32,13 @@ class _SplashViewState extends State<SplashView> {
   }
 
   void checkAuth() async {
-    await kakaoCheckAuth();
-    await googleCheckAuth();
+    // await kakaoCheckAuth();
+    // await googleCheckAuth();
+    moveLoginScreen();
   }
 
   // 카카오 토큰 검사
-  Future<void> kakaoCheckAuth() async{
+  Future<void> kakaoCheckAuth() async {
     OAuthToken? tokenInfo = await viewModel.kakaoRecentLogin();
     print(tokenInfo);
 
@@ -45,8 +46,9 @@ class _SplashViewState extends State<SplashView> {
       print('카카오 토큰 정보 불러옴');
 
       //JWT 토큰 요청
-      TokenDto? jwtToken = await viewModel.getJwtToken(tokenInfo.accessToken, "kakao");
-      if(jwtToken != null) {
+      TokenDto? jwtToken =
+          await viewModel.getJwtToken(tokenInfo.accessToken, "kakao");
+      if (jwtToken != null) {
         print('카카오 자동 로그인 성공 ${jwtToken.token}');
 
         return;
@@ -59,7 +61,8 @@ class _SplashViewState extends State<SplashView> {
   Future<void> googleCheckAuth() async {
     GoogleSignInAuthentication? auth = await viewModel.googleRecentLogin();
     if (auth != null) {
-      TokenDto? jwtToken = await viewModel.getJwtToken(auth.accessToken!, "google");
+      TokenDto? jwtToken =
+          await viewModel.getJwtToken(auth.accessToken!, "google");
       print(jwtToken);
 
       if (jwtToken != null) {
@@ -71,8 +74,8 @@ class _SplashViewState extends State<SplashView> {
     moveLoginScreen();
   }
 
-  void moveLoginScreen(){
-    if(mounted){
+  void moveLoginScreen() {
+    if (mounted) {
       Navigator.pop(context); //Splash 화면 제거
       Navigator.push(
           context, CupertinoPageRoute(builder: (context) => LoginPage()));
@@ -83,10 +86,14 @@ class _SplashViewState extends State<SplashView> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      body: Center(
-        // child: Image.asset('assets/test.jpg'),
-        child: Text("withu"),
-      ),
-    );
+        body: Center(
+      child: Container(
+          height: double.infinity, // 너비 꽉 채우기
+          width: double.infinity, // 높이 꽉 채우기
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 28, 72, 161),
+          ),
+          child: Image.asset('assets/images/logo_white.png')),
+    ));
   }
 }
