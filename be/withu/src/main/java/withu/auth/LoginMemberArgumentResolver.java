@@ -36,7 +36,6 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
             throw new CustomException(UNAUTHORIZED);
         }
 
-
         if (jwtUtil.isTokenExpired(token)) {
             throw new CustomException(TOKEN_EXPIRED);
         }

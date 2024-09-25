@@ -2,6 +2,7 @@ package withu.member.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,11 +35,9 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getMemberByEmail(email));
     }
 
-    @PutMapping
-    public ResponseEntity<MemberResponseDto> updateMemberInfo(@LoginMember Member member,
-        @Valid @RequestBody MemberUpdateRequestDto updateRequestDto) {
-
-        MemberResponseDto updatedMember = memberService.updateMemberInfo(member, updateRequestDto);
-        return ResponseEntity.ok(updatedMember);
+    @DeleteMapping
+    public ResponseEntity<Void> deleteMember(@LoginMember Member member) {
+        memberService.deleteMember(member);
+        return ResponseEntity.noContent().build();
     }
 }

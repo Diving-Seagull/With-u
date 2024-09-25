@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import withu.global.utils.ApiUtils;
 
 @Getter
-public class CustomException extends RuntimeException{
+public class CustomException extends RuntimeException {
 
     private ExceptionCode exceptionCode;
     private String message;
@@ -20,11 +20,11 @@ public class CustomException extends RuntimeException{
         this.message = message;
     }
 
-    public ApiUtils.ApiFail body(){
+    public ApiUtils.ApiFail body() {
         return ApiUtils.fail(message, exceptionCode.getHttpStatus());
     }
 
-    public HttpStatus status(){
+    public HttpStatus status() {
         return exceptionCode.getHttpStatus();
     }
 }

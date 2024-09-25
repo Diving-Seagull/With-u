@@ -15,10 +15,8 @@ public enum ExceptionCode {
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다."),
 
 
-
     // 잘못된 접근
     BAD_APPROACH(HttpStatus.BAD_REQUEST, "잘못된 접근입니다.");
-
 
 
     private final HttpStatus httpStatus;

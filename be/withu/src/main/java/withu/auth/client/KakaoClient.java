@@ -23,8 +23,9 @@ public class KakaoClient {
         headers.setBearerAuth(accessToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        try{
-            return restTemplate.exchange(KAKAO_USER_INFO_URI, HttpMethod.GET, entity, KakaoUserInfo.class).getBody();
+        try {
+            return restTemplate.exchange(KAKAO_USER_INFO_URI, HttpMethod.GET, entity,
+                KakaoUserInfo.class).getBody();
         } catch (Exception e) {
             throw new CustomException(ExceptionCode.UNAUTHORIZED);
         }
