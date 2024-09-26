@@ -51,9 +51,13 @@ class AuthServiceTest {
         SocialAuthRequestDto requestDto = new SocialAuthRequestDto(socialToken, firebaseToken);
 
         KakaoUserInfo kakaoUserInfo = KakaoUserInfo.builder()
-            .email(email)
-            .nickname(name)
-            .profileImageUrl(profileImageUrl)
+            .kakaoAccount(KakaoUserInfo.KakaoAccount.builder()
+                .email(email)
+                .profile(KakaoUserInfo.KakaoAccount.Profile.builder()
+                    .nickname(name)
+                    .profileImageUrl(profileImageUrl)
+                    .build())
+                .build())
             .build();
 
         Member existingMember = Member.builder()
