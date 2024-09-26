@@ -2,6 +2,8 @@ package withu.auth.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import withu.auth.client.GoogleClient;
 import withu.auth.client.KakaoClient;
@@ -20,6 +22,7 @@ import withu.member.repository.MemberRepository;
 @RequiredArgsConstructor
 public class AuthService {
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
     private final MemberRepository memberRepository;
     private final JwtUtil jwtUtil;
     private final KakaoClient kakaoClient;
@@ -34,6 +37,7 @@ public class AuthService {
 
         String jwtToken = jwtUtil.generateToken(member.getEmail());
 
+        logger.info("Generated JWT Token: {}", jwtToken);
         return new TokenResponseDto(jwtToken);
     }
 
