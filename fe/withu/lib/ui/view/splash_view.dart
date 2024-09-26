@@ -32,9 +32,9 @@ class _SplashViewState extends State<SplashView> {
   }
 
   void checkAuth() async {
-    // await kakaoCheckAuth();
-    // await googleCheckAuth();
-    moveLoginScreen();
+    await kakaoCheckAuth();
+    await googleCheckAuth();
+    // moveLoginScreen();
   }
 
   // 카카오 토큰 검사

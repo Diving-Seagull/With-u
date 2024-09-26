@@ -7,13 +7,13 @@ import 'package:withu/data/model/token_dto.dart';
 
 class LoginDataSource {
 
-  final uri_path = 'http://10.0.2.2:8080/api/auth';
-  // final uri_path = 'http://127.0.0.1:8080/api/auth';
+  // final uri_path = 'http://10.0.2.2:8080/api/auth';
+  final uri_path = 'http://127.0.0.1:8080/api/auth';
 
-  Future<TokenDto?> postTokenInfo(TokenDto accessToken, String type) async {
+  Future<TokenDto?> postTokenInfo(TokenDto tokenDto, String type) async {
     String path = '$uri_path/$type';
     try{
-      http.Response response = await RestApiSession.getPostUri(Uri.parse(path), accessToken.toJson());
+      http.Response response = await RestApiSession.getPostUri(Uri.parse(path), tokenDto.toJson());
 
       final int statusCode = response.statusCode;
 

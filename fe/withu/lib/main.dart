@@ -141,9 +141,6 @@ void showFlutterNotification(RemoteMessage message) {
           icon: '@mipmap/ic_launcher',
         ),
       ),
-
-      // fcm에서 보낸 데이터 받아오기 ex) data[key]
-      // payload: message.data['argument']
     );
   }
 }
