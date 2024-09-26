@@ -43,6 +43,6 @@ class SplashViewModel with ChangeNotifier {
   }
 
   Future<TokenDto?> getJwtToken(String token, String type) async {
-    return await _loginRepository.getJwtToken(token, type);
+    return await _loginRepository.getRecentToken(token, type);
   }
 }

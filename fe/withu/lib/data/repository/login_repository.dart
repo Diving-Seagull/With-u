@@ -12,8 +12,12 @@ class LoginRepository {
 
   LoginRepository() { _loginDataSource = LoginDataSource(); }
 
-  Future<TokenDto?> getJwtToken(String accessToken, String type) async {
-    return await _loginDataSource.postTokenInfo(TokenDto(token: accessToken), type);
+  Future<TokenDto?> getNewToken(String socialToken, String? firebaseToken, String type) async {
+    return await _loginDataSource.postTokenInfo(TokenDto(socialToken, firebaseToken), type);
+  }
+
+  Future<TokenDto?> getRecentToken(String socialToken, String type) async {
+    return await _loginDataSource.postTokenInfo(TokenDto(socialToken), type);
   }
 
 }
