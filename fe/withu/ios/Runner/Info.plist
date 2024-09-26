@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>NSAppTransportSecurity</key>
-     <dict>
-         <key>NSAllowsArbitraryLoads</key><true/>
-     </dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -29,9 +25,11 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>kakao67e0f157fa95339726303a17f1230e64</string>
+				<string>kakaoe87242ee364a0a27bb1a9e458477aba4</string>
 			</array>
 		</dict>
 		<dict>
@@ -39,7 +37,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.335235912554-vu4tcj7ng4kj2cie9ovh1hb50dqdo3re</string>
+				<string>com.googleusercontent.apps.965562953187-r9pih0bc1jfj4ufof2lnsvri605k3tmq</string>
 			</array>
 		</dict>
 	</array>
@@ -52,6 +50,11 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

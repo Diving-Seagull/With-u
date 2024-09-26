@@ -1,15 +1,17 @@
 class TokenDto {
   final String token;
+  final String? firebaseToken;
 
-  TokenDto({required this.token});
+  TokenDto(this.token, [this.firebaseToken]);
 
   Map<String, dynamic> toJson(){
     return {
-      'token': token
+      'token': token,
+      'firebaseToken': firebaseToken
     };
   }
 
   factory TokenDto.fromJson(Map<String, dynamic> json){
-    return TokenDto(token: json['token']);
+    return TokenDto(json['token'], json['firebaseToken']);
   }
 }
