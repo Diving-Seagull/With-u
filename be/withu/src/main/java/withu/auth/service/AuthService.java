@@ -32,9 +32,7 @@ public class AuthService {
         Member member = memberRepository.findByEmail(kakaoUserInfo.getEmail())
             .orElseGet(() -> registerNewKakaoMember(kakaoUserInfo, requestDto.getFirebaseToken()));
 
-        System.out.println("pass1");
         String jwtToken = jwtUtil.generateToken(member.getEmail());
-        System.out.println("pass2");
         return new TokenResponseDto(jwtToken);
     }
 
