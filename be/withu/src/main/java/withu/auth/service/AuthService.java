@@ -26,13 +26,15 @@ public class AuthService {
     private final GoogleClient googleClient;
 
     @Transactional
-    public TokenResponseDto kakakoAuth(SocialAuthRequestDto requestDto) {
+    public TokenResponseDto kakaoAuth(SocialAuthRequestDto requestDto) {
         KakaoUserInfo kakaoUserInfo = kakaoClient.getKakaoUserInfo(requestDto.getSocialToken());
 
         Member member = memberRepository.findByEmail(kakaoUserInfo.getEmail())
             .orElseGet(() -> registerNewKakaoMember(kakaoUserInfo, requestDto.getFirebaseToken()));
 
+        System.out.println("pass1");
         String jwtToken = jwtUtil.generateToken(member.getEmail());
+        System.out.println("pass2");
         return new TokenResponseDto(jwtToken);
     }
 
