@@ -1,13 +1,17 @@
 package withu.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class KakaoUserInfo {
 
     @JsonProperty("kakao_account")
@@ -16,6 +20,8 @@ public class KakaoUserInfo {
     @Getter
     @Setter
     @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
     public static class KakaoAccount {
 
         private String email;
@@ -24,6 +30,8 @@ public class KakaoUserInfo {
         @Getter
         @Setter
         @NoArgsConstructor
+        @AllArgsConstructor
+        @Builder
         public static class Profile {
 
             private String nickname;
@@ -45,5 +53,13 @@ public class KakaoUserInfo {
     public String getProfileImageUrl() {
         return kakaoAccount != null && kakaoAccount.getProfile() != null
             ? kakaoAccount.getProfile().getProfileImageUrl() : null;
+    }
+
+    public static KakaoAccount.KakaoAccountBuilder kakaoAccountBuilder() {
+        return KakaoAccount.builder();
+    }
+
+    public static KakaoAccount.Profile.ProfileBuilder profileBuilder() {
+        return KakaoAccount.Profile.builder();
     }
 }

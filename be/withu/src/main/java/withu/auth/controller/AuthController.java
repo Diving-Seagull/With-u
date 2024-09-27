@@ -18,9 +18,9 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/kakao")
-    public ResponseEntity<TokenResponseDto> kakakoAuth(
+    public ResponseEntity<TokenResponseDto> kakaoAuth(
         @RequestBody SocialAuthRequestDto requestDto) {
-        TokenResponseDto tokenResponse = authService.kakakoAuth(requestDto);
+        TokenResponseDto tokenResponse = authService.kakaoAuth(requestDto);
         return ResponseEntity.ok(tokenResponse);
     }
 
