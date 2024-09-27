@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-
+import 'package:withu/ui/viewmodel/main/home_viewmodel.dart';
 import '../../view/main/home_view.dart';
-import '../../viewmodel/home_viewmodel.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
