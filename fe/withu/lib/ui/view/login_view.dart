@@ -1,25 +1,24 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:withu/ui/view/main_view.dart';
 import 'package:withu/ui/viewmodel/login_viewmodel.dart';
 
 import '../../data/model/token_dto.dart';
 
 class LoginView extends StatelessWidget {
-  late LoginViewModel viewModel;
+  late final LoginViewModel _viewModel;
+  final FlutterSecureStorage _storage = FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    viewModel = Provider.of<LoginViewModel>(context); //ViewModel 가져오기
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(0),
-        child: AppBar(),
-      ), // AppBar 없애기
+    _viewModel = Provider.of<LoginViewModel>(context); //ViewModel 가져오기
+    return Scaffold( // AppBar 없애기
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -36,9 +35,12 @@ class LoginView extends StatelessWidget {
       padding: const EdgeInsets.all(3.0),
       child: CupertinoButton.filled(
         onPressed: () async {
-          TokenDto? jwt = await viewModel.setGoogleLogin();
+          TokenDto? jwt = await _viewModel.setGoogleLogin();
           if(jwt != null) {
             print('구글 로그인 성공 $jwt');
+            await _storage.write(key: 'jwtToken', value: jsonEncode(jwt));
+            // 메인 화면 이동
+            if(context.mounted) moveMainScreen(context);
           }
         }, child: Text('구글 로그인'),
       )
@@ -48,13 +50,23 @@ class LoginView extends StatelessWidget {
       padding: const EdgeInsets.all(3.0),
       child: CupertinoButton.filled(
       onPressed: () async {
-        TokenDto? jwt = await viewModel.setKakaoLogin();
+        TokenDto? jwt = await _viewModel.setKakaoLogin();
         if(jwt != null) {
           print('카카오 로그인 성공 $jwt');
+          await _storage.write(key: 'jwtToken', value: jsonEncode(jwt));
+          // 메인 화면 이동
+          if(context.mounted) moveMainScreen(context);
         }
       }, child: Text('카카오 로그인'),
     )
   );
 
-
+  // 메인 화면 이동
+  void moveMainScreen(BuildContext context) {
+    if(context.mounted){
+      Navigator.pop(context); //Splash 화면 제거
+      Navigator.push(
+          context, CupertinoPageRoute(builder: (context) => MainView()));
+    }
+  }
 }

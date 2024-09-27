@@ -1,15 +1,28 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:withu/extension/string_extension.dart';
 
-import '../../viewmodel/home_viewmodel.dart';
+import '../../../data/model/member.dart';
+import '../../viewmodel/main/home_viewmodel.dart';
 
 class HomeView extends StatelessWidget {
   late HomeViewModel _homeViewModel;
   late double _deviceWidth, _deviceHeight;
+  Member? _member;
+
+  void init(BuildContext context) async {
+    _homeViewModel = Provider.of<HomeViewModel>(context);
+    _member = await _homeViewModel.getMemberInfo();
+    print(_member!.toJson());
+    if(_member == null) {
+      // 문제 발생 상황 -> 로그인 화면 이동
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    init(context);
     _deviceWidth = MediaQuery.of(context).size.width;
     _deviceHeight = MediaQuery.of(context).size.height;
     // TODO: implement build
