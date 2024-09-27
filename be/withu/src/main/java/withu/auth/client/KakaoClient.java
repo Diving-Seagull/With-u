@@ -5,7 +5,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import withu.auth.dto.KakaoUserInfo;
 import withu.global.exception.CustomException;
@@ -27,7 +26,7 @@ public class KakaoClient {
             return restTemplate.exchange(KAKAO_USER_INFO_URI, HttpMethod.GET, entity,
                 KakaoUserInfo.class).getBody();
         } catch (Exception e) {
-            throw new CustomException(ExceptionCode.UNAUTHORIZED);
+            throw new CustomException(ExceptionCode.TOKEN_EXPIRED);
         }
     }
 }
