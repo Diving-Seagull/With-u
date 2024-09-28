@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:withu/ui/view/main_view.dart';
 import 'package:withu/ui/page/splash_page.dart';
 import 'firebase_options.dart';
 
@@ -110,6 +111,7 @@ Future<void> fcmSetting() async {
 Future<void> addFcmToken() async {
   final storage = FlutterSecureStorage();
   String? token = await storage.read(key: "fcmtoken");
+  // print('fcm $token');
   if(token == null){
     var fcmToken = await FirebaseMessaging.instance.getToken();
     if(fcmToken != null){
@@ -150,11 +152,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+    return CupertinoApp(
       home: SplashPage(),
     );
   }
