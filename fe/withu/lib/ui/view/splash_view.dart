@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/data/model/token_dto.dart';
 import 'package:withu/ui/page/login_page.dart';
+import 'package:withu/ui/view/main_view.dart';
 import 'dart:async';
 
 import 'package:withu/ui/viewmodel/splash_viewmodel.dart';
@@ -18,43 +22,37 @@ class SplashView extends StatefulWidget {
 
 class _SplashViewState extends State<SplashView> {
   late SplashViewModel viewModel;
+  final FlutterSecureStorage _storage = FlutterSecureStorage();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       viewModel = Provider.of<SplashViewModel>(context, listen: false);
       Timer(Duration(seconds: 2), () {
-        // Navigator.pop(context); //Splash 화면 제거
-        checkAuth();
+        kakaoCheckAuth();
       });
     });
-  }
-
-  void checkAuth() async {
-    await kakaoCheckAuth();
-    await googleCheckAuth();
-    // moveLoginScreen();
   }
 
   // 카카오 토큰 검사
   Future<void> kakaoCheckAuth() async {
     OAuthToken? tokenInfo = await viewModel.kakaoRecentLogin();
-    print(tokenInfo);
-
     if (tokenInfo != null) {
       print('카카오 토큰 정보 불러옴');
-
       //JWT 토큰 요청
       TokenDto? jwtToken =
           await viewModel.getJwtToken(tokenInfo.accessToken, "kakao");
+
       if (jwtToken != null) {
         print('카카오 자동 로그인 성공 ${jwtToken.token}');
-
+        await _storage.write(key: 'jwtToken', value: jsonEncode(jwtToken));
+        moveMainScreen();
         return;
       }
     }
     print('카카오 자동 로그인 실패');
+    googleCheckAuth();
   }
 
   // 구글 토큰 검사
@@ -67,6 +65,8 @@ class _SplashViewState extends State<SplashView> {
 
       if (jwtToken != null) {
         print('구글 자동 로그인 성공 ${jwtToken.token}');
+        await _storage.write(key: 'jwtToken', value: jsonEncode(jwtToken));
+        moveMainScreen();
         return;
       }
     }
@@ -74,11 +74,21 @@ class _SplashViewState extends State<SplashView> {
     moveLoginScreen();
   }
 
+  // 로그인 화면 이동
   void moveLoginScreen() {
     if (mounted) {
       Navigator.pop(context); //Splash 화면 제거
       Navigator.push(
           context, CupertinoPageRoute(builder: (context) => LoginPage()));
+    }
+  }
+
+  // 메인 화면 이동
+  void moveMainScreen() {
+    if (mounted) {
+      Navigator.pop(context); //Splash 화면 제거
+      Navigator.push(
+          context, CupertinoPageRoute(builder: (context) => MainView()));
     }
   }
 
