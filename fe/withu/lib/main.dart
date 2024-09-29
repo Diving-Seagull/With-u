@@ -6,8 +6,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:withu/ui/view/main_view.dart';
-import 'package:withu/ui/page/splash_page.dart';
+import 'package:withu/ui/page/login/login_page.dart';
+import 'package:withu/ui/view/login/login_view.dart';
+import 'package:withu/ui/view/main/main_view.dart';
+import 'package:withu/ui/page/login/splash_page.dart';
+import 'package:withu/ui/view/login/permission_view.dart';
 import 'firebase_options.dart';
 
 // 최상단에 위치해 있어야 함.
@@ -115,11 +118,11 @@ Future<void> addFcmToken() async {
   if(token == null){
     var fcmToken = await FirebaseMessaging.instance.getToken();
     if(fcmToken != null){
-      print('getFcmToken() : $fcmToken');
       await storage.write(key: "fcmtoken", value: fcmToken);
-      // print('fcm 토큰 저장 완료 ${await storage.read(key: "fcmtoken")}');
+      print('fcm 토큰 저장 완료 ${await storage.read(key: "fcmtoken")}');
     }
   }
+  print('getFcmToken() : $token');
 }
 
 void showFlutterNotification(RemoteMessage message) {
@@ -153,7 +156,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
-      home: SplashPage(),
+      home: LoginPage(),
     );
   }
 }
