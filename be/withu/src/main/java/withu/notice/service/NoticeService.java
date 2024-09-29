@@ -16,7 +16,6 @@ import withu.notice.dto.NoticeResponseDto;
 import withu.notice.entity.Notice;
 import withu.notice.repository.NoticeRepository;
 import withu.team.entity.Team;
-import withu.team.repository.TeamRepository;
 
 @Service
 @RequiredArgsConstructor
