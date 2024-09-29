@@ -24,7 +24,6 @@ public enum ExceptionCode {
     TEAM_CODE_REQUIRED(HttpStatus.BAD_REQUEST, "팀 코드가 제공되지 않았습니다."),
     MEMBER_NOT_IN_TEAM(HttpStatus.BAD_REQUEST, "팀에 소속되지 않은 사용자입니다."),
     TEAM_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 팀을 찾을 수 없습니다."),
-    DELETED_NOTICE(HttpStatus.GONE, "이 공지사항은 삭제되었습니다."),
 
 
 

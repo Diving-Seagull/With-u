@@ -45,9 +45,6 @@ public class Notice {
     @JoinColumn(name = "author_id", nullable = false)
     private Member author;
 
-    @Column(nullable = false)
-    private boolean isActive = true;
-
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -67,9 +64,5 @@ public class Notice {
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
-    }
-
-    public void deactivate() {
-        this.isActive = false;
     }
 }
