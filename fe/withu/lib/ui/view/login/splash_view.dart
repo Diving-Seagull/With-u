@@ -5,13 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/data/model/token_dto.dart';
-import 'package:withu/ui/page/login_page.dart';
-import 'package:withu/ui/view/main_view.dart';
+import 'package:withu/ui/page/login/login_page.dart';
+import 'package:withu/ui/view/main/main_view.dart';
 import 'dart:async';
 
-import 'package:withu/ui/viewmodel/splash_viewmodel.dart';
+import 'package:withu/ui/viewmodel/login/splash_viewmodel.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
