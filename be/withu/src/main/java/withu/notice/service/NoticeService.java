@@ -1,11 +1,14 @@
 package withu.notice.service;
 
+import static withu.global.exception.ExceptionCode.MEMBER_NOT_IN_TEAM;
 import static withu.global.exception.ExceptionCode.NOTICE_NOT_FOUND;
 import static withu.global.exception.ExceptionCode.NOTICE_NOT_IN_USER_TEAM;
 import static withu.global.exception.ExceptionCode.USER_NOT_LEADER;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import withu.global.exception.CustomException;
@@ -32,6 +35,17 @@ public class NoticeService {
         }
 
         return NoticeResponseDto.from(notice);
+    }
+
+    public List<NoticeResponseDto> getAllNotices(Member member) {
+        if (member.getTeam() == null) {
+            throw new CustomException(MEMBER_NOT_IN_TEAM);
+        }
+
+        List<Notice> notices = noticeRepository.findByTeamOrderByCreatedAtDesc(member.getTeam());
+        return notices.stream()
+            .map(NoticeResponseDto::from)
+            .collect(Collectors.toList());
     }
 
     @Transactional
