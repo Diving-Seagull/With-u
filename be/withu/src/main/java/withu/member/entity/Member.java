@@ -72,14 +72,6 @@ public class Member {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public void initMember(Role role, String description, String deviceUuid, String profileImage, String name) {
-        this.role = role;
-        this.description = description;
-        this.deviceUuid = deviceUuid;
-        this.profile = profileImage;
-        this.name = name;
-    }
-
     @Builder
     private Member(Long id, String email, String name, String description, String profile,
         SocialType socialType, String firebaseToken, String deviceUuid, Team team, Role role) {
@@ -93,6 +85,15 @@ public class Member {
         this.deviceUuid = deviceUuid;
         this.team = team;
         this.role = (role != null) ? role : Role.TEAMMATE;
+    }
+
+    public void initMember(Role role, String name, String description, String profile, String deviceUuid, Team team) {
+        this.role = (role != null) ? role : this.role;
+        this.name = name;
+        this.description = description;
+        this.profile = profile;
+        this.deviceUuid = deviceUuid;
+        this.team = team;
     }
 
     public void disable() {

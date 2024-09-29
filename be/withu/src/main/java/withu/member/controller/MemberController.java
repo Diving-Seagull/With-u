@@ -1,6 +1,7 @@
 package withu.member.controller;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +36,10 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getMemberByEmail(email));
     }
 
-    // todo get 요청으로 자기 팀에 해당하는 모든 팀원 반환
+    @GetMapping("/team-members")
+    public ResponseEntity<List<MemberResponseDto>> getTeamMembers(@LoginMember Member member) {
+        return ResponseEntity.ok(memberService.getTeamMembers(member));
+    }
 
     @PutMapping
     public ResponseEntity<MemberResponseDto> initMember(@LoginMember Member member,
