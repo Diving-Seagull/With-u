@@ -26,12 +26,7 @@ public class MemberService {
 
     @Transactional
     public MemberResponseDto getMember(Member member) {
-        return MemberResponseDto.builder()
-            .email(member.getEmail())
-            .name(member.getName())
-            .profile(member.getProfile())
-            .socialType(member.getSocialType())
-            .build();
+        return MemberResponseDto.toDto(member);
     }
 
     @Transactional
