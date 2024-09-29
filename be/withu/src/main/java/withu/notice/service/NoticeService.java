@@ -14,18 +14,12 @@ import org.springframework.stereotype.Service;
 import withu.global.exception.CustomException;
 import withu.member.entity.Member;
 import withu.member.enums.Role;
-<<<<<<< HEAD
 import withu.member.repository.MemberRepository;
-=======
->>>>>>> origin/develop
 import withu.notice.dto.NoticeRequestDto;
 import withu.notice.dto.NoticeResponseDto;
 import withu.notice.entity.Notice;
 import withu.notice.repository.NoticeRepository;
-<<<<<<< HEAD
 import withu.notification.service.FirebaseService;
-=======
->>>>>>> origin/develop
 import withu.team.entity.Team;
 
 @Service
@@ -33,11 +27,8 @@ import withu.team.entity.Team;
 public class NoticeService {
 
     private final NoticeRepository noticeRepository;
-<<<<<<< HEAD
     private final MemberRepository memberRepository;
     private final FirebaseService firebaseService;
-=======
->>>>>>> origin/develop
 
     public NoticeResponseDto getNotice(Member member, Long noticeId) {
         Notice notice = noticeRepository.findById(noticeId)
@@ -79,7 +70,6 @@ public class NoticeService {
             .build();
 
         Notice savedNotice = noticeRepository.save(notice);
-<<<<<<< HEAD
 
         // 팀원들에게 알림 전송
         List<Member> teamMembers = memberRepository.findByTeam(team);
@@ -87,8 +77,6 @@ public class NoticeService {
             "새로운 공지사항",
             author.getName() + "님이 새 공지사항을 작성했습니다: " + requestDto.getTitle());
 
-=======
->>>>>>> origin/develop
         return NoticeResponseDto.from(savedNotice);
     }
 
