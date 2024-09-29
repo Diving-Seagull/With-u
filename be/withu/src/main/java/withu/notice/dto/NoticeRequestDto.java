@@ -17,9 +17,6 @@ import withu.team.entity.Team;
 @Builder
 public class NoticeRequestDto {
 
-    @NotNull(message = "팀 ID는 필수입니다.")
-    private Long teamId;
-
     @NotBlank(message = "제목은 필수입니다.")
     @Size(max = 100, message = "제목은 100자를 초과할 수 없습니다.")
     private String title;
@@ -28,9 +25,9 @@ public class NoticeRequestDto {
     @Size(max = 5000, message = "내용은 5000자를 초과할 수 없습니다.")
     private String content;
 
-    public Notice toEntity(Team team, Member author) {
+    public Notice toEntity(Member author) {
         return Notice.builder()
-            .team(team)
+            .team(author.getTeam())
             .title(this.title)
             .content(this.content)
             .author(author)
