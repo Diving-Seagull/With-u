@@ -6,9 +6,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import withu.global.exception.CustomException;
-import withu.global.utils.JwtUtil;
 import withu.member.dto.MemberResponseDto;
-import withu.member.dto.MemberUpdateRequestDto;
+import withu.member.dto.MemberInitRequestDto;
 import withu.member.entity.Member;
 import withu.member.repository.MemberRepository;
 
@@ -26,35 +25,27 @@ public class MemberService {
 
     @Transactional
     public MemberResponseDto getMember(Member member) {
-        return MemberResponseDto.toDto(member);
+        return MemberResponseDto.from(member);
     }
 
     @Transactional
     public MemberResponseDto getMemberByEmail(String memberEmail) {
-        return MemberResponseDto.toDto(memberRepository.findByEmail(memberEmail)
+        return MemberResponseDto.from(memberRepository.findByEmail(memberEmail)
             .orElseThrow(() -> new CustomException(USER_NOT_FOUND)));
     }
 
     @Transactional
-    public MemberResponseDto updateMemberInfo(Member member, MemberUpdateRequestDto updateRequestDto) {
-        Member updatedMember = Member.builder()
-            .id(member.getId())
-            .email(member.getEmail())
-            .name(updateRequestDto.getName() != null && !updateRequestDto.getName().isEmpty()
-                ? updateRequestDto.getName() : member.getName())
-            .profile(updateRequestDto.getProfile() != null && !updateRequestDto.getProfile().isEmpty()
-                ? updateRequestDto.getProfile() : member.getProfile())
-            .socialType(member.getSocialType())
-            .build();
+    public MemberResponseDto initMember(Member member, MemberInitRequestDto updateDto) {
+        member.initMember(
+            updateDto.getRole(),
+            updateDto.getDescription(),
+            updateDto.getDeviceUuid(),
+            updateDto.getProfileImage(),
+            updateDto.getName()
+        );
 
-        Member savedMember = memberRepository.save(updatedMember);
-
-        return MemberResponseDto.builder()
-            .email(savedMember.getEmail())
-            .name(savedMember.getName())
-            .profile(savedMember.getProfile())
-            .socialType(savedMember.getSocialType())
-            .build();
+        Member updatedMember = memberRepository.save(member);
+        return MemberResponseDto.from(updatedMember);
     }
 
     @Transactional
