@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/ui/page/main/home_page.dart';
-import 'package:withu/ui/view/home_view.dart';
+import 'package:withu/ui/view/empty_view.dart';
 import 'package:withu/ui/viewmodel/main/home_viewmodel.dart';
 
-import '../../data/model/member.dart';
+import '../../../data/model/member.dart';
 
 class MainView extends StatelessWidget {
 

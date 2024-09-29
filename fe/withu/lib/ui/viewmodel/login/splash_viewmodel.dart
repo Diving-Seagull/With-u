@@ -4,8 +4,8 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:withu/data/api/google_login.dart';
 import 'package:withu/data/api/kakao_login.dart';
 
-import '../../data/model/token_dto.dart';
-import '../../data/repository/login_repository.dart';
+import '../../../data/model/token_dto.dart';
+import '../../../data/repository/login_repository.dart';
 
 class SplashViewModel with ChangeNotifier {
   late final LoginRepository _loginRepository;

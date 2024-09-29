@@ -4,9 +4,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:withu/data/api/kakao_login.dart';
 
-import '../../data/api/google_login.dart';
-import '../../data/model/token_dto.dart';
-import '../../data/repository/login_repository.dart';
+import '../../../data/api/google_login.dart';
+import '../../../data/model/token_dto.dart';
+import '../../../data/repository/login_repository.dart';
 
 class LoginViewModel with ChangeNotifier {
   final KakaoLoginApi _kakaoLoginApi = KakaoLoginApi();
@@ -18,7 +18,7 @@ class LoginViewModel with ChangeNotifier {
   Future<TokenDto?> setKakaoLogin() async {
     OAuthToken? token = await _kakaoLoginApi.signWithKakao();
     if(token != null) {
-      print(token.accessToken);
+      print('카카오 토큰 : ${token.accessToken}');
       String? fcmToken = await storage.read(key: 'fcmtoken');
       return await _loginRepository.getNewToken(token.accessToken, fcmToken, "kakao");
     }
