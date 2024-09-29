@@ -52,8 +52,4 @@ public class Team {
         this.leader = leader;
         this.teamCode = TeamCodeGenerator.generateUniqueCode();
     }
-
-    public void changeLeader(Member newLeader) {
-        this.leader = newLeader;
-    }
 }
