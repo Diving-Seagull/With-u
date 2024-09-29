@@ -37,6 +37,7 @@ out/
 .vscode/
 
 ### application.properties ###
+<<<<<<< HEAD
 src/main/resources/application.properties
 
 ### firebase account ###
