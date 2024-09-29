@@ -2,10 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/extension/string_extension.dart';
+import 'package:withu/ui/page/main/teammate_page.dart';
 
 import '../../../data/model/member.dart';
 import '../../viewmodel/main/home_viewmodel.dart';
-import '../setting_view.dart';
+import 'setting_view.dart';
 
 class HomeView extends StatelessWidget {
   late HomeViewModel _homeViewModel;
@@ -41,7 +42,7 @@ class HomeView extends StatelessWidget {
                 children: [
                   _topBar(context),
                   _userInfoSection(),
-                  _menuSection(),
+                  _menuSection(context),
                   _nowScheduleSection(),
                   _noticeSection(),
                 ],
@@ -118,7 +119,7 @@ class HomeView extends StatelessWidget {
         ));
   }
 
-  Widget _menuSection() {
+  Widget _menuSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min, //Column의 크기를 자식들의 크기에 맞게 최소화
@@ -132,7 +133,12 @@ class HomeView extends StatelessWidget {
             child: Row(
               children: [
                 Flexible(flex: 1, child: _createMenuBtn('path', '멤버관리')),
-                Flexible(flex: 1, child: _createMenuBtn('path', '인원확인')),
+                Flexible(flex: 1, child: GestureDetector(
+                  child: _createMenuBtn('path', '인원확인'),
+                  onTap: () {
+                    Navigator.push(context, CupertinoPageRoute(builder: (context) => TeamMatePage()));
+                  },
+                )),
                 Flexible(flex: 1, child: _createMenuBtn('path', '공지사항')),
                 Flexible(flex: 1, child: _createMenuBtn('path', '관광지도'))
               ],
