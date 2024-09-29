@@ -24,7 +24,7 @@ public class MemberResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static MemberResponseDto toDto(Member member) {
+    public static MemberResponseDto from(Member member) {
         return MemberResponseDto.builder()
             .id(member.getId())
             .email(member.getEmail())
