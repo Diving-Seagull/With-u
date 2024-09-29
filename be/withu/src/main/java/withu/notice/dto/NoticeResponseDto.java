@@ -21,7 +21,7 @@ public class NoticeResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static NoticeResponseDto toDto(Notice notice) {
+    public static NoticeResponseDto from(Notice notice) {
         return NoticeResponseDto.builder()
             .id(notice.getId())
             .teamId(notice.getTeam().getId())

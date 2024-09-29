@@ -1,6 +1,7 @@
 package withu.member.controller;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import withu.auth.LoginMember;
 import withu.member.dto.MemberResponseDto;
-import withu.member.dto.MemberUpdateRequestDto;
+import withu.member.dto.MemberInitRequestDto;
 import withu.member.entity.Member;
 import withu.member.service.MemberService;
 
@@ -35,8 +36,16 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getMemberByEmail(email));
     }
 
-    // todo put 요청으로 추가 정보 기입하기(role 선택, 회원 설명, deviceuuid, 프로필 사진, 이름 제대로 적혀있는지 확인)
-    // todo get 요청으로 자기 팀에 해당하는 모든 팀원 반환
+    @GetMapping("/team-members")
+    public ResponseEntity<List<MemberResponseDto>> getTeamMembers(@LoginMember Member member) {
+        return ResponseEntity.ok(memberService.getTeamMembers(member));
+    }
+
+    @PutMapping
+    public ResponseEntity<MemberResponseDto> initMember(@LoginMember Member member,
+        @Valid @RequestBody MemberInitRequestDto initRequestDto) {
+        return ResponseEntity.ok(memberService.initMember(member, initRequestDto));
+    }
 
     @DeleteMapping
     public ResponseEntity<Void> deleteMember(@LoginMember Member member) {
