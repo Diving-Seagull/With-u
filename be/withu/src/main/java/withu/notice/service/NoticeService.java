@@ -1,5 +1,6 @@
 package withu.notice.service;
 
+import static withu.global.exception.ExceptionCode.DELETED_NOTICE;
 import static withu.global.exception.ExceptionCode.NOTICE_NOT_FOUND;
 import static withu.global.exception.ExceptionCode.NOTICE_NOT_IN_USER_TEAM;
 import static withu.global.exception.ExceptionCode.USER_NOT_LEADER;
@@ -27,6 +28,9 @@ public class NoticeService {
         Notice notice = noticeRepository.findById(noticeId)
             .orElseThrow(() -> new CustomException(NOTICE_NOT_FOUND));
 
+        if (!notice.isActive()) {
+            throw new CustomException(DELETED_NOTICE);
+        }
         if (!notice.getTeam().equals(member.getTeam())) {
             throw new CustomException(NOTICE_NOT_IN_USER_TEAM);
         }
@@ -57,10 +61,6 @@ public class NoticeService {
 
         Notice notice = noticeRepository.findById(noticeId)
             .orElseThrow(() -> new CustomException(NOTICE_NOT_FOUND));
-
-        if (!notice.getTeam().equals(member.getTeam())) {
-            throw new CustomException(NOTICE_NOT_IN_USER_TEAM);
-        }
 
         notice.update(requestDto.getTitle(), requestDto.getContent());
         return NoticeResponseDto.from(notice);
