@@ -32,11 +32,22 @@ public class Member {
 
     @Column(unique = true)
     private String email;
+
+    @Column(length = 20)
     private String name;
+
+    @Column(length = 50)
+    private String description;
+
     private String profile;
+
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
+
     private String firebaseToken;
+
+    @Column(name = "device_uuid")
+    private String deviceUuid;
 
     @Column(nullable = false)
     @ColumnDefault("true")
@@ -49,13 +60,15 @@ public class Member {
     private LocalDateTime updatedAt;
 
     @Builder
-    private Member(Long id, String email, String name, String profile, SocialType socialType, String firebaseToken) {
+    private Member(Long id, String email, String name, String description, String profile, SocialType socialType, String firebaseToken, String deviceUuid) {
         this.id = id;
         this.email = email;
         this.name = name;
+        this.description = description;
         this.profile = profile;
         this.socialType = socialType;
         this.firebaseToken = firebaseToken;
+        this.deviceUuid = deviceUuid;
     }
 
     public void disable() {
