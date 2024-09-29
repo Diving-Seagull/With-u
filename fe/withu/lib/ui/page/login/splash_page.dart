@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-import 'package:withu/ui/view/splash_view.dart';
-
-import '../../data/api/kakao_login.dart';
-import '../viewmodel/splash_viewmodel.dart';
+import '../../view/login/splash_view.dart';
+import '../../viewmodel/login/splash_viewmodel.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
