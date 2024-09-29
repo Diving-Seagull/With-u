@@ -1,6 +1,7 @@
 package withu.notice.controller;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,6 +33,12 @@ public class NoticeController {
         @PathVariable Long noticeId) {
         return ResponseEntity.ok(noticeService.getNotice(member, noticeId));
     }
+
+    @GetMapping()
+    public ResponseEntity<List<NoticeResponseDto>> getAllNotices(@LoginMember Member member) {
+        return ResponseEntity.ok(noticeService.getAllNotices(member));
+    }
+
 
     @PostMapping
     public ResponseEntity<NoticeResponseDto> createNotice(@LoginMember Member member,
