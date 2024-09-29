@@ -14,8 +14,6 @@ import 'dart:async';
 
 import 'package:withu/ui/viewmodel/login/splash_viewmodel.dart';
 
-import '../../page/login/add_info_page.dart';
-
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
 
@@ -50,8 +48,7 @@ class _SplashViewState extends State<SplashView> {
       if (jwtToken != null) {
         print('카카오 자동 로그인 성공 ${jwtToken.token}');
         await _storage.write(key: 'jwtToken', value: jsonEncode(jwtToken));
-        // moveMainScreen();
-        checkRegister();
+        moveMainScreen();
         return;
       }
     }
@@ -70,23 +67,12 @@ class _SplashViewState extends State<SplashView> {
       if (jwtToken != null) {
         print('구글 자동 로그인 성공 ${jwtToken.token}');
         await _storage.write(key: 'jwtToken', value: jsonEncode(jwtToken));
-        // moveMainScreen();
-        checkRegister();
+        moveMainScreen();
         return;
       }
     }
     print('구글 자동 로그인 실패');
     moveLoginScreen();
-  }
-
-  void checkRegister() async {
-    var member = await viewModel.getMember();
-    if(member!.deviceUuid == null) {
-      moveAddInfoScreen();
-    }
-    else {
-      moveMainScreen();
-    }
   }
 
   // 로그인 화면 이동
@@ -95,15 +81,6 @@ class _SplashViewState extends State<SplashView> {
       Navigator.pop(context); //Splash 화면 제거
       Navigator.push(
           context, CupertinoPageRoute(builder: (context) => LoginPage()));
-    }
-  }
-
-  // 유저 추가 정보 기입 화면 이동
-  void moveAddInfoScreen() {
-    if(mounted){
-      Navigator.pop(context); //Splash 화면 제거
-      Navigator.push(
-          context, CupertinoPageRoute(builder: (context) => AddInfoPage()));
     }
   }
 
