@@ -5,6 +5,7 @@ import 'package:withu/extension/string_extension.dart';
 
 import '../../../data/model/member.dart';
 import '../../viewmodel/main/home_viewmodel.dart';
+import '../setting_view.dart';
 
 class HomeView extends StatelessWidget {
   late HomeViewModel _homeViewModel;
@@ -38,7 +39,7 @@ class HomeView extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  _topBar(),
+                  _topBar(context),
                   _userInfoSection(),
                   _menuSection(),
                   _nowScheduleSection(),
@@ -50,7 +51,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _topBar() {
+  Widget _topBar(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(top: 0, bottom: 16.0, left: 0, right: 0),
       child: Row(
@@ -74,7 +75,17 @@ class HomeView extends StatelessWidget {
               height: 50,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: const [Text('버튼1'), Text('버튼2')],
+                children: [
+                  GestureDetector(
+                    child: Text('알림'),
+                  ),
+                  GestureDetector(
+                    child: Text('설정'),
+                    onTap: () {
+                      Navigator.push(context, CupertinoPageRoute(builder: (context) => SettingView()));
+                    }
+                  ),
+                ],
               ),
             ),
           )
