@@ -2,25 +2,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/extension/string_extension.dart';
-import 'package:withu/ui/page/main/teammate_page.dart';
 
 import '../../../data/model/member.dart';
 import '../../viewmodel/main/home_viewmodel.dart';
-import 'setting_view.dart';
+import '../setting_view.dart';
 
 class HomeView extends StatelessWidget {
   late HomeViewModel _homeViewModel;
   late double _deviceWidth, _deviceHeight;
+  Member? _member;
 
   void init(BuildContext context) async {
-    if(_homeViewModel.member == null) {
-      await _homeViewModel.getMemberInfo();
+    _homeViewModel = Provider.of<HomeViewModel>(context);
+    _member = await _homeViewModel.getMemberInfo();
+    print(_member!.toJson());
+    if(_member == null) {
+      // 문제 발생 상황 -> 로그인 화면 이동
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    _homeViewModel = Provider.of<HomeViewModel>(context, listen: true);
     init(context);
     _deviceWidth = MediaQuery.of(context).size.width;
     _deviceHeight = MediaQuery.of(context).size.height;
@@ -39,7 +41,7 @@ class HomeView extends StatelessWidget {
                 children: [
                   _topBar(context),
                   _userInfoSection(),
-                  _menuSection(context),
+                  _menuSection(),
                   _nowScheduleSection(),
                   _noticeSection(),
                 ],
@@ -100,7 +102,7 @@ class HomeView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${_homeViewModel.member?.name}님,'.insertZwj(),
+              'data님,'.insertZwj(),
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontWeight: FontWeight.w700,
@@ -108,7 +110,7 @@ class HomeView extends StatelessWidget {
               ),
             ),
             Text(
-              'WYD 행사에 오신 것을\n환영합니다.',
+              'WYD 행사에 오신 것을 환영합니다.'.insertZwj(),
               style: TextStyle(fontSize: 25),
               textAlign: TextAlign.left,
             )
@@ -116,7 +118,7 @@ class HomeView extends StatelessWidget {
         ));
   }
 
-  Widget _menuSection(BuildContext context) {
+  Widget _menuSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min, //Column의 크기를 자식들의 크기에 맞게 최소화
@@ -130,12 +132,7 @@ class HomeView extends StatelessWidget {
             child: Row(
               children: [
                 Flexible(flex: 1, child: _createMenuBtn('path', '멤버관리')),
-                Flexible(flex: 1, child: GestureDetector(
-                  child: _createMenuBtn('path', '인원확인'),
-                  onTap: () {
-                    Navigator.push(context, CupertinoPageRoute(builder: (context) => TeamMatePage()));
-                  },
-                )),
+                Flexible(flex: 1, child: _createMenuBtn('path', '인원확인')),
                 Flexible(flex: 1, child: _createMenuBtn('path', '공지사항')),
                 Flexible(flex: 1, child: _createMenuBtn('path', '관광지도'))
               ],
