@@ -31,7 +31,7 @@ public class NoticeService {
             throw new CustomException(NOTICE_NOT_IN_USER_TEAM);
         }
 
-        return NoticeResponseDto.toDto(notice);
+        return NoticeResponseDto.from(notice);
     }
 
     @Transactional
@@ -48,7 +48,7 @@ public class NoticeService {
             .build();
 
         Notice savedNotice = noticeRepository.save(notice);
-        return NoticeResponseDto.toDto(savedNotice);
+        return NoticeResponseDto.from(savedNotice);
     }
 
     @Transactional
@@ -63,7 +63,7 @@ public class NoticeService {
         }
 
         notice.update(requestDto.getTitle(), requestDto.getContent());
-        return NoticeResponseDto.toDto(notice);
+        return NoticeResponseDto.from(notice);
     }
 
     @Transactional

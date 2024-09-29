@@ -87,6 +87,15 @@ public class Member {
         this.role = (role != null) ? role : Role.TEAMMATE;
     }
 
+    public void initMember(Role role, String name, String description, String profile, String deviceUuid, Team team) {
+        this.role = (role != null) ? role : this.role;
+        this.name = name;
+        this.description = description;
+        this.profile = profile;
+        this.deviceUuid = deviceUuid;
+        this.team = team;
+    }
+
     public void disable() {
         this.isEnabled = false;
     }
