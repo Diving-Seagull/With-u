@@ -68,10 +68,10 @@ public class MemberService {
 
         member.initMember(
             newRole,
-            initDto.getDescription(),
-            initDto.getDeviceUuid(),
-            initDto.getProfileImage(),
             initDto.getName(),
+            initDto.getDescription(),
+            initDto.getProfileImage(),
+            initDto.getDeviceUuid(),
             team
         );
 
