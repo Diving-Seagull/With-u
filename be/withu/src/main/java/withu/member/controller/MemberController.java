@@ -35,6 +35,9 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getMemberByEmail(email));
     }
 
+    // todo put 요청으로 추가 정보 기입하기(role 선택, 회원 설명, deviceuuid, 프로필 사진, 이름 제대로 적혀있는지 확인)
+    // todo get 요청으로 자기 팀에 해당하는 모든 팀원 반환
+
     @DeleteMapping
     public ResponseEntity<Void> deleteMember(@LoginMember Member member) {
         memberService.deleteMember(member);

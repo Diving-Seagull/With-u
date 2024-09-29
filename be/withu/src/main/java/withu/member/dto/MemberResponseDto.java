@@ -18,7 +18,9 @@ public class MemberResponseDto {
     private String email;
     private String name;
     private String profile;
+    private String description;
     private SocialType socialType;
+    private String deviceUuid;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -27,8 +29,10 @@ public class MemberResponseDto {
             .id(member.getId())
             .email(member.getEmail())
             .name(member.getName())
+            .description(member.getDescription())
             .profile(member.getProfile())
             .socialType(member.getSocialType())
+            .deviceUuid(member.getDeviceUuid())
             .createdAt(member.getCreatedAt())
             .updatedAt(member.getUpdatedAt())
             .build();
