@@ -4,8 +4,7 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/services.dart';
 
 class DeviceInfo {
-
-  Future<Map<String, String>> getDeviceInfo() async {
+  static Future<Map<String, String>> getDeviceInfo() async {
 
     final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
     String device_id = '';	//기기 고유번호
@@ -27,5 +26,4 @@ class DeviceInfo {
     }
     return {'device_type': device_type, 'device_id': device_id};
   }
-
 }
