@@ -7,8 +7,6 @@ import 'package:withu/data/model/token_dto.dart';
 
 class LoginRepository {
   late final LoginDataSource _loginDataSource;
-  // final RemoteDataSource _remoteDataSource;
-  // final LocalDataSource _localDataSource;
 
   LoginRepository() { _loginDataSource = LoginDataSource(); }
 

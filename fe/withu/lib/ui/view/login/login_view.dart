@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:withu/ui/page/login/add_info_page.dart';
 import 'package:withu/ui/view/main/main_view.dart';
 import 'package:withu/ui/viewmodel/login/login_viewmodel.dart';
 
@@ -39,7 +40,10 @@ class LoginView extends StatelessWidget {
             print('구글 로그인 성공 $jwt');
             await _storage.write(key: 'jwtToken', value: jsonEncode(jwt));
             // 메인 화면 이동
-            if(context.mounted) moveMainScreen(context);
+            if(context.mounted) {
+              // moveMainScreen(context);
+              moveAddInfoScreen(context);
+            }
           }
         }, child: Text('구글 로그인'),
       )
@@ -54,7 +58,10 @@ class LoginView extends StatelessWidget {
           print('카카오 로그인 성공 $jwt');
           await _storage.write(key: 'jwtToken', value: jsonEncode(jwt));
           // 메인 화면 이동
-          if(context.mounted) moveMainScreen(context);
+          if(context.mounted){
+            // moveMainScreen(context);
+            moveAddInfoScreen(context);
+          }
         }
       }, child: Text('카카오 로그인'),
     )
@@ -66,6 +73,15 @@ class LoginView extends StatelessWidget {
       Navigator.pop(context); //Splash 화면 제거
       Navigator.push(
           context, CupertinoPageRoute(builder: (context) => MainView()));
+    }
+  }
+
+  // 유저 추가 정보 기입 화면 이동
+  void moveAddInfoScreen(BuildContext context) {
+    if(context.mounted){
+      Navigator.pop(context); //Splash 화면 제거
+      Navigator.push(
+          context, CupertinoPageRoute(builder: (context) => AddInfoPage()));
     }
   }
 }
