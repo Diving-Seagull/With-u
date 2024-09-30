@@ -11,19 +11,16 @@ import 'setting_view.dart';
 class HomeView extends StatelessWidget {
   late HomeViewModel _homeViewModel;
   late double _deviceWidth, _deviceHeight;
-  Member? _member;
 
   void init(BuildContext context) async {
-    _homeViewModel = Provider.of<HomeViewModel>(context);
-    _member = await _homeViewModel.getMemberInfo();
-    print(_member!.toJson());
-    if(_member == null) {
-      // 문제 발생 상황 -> 로그인 화면 이동
+    if(_homeViewModel.member == null) {
+      await _homeViewModel.getMemberInfo();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    _homeViewModel = Provider.of<HomeViewModel>(context, listen: true);
     init(context);
     _deviceWidth = MediaQuery.of(context).size.width;
     _deviceHeight = MediaQuery.of(context).size.height;
@@ -103,7 +100,7 @@ class HomeView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'data님,'.insertZwj(),
+              '${_homeViewModel.member?.name}님,'.insertZwj(),
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontWeight: FontWeight.w700,
@@ -111,7 +108,7 @@ class HomeView extends StatelessWidget {
               ),
             ),
             Text(
-              'WYD 행사에 오신 것을 환영합니다.'.insertZwj(),
+              'WYD 행사에 오신 것을\n환영합니다.',
               style: TextStyle(fontSize: 25),
               textAlign: TextAlign.left,
             )

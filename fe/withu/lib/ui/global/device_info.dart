@@ -4,9 +4,6 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/services.dart';
 
 class DeviceInfo {
-
-  static const platform = MethodChannel('com.divingseagull.withu/advertise');
-
   static Future<Map<String, String>> getDeviceInfo() async {
 
     final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
