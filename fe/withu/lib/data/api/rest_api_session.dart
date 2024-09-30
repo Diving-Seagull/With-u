@@ -16,4 +16,9 @@ class RestApiSession {
     return await http.post(uri, headers: headers, body: json.encode(data))
         .timeout(const Duration(seconds: 10)); //Timeout 설정
   }
+
+  static getPutUri(Uri uri, Map<String, String> headers, dynamic data) async {
+    return await http.put(uri, headers: headers, body: json.encode(data))
+        .timeout(const Duration(seconds: 10));
+  }
 }
