@@ -8,7 +8,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/ui/viewmodel/main/teammate_viewmodel.dart';
 
-import '../../device_info.dart';
+import '../../global/device_info.dart';
 
 class TeamMateView extends StatelessWidget {
 
@@ -16,7 +16,7 @@ class TeamMateView extends StatelessWidget {
   FlutterBlue flutterBlue = FlutterBlue.instance;
 
   void init() async {
-    dynamic data = await DeviceInfo().getDeviceInfo();
+    dynamic data = await DeviceInfo.getDeviceInfo();
     print(data);
     startScanForTeamMembers();
   }
