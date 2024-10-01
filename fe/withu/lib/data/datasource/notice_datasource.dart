@@ -10,8 +10,8 @@ import '../model/token_dto.dart';
 class NoticeDataSource {
 
   // final _uriPath = 'http://127.0.0.1:8080/api/notice';
-  final _uriPath = 'http://10.0.2.2:8080/api/notice';
-  // final _uriPath = 'http://192.168.219.112:8080/api/notice';
+  // final _uriPath = 'http://10.0.2.2:8080/api/notice';
+  final _uriPath = 'http://192.168.219.112:8080/api/notice';
 
   final Map<String, String> headers = {
     'Content-Type': 'application/json',

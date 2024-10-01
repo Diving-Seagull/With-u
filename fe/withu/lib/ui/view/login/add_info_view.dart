@@ -5,7 +5,6 @@ import 'package:withu/data/model/init_member.dart';
 import 'package:withu/ui/global/custom_dialog.dart';
 import 'package:withu/ui/global/device_info.dart';
 import 'package:withu/ui/global/color_data.dart';
-import 'package:withu/ui/page/main/main_page.dart';
 import 'package:withu/ui/viewmodel/login/add_info_viewmodel.dart';
 
 import '../../../data/model/role.dart';
@@ -257,7 +256,7 @@ class _AddInfoView extends State<AddInfoView> {
             Navigator.pop(ct);
             Navigator.pop(context);
             Navigator.push(
-                ct, CupertinoPageRoute(builder: (context) => MainPage()));
+                ct, CupertinoPageRoute(builder: (context) => MainView()));
           });
         }
       }

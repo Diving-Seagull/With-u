@@ -37,8 +37,8 @@ class _NoticeView extends State<NoticeView> {
           right: true,
           child: Column(
             children: [
-              _noticeList()
-
+              _noticeList(),
+              _noticeAddBtn()
             ],
           )
         )
@@ -87,5 +87,20 @@ class _NoticeView extends State<NoticeView> {
               },
       )
     );
+  }
+
+  Widget _noticeAddBtn() {
+    if(_member?.role! == 'LEADER'){
+      return FloatingActionButton.large(
+        onPressed: () {
+
+        },
+        backgroundColor: Colors.blue,
+
+      );
+    }
+    else{
+      return Scaffold();
+    }
   }
 }
