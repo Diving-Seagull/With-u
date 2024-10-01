@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:withu/ui/global/convert_uuid.dart';
 import 'package:withu/ui/page/main/home_page.dart';
 import 'package:withu/ui/view/empty_view.dart';
 
@@ -35,11 +38,11 @@ class MainView extends StatelessWidget {
 
   // 팀원으로 로그인 시 Bluetooth Advertisement 활성화
   void startAdvertisement() async {
-    try {
-      // 현재 로그인한 디바이스 정보를 네이티브 코드에 전달
-      await DeviceInfo.platform.invokeMethod('startAdvertising', {'deviceInfo': 'test' });
-    } on PlatformException catch (e) {
-      print("Failed to start advertising: '${e.message}'.");
-    }
+    // try {
+    //   // 현재 로그인한 디바이스 정보를 네이티브 코드에 전달
+    //   await DeviceInfo.platform.invokeMethod('startAdvertising', {'deviceUuid': ConvertUuid.nameUUIDFromBytes('4dcb44b286e1b339') });
+    // } on PlatformException catch (e) {
+    //   print("Failed to start advertising: '${e.message}'.");
+    // }
   }
 }
