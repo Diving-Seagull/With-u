@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/extension/string_extension.dart';
+import 'package:withu/ui/page/main/notice_page.dart';
 import 'package:withu/ui/page/main/teammate_page.dart';
 
 import '../../../data/model/member.dart';
@@ -136,7 +137,9 @@ class HomeView extends StatelessWidget {
                     Navigator.push(context, CupertinoPageRoute(builder: (context) => TeamMatePage()));
                   },
                 )),
-                Flexible(flex: 1, child: _createMenuBtn('path', '공지사항')),
+                Flexible(flex: 1, child: GestureDetector( child : _createMenuBtn('path', '공지사항'), onTap: () {
+                  Navigator.push(context, CupertinoPageRoute(builder: (context) => NoticePage()));
+                })),
                 Flexible(flex: 1, child: _createMenuBtn('path', '관광지도'))
               ],
             ))

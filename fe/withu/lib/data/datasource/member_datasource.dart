@@ -9,8 +9,8 @@ import 'package:withu/data/model/token_dto.dart';
 
 class MemberDataSource {
   // final _uriPath = 'http://127.0.0.1:8080/api/member';
-  // final _uriPath = 'http://10.0.2.2:8080/api/member';
-  final _uriPath = 'http://192.168.219.112:8080/api/member';
+  final _uriPath = 'http://10.0.2.2:8080/api/member';
+  // final _uriPath = 'http://192.168.219.112:8080/api/member';
 
   final Map<String, String> headers = {
     'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ class MemberDataSource {
           await RestApiSession.getUrl(Uri.parse('$_uriPath/team-members'), headers);
       final int statusCode = response.statusCode;
       if (statusCode == 200) {
-        print(json.decode(utf8.decode(response.bodyBytes)));
+        // print(json.decode(utf8.decode(response.bodyBytes)));
         List<dynamic> result = json.decode(utf8.decode(response.bodyBytes));
         return result.map((item) => Member.fromJson(item)).toList();
       } else if (statusCode == 401) {

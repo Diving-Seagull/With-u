@@ -9,6 +9,7 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:withu/ui/global/color_data.dart';
 import 'package:withu/ui/page/login/add_info_page.dart';
 import 'package:withu/ui/page/login/login_page.dart';
+import 'package:withu/ui/page/main/notice_page.dart';
 import 'package:withu/ui/view/login/login_view.dart';
 import 'package:withu/ui/view/main/main_view.dart';
 import 'package:withu/ui/page/login/splash_page.dart';
@@ -158,7 +159,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
-      home: PermissionView(),
+      home: LoginPage(),
     );
   }
 }
