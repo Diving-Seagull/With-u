@@ -18,12 +18,11 @@ class NoticeDataSource {
     'Accept': 'application/json'
   };
 
-  Future<List<Notice>?> getTeamNotice(String jwtToken, int teamId) async {
+  Future<List<Notice>?> getTeamNotice(String jwtToken) async {
     TokenDto tokenDto = TokenDto.fromJson(json.decode(jwtToken));
     headers['Authorization'] = 'Bearer ${tokenDto.token}';
-    String path = '$_uriPath?teamId=$teamId';
     try{
-      http.Response response = await RestApiSession.getUrl(Uri.parse(path), headers);
+      http.Response response = await RestApiSession.getUrl(Uri.parse(_uriPath), headers);
       final int statusCode = response.statusCode;
 
       if(statusCode == 200){
@@ -36,7 +35,7 @@ class NoticeDataSource {
     } on http.ClientException {
       print('인터넷 문제 발생');
     } on TimeoutException {
-      print('$path TimeoutException');
+      print('$_uriPath TimeoutException');
     }
     return null;
   }
