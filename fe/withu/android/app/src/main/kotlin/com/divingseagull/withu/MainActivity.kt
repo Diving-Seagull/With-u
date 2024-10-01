@@ -32,8 +32,8 @@ class MainActivity : FlutterActivity() {
             // MethodChannel 설정
             MethodChannel(flutterEngine!!.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
                 if (call.method == "startAdvertising") {
-                    val teamInfo = call.argument<String>("teamInfo")
-                    startAdvertising(teamInfo)
+                    val uuid = call.argument<String>("deviceUuid")
+                    startAdvertising(uuid)
                     result.success(null)
                 } else {
                     result.notImplemented()
@@ -43,17 +43,19 @@ class MainActivity : FlutterActivity() {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun startAdvertising(teamInfo: String?) {
+    private fun startAdvertising(deviceUuid: String?) {
         val settings = AdvertiseSettings.Builder()
             .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
             .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
             .setConnectable(true)
             .build()
 
-        val teamInfoBytes = teamInfo?.toByteArray() ?: byteArrayOf()
+        var uuidStr = ParcelUuid.fromString(deviceUuid)
+        Log.i("Android-Advertisement", "$uuidStr")
+
         val data = AdvertiseData.Builder()
-            .addServiceUuid(ParcelUuid.fromString(UUID.randomUUID().toString())) // 고유 서비스 UUID
-            .addManufacturerData(0x004C, teamInfoBytes) // Manufacturer ID에 기기 정보 추가
+            .setIncludeDeviceName(false)
+            .addServiceUuid(uuidStr) // 고유 서비스 UUID
             .build()
 
         advertiser?.startAdvertising(settings, data, object : AdvertiseCallback() {
@@ -66,7 +68,7 @@ class MainActivity : FlutterActivity() {
             override fun onStartFailure(errorCode: Int) {
                 super.onStartFailure(errorCode)
                 // 광고 시작 실패
-                Log.e("Android-Advertisement", "광고 실패!")
+                Log.e("Android-Advertisement", "광고 실패!${errorCode}")
             }
         })
     }
@@ -75,5 +77,6 @@ class MainActivity : FlutterActivity() {
     override fun onDestroy() {
         super.onDestroy()
         advertiser?.stopAdvertising(object : AdvertiseCallback() {})
+        Log.i("Android-Advertisement", "광고 멈춤!")
     }
 }
