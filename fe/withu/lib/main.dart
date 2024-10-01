@@ -160,7 +160,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoApp(
       theme: CupertinoThemeData(scaffoldBackgroundColor: CupertinoColors.white),
-      home: LoginPage(),
+      home: PermissionView(),
     );
   }
 }
