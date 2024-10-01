@@ -18,6 +18,7 @@ class _PermissionViewState extends State<PermissionView> {
       Permission.location,
       Permission.camera,
       Permission.bluetooth,
+      Permission.bluetoothConnect,
       Permission.bluetoothScan,
       Permission.bluetoothAdvertise
     ].request();
@@ -34,11 +35,15 @@ class _PermissionViewState extends State<PermissionView> {
       openSetting();
       return;
     }
-    if (await Permission.bluetoothScan.isGranted != true) {
+    if (await Permission.bluetoothScan.isGranted != true){
       openSetting();
       return;
     }
-    if (await Permission.bluetoothAdvertise.isGranted != true) {
+    if (await Permission.bluetoothAdvertise.isGranted != true){
+      openSetting();
+      return;
+    }
+    if (await Permission.bluetoothConnect.isGranted != true){
       openSetting();
       return;
     }
