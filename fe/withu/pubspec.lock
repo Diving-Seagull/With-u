@@ -259,14 +259,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.32.12"
-  flutter_bluetooth_sharing:
-    dependency: "direct main"
-    description:
-      name: flutter_bluetooth_sharing
-      sha256: a9bbeff2de6554a11a95325cf8b1db27a1f4054ef7cd0cd51f848b1567ea19a4
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.2"
   flutter_dotenv:
     dependency: "direct main"
     description:
