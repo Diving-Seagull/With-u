@@ -37,7 +37,7 @@ class LoginView extends StatelessWidget {
         onPressed: () async {
           TokenDto? jwt = await _viewModel.setGoogleLogin();
           if(jwt != null) {
-            print('구글 로그인 성공 $jwt');
+            print('구글 로그인 성공 ${jwt.token}');
             await _storage.write(key: 'jwtToken', value: jsonEncode(jwt));
             // 메인 화면 이동
             if(context.mounted) {
