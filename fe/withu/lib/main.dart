@@ -159,6 +159,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
+      theme: CupertinoThemeData(scaffoldBackgroundColor: CupertinoColors.white),
       home: LoginPage(),
     );
   }

@@ -6,8 +6,8 @@ class NoticeRepository {
   final NoticeDataSource _dataSource = NoticeDataSource();
   final FlutterSecureStorage storage = FlutterSecureStorage();
 
-  Future<List<Notice>?> getTeamNotice(int teamId) async {
+  Future<List<Notice>?> getTeamNotice() async {
     String? jwtToken = await storage.read(key: 'jwtToken') as String;
-    return _dataSource.getTeamNotice(jwtToken, teamId);
+    return _dataSource.getTeamNotice(jwtToken);
   }
 }
