@@ -13,12 +13,17 @@ class HomeView extends StatelessWidget {
 
   late HomeViewModel _homeViewModel;
   late double _deviceWidth, _deviceHeight;
-  final Member? _member;
-  HomeView(this._member, {super.key});
+
+  void init() async {
+    if(_homeViewModel.member == null) {
+      await _homeViewModel.getMemberInfo();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     _homeViewModel = Provider.of<HomeViewModel>(context, listen: true);
+    init();
     _deviceWidth = MediaQuery.of(context).size.width;
     _deviceHeight = MediaQuery.of(context).size.height;
     // TODO: implement build
@@ -101,7 +106,7 @@ class HomeView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${_member?.name}님,'.insertZwj(),
+                '${_homeViewModel.member?.name}님,'.insertZwj(),
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
@@ -154,7 +159,7 @@ class HomeView extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 CupertinoPageRoute(
-                                    builder: (context) => NoticePage(_member)));
+                                    builder: (context) => NoticePage(_homeViewModel.member)));
                           })),
                   Flexible(flex: 1, child: _createMenuBtn('path', '관광지도'))
                 ],
