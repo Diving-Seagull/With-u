@@ -8,7 +8,7 @@ class Member {
   final String socialType;
   final String? description;
   final String? deviceUuid;
-  final int? team;
+  final String? role;
 
   Member({
         required this.email,
@@ -17,7 +17,7 @@ class Member {
         required this.socialType,
         required this.description,
         required this.deviceUuid,
-        required this.team
+        required this.role
       });
 
   factory Member.fromJson(Map<String, dynamic> json) {
@@ -28,7 +28,7 @@ class Member {
       socialType: json['socialType'],
       description: json['description'],
       deviceUuid: json['deviceUuid'],
-        team: json['team']
+        role: json['role']
     );
   }
 
@@ -40,7 +40,7 @@ class Member {
       'description': description,
       'socialType': socialType,
       'deviceUuid': deviceUuid,
-      'team': team
+      'role': role
     };
   }
 }

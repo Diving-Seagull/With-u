@@ -5,13 +5,12 @@ import '../../../data/model/member.dart';
 import '../../view/main/home_view.dart';
 
 class HomePage extends StatelessWidget {
-  final Member? _member;
-  HomePage(this._member, {super.key});
+  HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<HomeViewModel>(
         create: (_) => HomeViewModel(),
-        child: HomeView(_member));
+        child: HomeView());
   }
 }
