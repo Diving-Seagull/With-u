@@ -8,6 +8,7 @@ class Member {
   final String socialType;
   final String? description;
   final String? deviceUuid;
+  final int? team;
 
   Member({
         required this.email,
@@ -16,6 +17,7 @@ class Member {
         required this.socialType,
         required this.description,
         required this.deviceUuid,
+        required this.team
       });
 
   factory Member.fromJson(Map<String, dynamic> json) {
@@ -24,8 +26,9 @@ class Member {
       email: json['email'],
       profile: json['profile'],
       socialType: json['socialType'],
-      description: json['description'] ?? null,
-      deviceUuid: json['deviceUuid'] ?? null
+      description: json['description'],
+      deviceUuid: json['deviceUuid'],
+        team: json['team']
     );
   }
 
@@ -36,7 +39,8 @@ class Member {
       'profile': profile,
       'description': description,
       'socialType': socialType,
-      'deviceUuid': deviceUuid
+      'deviceUuid': deviceUuid,
+      'team': team
     };
   }
 }
