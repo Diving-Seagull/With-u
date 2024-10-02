@@ -10,7 +10,7 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/data/model/member.dart';
 import 'package:withu/ui/global/convert_uuid.dart';
-import 'package:withu/ui/viewmodel/main/teammate_viewmodel.dart';
+import 'package:withu/ui/viewmodel/main/checkteam_viewmodel.dart';
 
 import '../../global/custom_dialog.dart';
 import '../../global/device_info.dart';
