@@ -1,18 +1,12 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:withu/ui/global/color_data.dart';
-import 'package:withu/ui/page/login/add_info_page.dart';
-import 'package:withu/ui/page/login/login_page.dart';
-import 'package:withu/ui/page/main/notice_page.dart';
-import 'package:withu/ui/view/login/login_view.dart';
-import 'package:withu/ui/view/main/main_view.dart';
-import 'package:withu/ui/page/login/splash_page.dart';
 import 'package:withu/ui/view/login/permission_view.dart';
 import 'firebase_options.dart';
 
@@ -62,12 +56,6 @@ void main() async {
 Future<void> fcmSetting() async {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  await messaging.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
-
   NotificationSettings settings = await messaging.requestPermission(
     alert: true,
     announcement: false,
@@ -78,38 +66,51 @@ Future<void> fcmSetting() async {
     sound: true,
   );
 
-  var initialzationSettingsIOS = const DarwinInitializationSettings(
-    requestSoundPermission: true,
-    requestBadgePermission: true,
-    requestAlertPermission: true,
-  );
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
 
-  var initializationSettingsAndroid = const AndroidInitializationSettings(
-      '@mipmap/ic_launcher');
+    var initialzationSettingsIOS = const DarwinInitializationSettings(
+      requestSoundPermission: true,
+      requestBadgePermission: true,
+      requestAlertPermission: true,
+    );
 
-  var initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initialzationSettingsIOS);
+    var initializationSettingsAndroid = const AndroidInitializationSettings(
+        '@mipmap/ic_launcher');
 
-  await _flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(_channel);
+    var initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid,
+        iOS: initialzationSettingsIOS);
 
-  await _flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-      IOSFlutterLocalNotificationsPlugin>()
-      ?.getActiveNotifications();
+    if(Platform.isAndroid) {
+      await _flutterLocalNotificationsPlugin.initialize(
+          initializationSettings,
+          onDidReceiveNotificationResponse: (notificationResponse) {
+            // notification 클릭 이벤트
+            print('notification 클릭 이벤트 발생!');
+            // notification 데이터 불러오기
+            // notificationResponse.payload
+          }
+      );
 
-  await _flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-    onDidReceiveNotificationResponse: (notificationResponse) {
-      // notification 클릭 이벤트
-      print('notification 클릭 이벤트 발생!');
-      // notification 데이터 불러오기
-      // notificationResponse.payload
+      await _flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+          ?.createNotificationChannel(_channel);
     }
-  );
+    else if(Platform.isIOS) {
+      await messaging.setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+    }
+
+    // await _flutterLocalNotificationsPlugin
+    //     .resolvePlatformSpecificImplementation<
+    //     IOSFlutterLocalNotificationsPlugin>()
+    //     ?.getActiveNotifications();
+  }
+
   // 토큰 발급
   await addFcmToken();
 }
@@ -141,7 +142,6 @@ void showFlutterNotification(RemoteMessage message) {
           presentAlert: true,
           presentBadge: true,
           presentSound: true,
-          badgeNumber: 1,
         ),
         android: AndroidNotificationDetails(
           _channel.id,
