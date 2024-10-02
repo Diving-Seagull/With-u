@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-import 'package:withu/ui/view/main/teammate_view.dart';
-import 'package:withu/ui/viewmodel/main/teammate_viewmodel.dart';
+import 'package:withu/ui/view/main/checkteam_view.dart';
+import 'package:withu/ui/viewmodel/main/checkteam_viewmodel.dart';
 
 class TeamMatePage extends StatelessWidget {
 
