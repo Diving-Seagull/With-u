@@ -26,8 +26,11 @@ class _NoticeView extends State<NoticeView> {
 
   @override
   Widget build(BuildContext context) {
+    //build 후 콜백 호출
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      initData();
+    });
     _viewModel = Provider.of<NoticeViewModel>(context, listen: true);
-    initData();
     return Scaffold(
         appBar: CustomAppBar.getNavigationBar(context, ''),
         body: SafeArea(
