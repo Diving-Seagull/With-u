@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/ui/page/login/add_info_page.dart';
+import 'package:withu/ui/page/main/home_page.dart';
 import 'package:withu/ui/view/main/main_view.dart';
 import 'package:withu/ui/viewmodel/login/login_viewmodel.dart';
 
@@ -72,7 +73,7 @@ class LoginView extends StatelessWidget {
     if(context.mounted){
       Navigator.pop(context); //Splash 화면 제거
       Navigator.push(
-          context, CupertinoPageRoute(builder: (context) => MainView()));
+          context, CupertinoPageRoute(builder: (context) => HomePage()));
     }
   }
 

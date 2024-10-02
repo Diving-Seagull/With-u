@@ -32,8 +32,8 @@ class TeamMateView extends StatelessWidget {
   }
 
   // 10초 간 스캔
-  void startScanForTeamMembers(BuildContext context) {
-    FlutterBluePlus.startScan(withServices: [Guid(ConvertUuid.nameUUIDFromBytes('4dcb44b286e1b339'))], timeout: Duration(seconds: 10));
+  void startScanForTeamMembers(BuildContext context) async {
+    FlutterBluePlus.startScan(withServices: [Guid(ConvertUuid.nameUUIDFromBytes('51CEE9EF-2925-425C-8DC4-CCC24C3ED886'))], timeout: Duration(seconds: 10));
     FlutterBluePlus.scanResults.listen((results) {
       for (ScanResult r in results) {
         // print('Device Data found: ${r.rssi.toString()}');
@@ -44,7 +44,11 @@ class TeamMateView extends StatelessWidget {
         // String hexString = deviceInfo.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join(' ');
         // print(String.fromCharCode(hexString.tora));
       }
-    });
+    },
+      onError: (e) {
+        print('Error During scan: $e');
+      }
+    );
   }
 
   @override
