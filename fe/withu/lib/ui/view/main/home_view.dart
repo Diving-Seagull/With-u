@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/extension/string_extension.dart';
 import 'package:withu/ui/page/main/notice_page.dart';
-import 'package:withu/ui/page/main/teammate_page.dart';
+import 'package:withu/ui/page/main/checkteam_page.dart';
 
 import '../../../data/model/member.dart';
 import '../../global/convert_uuid.dart';
