@@ -1,29 +1,77 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/extension/string_extension.dart';
 import 'package:withu/ui/page/main/notice_page.dart';
 import 'package:withu/ui/page/main/teammate_page.dart';
 
 import '../../../data/model/member.dart';
+import '../../global/convert_uuid.dart';
+import '../../global/device_info.dart';
 import '../../viewmodel/main/home_viewmodel.dart';
+import '../empty_view.dart';
 import 'setting_view.dart';
 
-class HomeView extends StatelessWidget {
 
+class HomeView extends StatelessWidget {
   late HomeViewModel _homeViewModel;
-  late double _deviceWidth, _deviceHeight;
 
   void init() async {
     if(_homeViewModel.member == null) {
       await _homeViewModel.getMemberInfo();
+      startAdvertisement();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     _homeViewModel = Provider.of<HomeViewModel>(context, listen: true);
-    init();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      init();
+    });
+    return CupertinoTabScaffold(
+        tabBar: CupertinoTabBar(items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈')
+        ]),
+        tabBuilder: (context, index)  {
+          switch(index){
+            case 0:
+              return _HomeView(_homeViewModel);
+            case 1:
+              return SecondView();
+            case 2:
+              return ThirdView();
+            default:
+              return _HomeView(_homeViewModel);
+          }
+        }
+    );
+  }
+
+  // 팀원으로 로그인 시 Bluetooth Advertising 활성화
+  void startAdvertisement() async {
+    // try {
+    //   // 현재 로그인한 디바이스 정보를 네이티브 코드에 전달
+    //   await DeviceInfo.platform.invokeMethod('startAdvertising', {'deviceUuid': ConvertUuid.nameUUIDFromBytes('51CEE9EF-2925-425C-8DC4-CCC24C3ED886') });
+    // } on PlatformException catch (e) {
+    //   print("Failed to start advertising: '${e.message}'.");
+    // }
+  }
+}
+
+
+
+class _HomeView extends StatelessWidget {
+  late final HomeViewModel _homeViewModel;
+  _HomeView(this._homeViewModel);
+
+  late double _deviceWidth, _deviceHeight;
+
+  @override
+  Widget build(BuildContext context) {
     _deviceWidth = MediaQuery.of(context).size.width;
     _deviceHeight = MediaQuery.of(context).size.height;
     // TODO: implement build
