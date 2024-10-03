@@ -29,6 +29,7 @@ public enum ExceptionCode {
 
     SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 일정을 찾을 수 없습니다."),
     NOT_USERS_SCHEDULE(HttpStatus.FORBIDDEN, "해당 작업을 수행할 권한이 없습니다."),
+    SCHEDULE_CONFLICT(HttpStatus.CONFLICT, "이미 해당 시간에 기존 일정이 존재합니다."),
 
 
 
