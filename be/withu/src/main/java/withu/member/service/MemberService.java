@@ -59,10 +59,7 @@ public class MemberService {
 
         if (newRole == Role.LEADER) {
             team = teamService.createTeam(member);
-        } else if (newRole == Role.TEAMMATE) {
-            if (initDto.getTeamCode() == null) {
-                throw new CustomException(TEAM_CODE_REQUIRED);
-            }
+        } else if (newRole == Role.TEAMMATE && initDto.getTeamCode() != null) {
             team = teamService.findTeamByCode(initDto.getTeamCode());
         }
 

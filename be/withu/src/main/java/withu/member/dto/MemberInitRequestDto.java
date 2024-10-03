@@ -11,20 +11,18 @@ import withu.member.enums.Role;
 @NoArgsConstructor
 public class MemberInitRequestDto {
 
-    @NotNull
+    @NotNull(message = "역할은 필수입니다.")
     private Role role;
 
-    @NotBlank
+    @NotBlank(message = "설명은 필수입니다.")
     @Size(max = 50, message = "설명은 50자를 초과할 수 없습니다.")
     private String description;
 
-    @NotBlank
+    @NotBlank(message = "deviceUUID는 필수입니다.")
     private String deviceUuid;
 
-    @NotBlank
     private String profileImage;
 
-    @NotBlank(message = "이름은 필수입니다.")
     @Size(max = 20, message = "이름은 20자를 초과할 수 없습니다.")
     private String name;
 

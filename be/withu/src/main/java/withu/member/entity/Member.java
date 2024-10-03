@@ -25,7 +25,7 @@ import withu.member.enums.SocialType;
 import withu.team.entity.Team;
 
 @Entity
-@Table(name = "member")
+@Table(name = "members")
 @Getter
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
@@ -89,11 +89,18 @@ public class Member {
 
     public void initMember(Role role, String name, String description, String profile, String deviceUuid, Team team) {
         this.role = (role != null) ? role : this.role;
-        this.name = name;
         this.description = description;
-        this.profile = profile;
         this.deviceUuid = deviceUuid;
-        this.team = team;
+
+        if (name != null) {
+            this.name = name;
+        }
+        if (profile != null) {
+            this.profile = profile;
+        }
+        if (team != null) {
+            this.team = team;
+        }
     }
 
     public void disable() {
