@@ -1,6 +1,6 @@
 package withu.auth;
 
-import static withu.global.exception.ExceptionCode.SOCIAL_TOKEN_MISSING;
+import static withu.global.exception.ExceptionCode.JWT_TOKEN_MISSING;
 import static withu.global.exception.ExceptionCode.TOKEN_EXPIRED;
 
 import lombok.AllArgsConstructor;
@@ -33,7 +33,7 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String token = extractToken(webRequest);
         if (token == null) {
-            throw new CustomException(SOCIAL_TOKEN_MISSING);
+            throw new CustomException(JWT_TOKEN_MISSING);
         }
 
         if (jwtUtil.isTokenExpired(token)) {
