@@ -15,10 +15,11 @@ import 'setting_view.dart';
 
 
 class HomeView extends StatelessWidget {
+  var _isChecked = false;
   late HomeViewModel _homeViewModel;
 
   void init() async {
-    if(_homeViewModel.member == null) {
+    if (_homeViewModel.member == null) {
       await _homeViewModel.getMemberInfo();
       startAdvertisement();
     }
@@ -28,26 +29,34 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     _homeViewModel = Provider.of<HomeViewModel>(context, listen: true);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      init();
+      if (!_isChecked) {
+        _isChecked = true;
+        init();
+      }
     });
-    return CupertinoTabScaffold(
-        tabBar: CupertinoTabBar(items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈')
-        ]),
-        tabBuilder: (context, index)  {
-          switch(index){
-            case 0:
-              return _HomeView(_homeViewModel);
-            case 1:
-              return SecondView();
-            case 2:
-              return ThirdView();
-            default:
-              return _HomeView(_homeViewModel);
-          }
-        }
+    return SafeArea(
+        top: true,
+        bottom: true,
+        left: true,
+        right: true,
+        child: CupertinoTabScaffold(
+            tabBar: CupertinoTabBar(items: [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: '테스트'),
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: '테스트2')
+            ]),
+            tabBuilder: (context, index) {
+              if(index == 0) {
+                return _HomeView(_homeViewModel);
+              }
+              else if(index == 1) {
+                return SecondView();
+              }
+              else {
+                return ThirdView();
+              }
+            }
+        )
     );
   }
 
@@ -63,45 +72,47 @@ class HomeView extends StatelessWidget {
 }
 
 
-
 class _HomeView extends StatelessWidget {
   late final HomeViewModel _homeViewModel;
+
   _HomeView(this._homeViewModel);
 
   late double _deviceWidth, _deviceHeight;
 
   @override
   Widget build(BuildContext context) {
-    _deviceWidth = MediaQuery.of(context).size.width;
-    _deviceHeight = MediaQuery.of(context).size.height;
+    _deviceWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    _deviceHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
     // TODO: implement build
     return Scaffold(
-      body: SafeArea(
-          top: true,
-          bottom: true,
-          left: true,
-          right: true,
-          child: SingleChildScrollView(
-            child: Container(
-              margin: EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  _topBar(context),
-                  _userInfoSection(),
-                  _menuSection(context),
-                  _nowScheduleSection(),
-                  _noticeSection(),
-                ],
+      appBar: PreferredSize(preferredSize: Size.fromHeight(60), child: _topBar(context)),
+        body: SingleChildScrollView(
+              child: Container(
+                margin: EdgeInsets.all(24.0),
+                height: _deviceHeight - 60,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    _userInfoSection(),
+                    _menuSection(context),
+                    _nowScheduleSection(),
+                    _noticeSection(),
+                  ],
+                ),
               ),
-            ),
-          )),
-    );
+            )
+        );
   }
 
   Widget _topBar(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 0, bottom: 16.0, left: 0, right: 0),
+      padding: EdgeInsets.only(left: 24, right: 24, top: 10, bottom: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -110,7 +121,7 @@ class _HomeView extends StatelessWidget {
             flex: 1,
             child: Container(
               width: _deviceWidth / 2,
-              height: 50,
+              height: 60,
               child: Image.asset(
                 'assets/images/logo_blue.png',
               ),
@@ -120,7 +131,6 @@ class _HomeView extends StatelessWidget {
             flex: 4,
             child: Container(
               width: _deviceWidth / 2,
-              height: 50,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -146,7 +156,7 @@ class _HomeView extends StatelessWidget {
 
   Widget _userInfoSection() {
     return Padding(
-        padding: EdgeInsets.symmetric(vertical: 40, horizontal: 0),
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
         child: Container(
           width: _deviceWidth,
           child: Column(
@@ -207,7 +217,8 @@ class _HomeView extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 CupertinoPageRoute(
-                                    builder: (context) => NoticePage(_homeViewModel.member)));
+                                    builder: (context) =>
+                                        NoticePage(_homeViewModel.member)));
                           })),
                   Flexible(flex: 1, child: _createMenuBtn('path', '관광지도'))
                 ],
@@ -276,12 +287,12 @@ class _HomeView extends StatelessWidget {
               children: [
                 const Text('공지사항',
                     style:
-                        TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                    TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                 Container(
                   margin: EdgeInsets.only(top: 0, bottom: 4, left: 0, right: 0),
                   child: Text('중요 공지!!',
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                 ),
                 Text('description\ndescription', style: TextStyle(fontSize: 12))
               ],
