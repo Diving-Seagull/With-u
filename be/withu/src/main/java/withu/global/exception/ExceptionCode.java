@@ -16,6 +16,7 @@ public enum ExceptionCode {
 
     // 잘못된 접근
     SOCIAL_TOKEN_MISSING(HttpStatus.BAD_REQUEST, "소셜 토큰이 제공되지 않았습니다."),
+    JWT_TOKEN_MISSING(HttpStatus.BAD_REQUEST, "JWT 토큰이 제공되지 않았습니다."),
     FIREBASE_TOKEN_MISSING(HttpStatus.BAD_REQUEST, "파이어베이스 토큰이 제공되지 않았습니다."),
     BAD_APPROACH(HttpStatus.BAD_REQUEST, "잘못된 접근입니다."),
 
