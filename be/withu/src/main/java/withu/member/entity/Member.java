@@ -25,7 +25,7 @@ import withu.member.enums.SocialType;
 import withu.team.entity.Team;
 
 @Entity
-@Table(name = "member")
+@Table(name = "members")
 @Getter
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
