@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -158,8 +159,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: CupertinoColors.systemGrey, // 원하는 색상으로 변경
+      statusBarBrightness: Brightness.light, // 상태바의 아이콘 색상 (밝은 배경에 어두운 아이콘)
+    ));
+
     return CupertinoApp(
-      theme: CupertinoThemeData(scaffoldBackgroundColor: CupertinoColors.white),
+      theme: CupertinoThemeData(
+          scaffoldBackgroundColor: CupertinoColors.white,
+      ),
       home: PermissionView(),
     );
   }
