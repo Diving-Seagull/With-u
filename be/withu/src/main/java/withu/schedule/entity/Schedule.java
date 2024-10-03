@@ -69,4 +69,19 @@ public class Schedule {
             this.team = null;
         }
     }
+
+    public void update(String title, LocalDateTime startTime, LocalDateTime endTime,
+        String description, ScheduleType type, Team team) {
+        this.title = title;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.description = description;
+        this.type = (type != null) ? type : ScheduleType.PERSONAL;
+
+        if (this.type == ScheduleType.PERSONAL) {
+            this.team = null;
+        } else {
+            this.team = team;
+        }
+    }
 }

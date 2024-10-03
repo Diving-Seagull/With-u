@@ -1,5 +1,7 @@
 package withu.schedule.service;
 
+import static withu.global.exception.ExceptionCode.NOT_USERS_SCHEDULE;
+import static withu.global.exception.ExceptionCode.SCHEDULE_NOT_FOUND;
 import static withu.global.exception.ExceptionCode.TEAM_NOT_FOUND;
 
 import java.time.LocalDate;
@@ -11,9 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import withu.global.exception.CustomException;
 import withu.member.entity.Member;
-import withu.member.repository.MemberRepository;
 import withu.schedule.dto.ScheduleRequestDto;
 import withu.schedule.dto.ScheduleResponseDto;
+import withu.schedule.dto.ScheduleUpdateDto;
 import withu.schedule.entity.Schedule;
 import withu.schedule.enums.ScheduleType;
 import withu.schedule.repository.ScheduleRepository;
@@ -41,8 +43,10 @@ public class ScheduleService {
         return getFilteredSchedules(start, end, member);
     }
 
-    private List<ScheduleResponseDto> getFilteredSchedules(LocalDateTime start, LocalDateTime end, Member member) {
-        List<Schedule> allSchedules = scheduleRepository.findByMemberAndTimeBetween(member, start, end);
+    private List<ScheduleResponseDto> getFilteredSchedules(LocalDateTime start, LocalDateTime end,
+        Member member) {
+        List<Schedule> allSchedules = scheduleRepository.findByMemberAndTimeBetween(member, start,
+            end);
 
         List<Schedule> personalSchedules = allSchedules.stream()
             .filter(s -> s.getType() == ScheduleType.PERSONAL)
@@ -90,5 +94,44 @@ public class ScheduleService {
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
         return ScheduleResponseDto.from(savedSchedule);
+    }
+
+    @Transactional
+    public ScheduleResponseDto updateSchedule(Long scheduleId, ScheduleUpdateDto updateDto,
+        Member member) {
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+            .orElseThrow(() -> new CustomException(SCHEDULE_NOT_FOUND));
+
+        // 스케줄 생성자 또는 팀장만 수정 가능
+        if (!schedule.getMember().equals(member) &&
+            (schedule.getTeam() == null || !isTeamLeader(member, schedule.getTeam()))) {
+            throw new CustomException(NOT_USERS_SCHEDULE);
+        }
+
+        Team team = null;
+        if (updateDto.getType() == ScheduleType.TEAM) {
+            team = teamRepository.findById(updateDto.getTeamId())
+                .orElseThrow(() -> new CustomException(TEAM_NOT_FOUND));
+        }
+
+        schedule.update(
+            updateDto.getTitle(),
+            updateDto.getStartTime(),
+            updateDto.getEndTime(),
+            updateDto.getDescription(),
+            updateDto.getType(),
+            team
+        );
+
+        Schedule updatedSchedule = scheduleRepository.save(schedule);
+        return ScheduleResponseDto.from(updatedSchedule);
+    }
+
+    private boolean isTeamLeader(Member member, Team team) {
+        if (team == null || member == null) {
+            return false;
+        }
+        Member leader = team.getLeader();
+        return leader != null && leader.equals(member);
     }
 }

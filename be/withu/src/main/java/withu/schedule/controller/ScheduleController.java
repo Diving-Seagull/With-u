@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +18,7 @@ import withu.auth.LoginMember;
 import withu.member.entity.Member;
 import withu.schedule.dto.ScheduleRequestDto;
 import withu.schedule.dto.ScheduleResponseDto;
+import withu.schedule.dto.ScheduleUpdateDto;
 import withu.schedule.service.ScheduleService;
 
 @RestController
@@ -42,8 +45,17 @@ public class ScheduleController {
     }
 
     @PostMapping
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@Valid @RequestBody ScheduleRequestDto requestDto, @LoginMember Member member) {
+    public ResponseEntity<ScheduleResponseDto> createSchedule(
+        @Valid @RequestBody ScheduleRequestDto requestDto, @LoginMember Member member) {
         ScheduleResponseDto responseDto = scheduleService.createSchedule(requestDto, member);
         return ResponseEntity.ok(responseDto);
+    }
+
+    @PutMapping("/{scheduleId}")
+    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable Long scheduleId,
+        @Valid @RequestBody ScheduleUpdateDto updateDto, @LoginMember Member member) {
+        ScheduleResponseDto updatedSchedule = scheduleService.updateSchedule(scheduleId, updateDto,
+            member);
+        return ResponseEntity.ok(updatedSchedule);
     }
 }
