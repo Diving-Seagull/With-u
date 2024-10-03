@@ -1,8 +1,10 @@
 package withu.schedule.service;
 
 import static withu.global.exception.ExceptionCode.NOT_USERS_SCHEDULE;
+import static withu.global.exception.ExceptionCode.SCHEDULE_CONFLICT;
 import static withu.global.exception.ExceptionCode.SCHEDULE_NOT_FOUND;
 import static withu.global.exception.ExceptionCode.TEAM_NOT_FOUND;
+import static withu.global.exception.ExceptionCode.USER_NOT_LEADER;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -75,11 +77,27 @@ public class ScheduleService {
     public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto, Member member) {
         Team team = null;
 
-        // todo 팀 일정 등록시 팀장만 가능하도록 유효성 검사 진행?
-
         if (requestDto.getType() == ScheduleType.TEAM) {
             team = teamRepository.findById(requestDto.getTeamId())
                 .orElseThrow(() -> new CustomException(TEAM_NOT_FOUND));
+
+            if (!isTeamLeader(member, team)) {
+                throw new CustomException(USER_NOT_LEADER);
+            }
+
+            // 팀 일정 중복 검사
+            List<Schedule> conflictingTeamSchedules = scheduleRepository.findConflictingTeamSchedules(
+                team, requestDto.getStartTime(), requestDto.getEndTime());
+            if (!conflictingTeamSchedules.isEmpty()) {
+                throw new CustomException(SCHEDULE_CONFLICT);
+            }
+        }
+
+        // 개인 일정 중복 검사
+        List<Schedule> conflictingSchedules = scheduleRepository.findConflictingSchedules(
+            member, requestDto.getStartTime(), requestDto.getEndTime());
+        if (!conflictingSchedules.isEmpty()) {
+            throw new CustomException(SCHEDULE_CONFLICT);
         }
 
         Schedule schedule = Schedule.builder()
