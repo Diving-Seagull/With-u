@@ -1,5 +1,8 @@
 package withu.notification.service;
 
+import com.google.firebase.messaging.AndroidNotification;
+import com.google.firebase.messaging.ApnsConfig;
+import com.google.firebase.messaging.Aps;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
@@ -21,6 +24,16 @@ public class FirebaseService {
                         .setBody(body)
                         .build())
                     .setToken(member.getFirebaseToken())
+                    .setAndroidConfig(com.google.firebase.messaging.AndroidConfig.builder()
+                        .setNotification(AndroidNotification.builder()
+                            .setSound("default")
+                            .build())
+                        .build())
+                    .setApnsConfig(ApnsConfig.builder()
+                        .setAps(Aps.builder()
+                            .setSound("default")
+                            .build())
+                        .build())
                     .build();
 
                 try {
