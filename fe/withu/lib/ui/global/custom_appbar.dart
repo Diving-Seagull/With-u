@@ -9,6 +9,7 @@ class CustomAppBar {
       child: Container(
         height: 80,
         child: CupertinoNavigationBar(
+          backgroundColor: Colors.white,
           leading: Align(
             widthFactor: 1.0,
             alignment: Alignment.center,

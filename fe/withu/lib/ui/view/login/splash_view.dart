@@ -9,7 +9,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/data/model/token_dto.dart';
 import 'package:withu/ui/page/login/login_page.dart';
-import 'package:withu/ui/view/main/main_view.dart';
+import 'package:withu/ui/page/main/home_page.dart';
+import 'package:withu/ui/view/main/home_view.dart';
 import 'dart:async';
 
 import 'package:withu/ui/viewmodel/login/splash_viewmodel.dart';
@@ -112,7 +113,7 @@ class _SplashViewState extends State<SplashView> {
     if (mounted) {
       Navigator.pop(context); //Splash 화면 제거
       Navigator.push(
-          context, CupertinoPageRoute(builder: (context) => MainView()));
+          context, CupertinoPageRoute(builder: (context) => HomePage()));
     }
   }
 
