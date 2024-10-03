@@ -102,7 +102,7 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findById(scheduleId)
             .orElseThrow(() -> new CustomException(SCHEDULE_NOT_FOUND));
 
-        // 스케줄 생성자 또는 팀장만 수정 가능
+        // 일정 생성자 또는 팀장만 수정 가능
         if (!schedule.getMember().equals(member) &&
             (schedule.getTeam() == null || !isTeamLeader(member, schedule.getTeam()))) {
             throw new CustomException(NOT_USERS_SCHEDULE);
@@ -133,5 +133,23 @@ public class ScheduleService {
         }
         Member leader = team.getLeader();
         return leader != null && leader.equals(member);
+    }
+
+    @Transactional
+    public void deleteSchedule(Long scheduleId, Member member) {
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+            .orElseThrow(() -> new CustomException(SCHEDULE_NOT_FOUND));
+
+        // 일정 생성자 또는 팀장만 삭제 가능
+        if (!hasPermissionToModify(schedule, member)) {
+            throw new CustomException(NOT_USERS_SCHEDULE);
+        }
+
+        scheduleRepository.delete(schedule);
+    }
+
+    private boolean hasPermissionToModify(Schedule schedule, Member member) {
+        return schedule.getMember().equals(member) ||
+            (schedule.getTeam() != null && isTeamLeader(member, schedule.getTeam()));
     }
 }
