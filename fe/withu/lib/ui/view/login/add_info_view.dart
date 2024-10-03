@@ -6,10 +6,9 @@ import 'package:withu/ui/global/custom_dialog.dart';
 import 'package:withu/ui/global/device_info.dart';
 import 'package:withu/ui/global/color_data.dart';
 import 'package:withu/ui/page/main/home_page.dart';
+import 'package:withu/ui/view/main/home_view.dart';
 import 'package:withu/ui/viewmodel/login/add_info_viewmodel.dart';
-
 import '../../../data/model/role.dart';
-import '../main/main_view.dart';
 
 class AddInfoView extends StatefulWidget {
   @override
