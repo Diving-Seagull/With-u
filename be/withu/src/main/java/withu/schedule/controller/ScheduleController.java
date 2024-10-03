@@ -5,7 +5,9 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,7 +50,7 @@ public class ScheduleController {
     public ResponseEntity<ScheduleResponseDto> createSchedule(
         @Valid @RequestBody ScheduleRequestDto requestDto, @LoginMember Member member) {
         ScheduleResponseDto responseDto = scheduleService.createSchedule(requestDto, member);
-        return ResponseEntity.ok(responseDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @PutMapping("/{scheduleId}")
@@ -57,5 +59,12 @@ public class ScheduleController {
         ScheduleResponseDto updatedSchedule = scheduleService.updateSchedule(scheduleId, updateDto,
             member);
         return ResponseEntity.ok(updatedSchedule);
+    }
+
+    @DeleteMapping("/{scheduleId}")
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId,
+        @LoginMember Member member) {
+        scheduleService.deleteSchedule(scheduleId, member);
+        return ResponseEntity.noContent().build();
     }
 }
