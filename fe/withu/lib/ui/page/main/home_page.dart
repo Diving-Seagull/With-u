@@ -4,7 +4,7 @@ import 'package:withu/ui/viewmodel/main/home_viewmodel.dart';
 import '../../view/main/home_view.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
