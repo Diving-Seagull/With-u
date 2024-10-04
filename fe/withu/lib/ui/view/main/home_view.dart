@@ -62,12 +62,15 @@ class HomeView extends StatelessWidget {
 
   // 팀원으로 로그인 시 Bluetooth Advertising 활성화
   void startAdvertisement() async {
-    // try {
-    //   // 현재 로그인한 디바이스 정보를 네이티브 코드에 전달
-    //   await DeviceInfo.platform.invokeMethod('startAdvertising', {'deviceUuid': ConvertUuid.nameUUIDFromBytes('51CEE9EF-2925-425C-8DC4-CCC24C3ED886') });
-    // } on PlatformException catch (e) {
-    //   print("Failed to start advertising: '${e.message}'.");
-    // }
+    if(_homeViewModel.member!.role == 'LEADER') {
+      try {
+        // 현재 로그인한 디바이스 정보를 네이티브 코드에 전달
+        await DeviceInfo.platform.invokeMethod('startAdvertising',
+            {'deviceUuid': ConvertUuid.nameUUIDFromBytes(_homeViewModel.member!.deviceUuid!) });
+      } on PlatformException catch (e) {
+        print("Failed to start advertising: '${e.message}'.");
+      }
+    }
   }
 }
 
