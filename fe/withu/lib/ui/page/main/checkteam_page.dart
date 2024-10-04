@@ -7,8 +7,8 @@ class TeamMatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<TeammateViewModel>(
-        create: (_) => TeammateViewModel(),
-        child: TeamMateView());
+    return ChangeNotifierProvider<CheckteamViewModel>(
+        create: (_) => CheckteamViewModel(),
+        child: CheckTeamView());
   }
 }
