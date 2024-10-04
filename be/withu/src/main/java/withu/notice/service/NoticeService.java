@@ -61,29 +61,20 @@ public class NoticeService {
             throw new CustomException(MEMBER_NOT_IN_TEAM);
         }
 
-        Notice notice = Notice.builder()
-            .team(team)
-            .title(requestDto.getTitle())
-            .content(requestDto.getContent())
-            .author(author)
-            .build();
+        Notice notice = requestDto.toEntity(author);
 
-        List<String> imageUrls = requestDto.getImageUrls();
-        if (imageUrls != null && !imageUrls.isEmpty()) {
-            if (imageUrls.size() > 5) {
-                throw new CustomException(NOTICE_IMAGE_LIMIT_EXCEEDED);
-            }
-            for (int i = 0; i < imageUrls.size(); i++) {
-                notice.getImages()
-                    .add(new NoticeImage(notice, imageUrls.get(i), i));
-            }
+        if (requestDto.isPinned()) {
+            unpinExistingNotices(team);
+            notice.pin();
         }
 
         Notice savedNotice = noticeRepository.save(notice);
 
         // Firebase 알림 전송
         List<Member> teamMembers = memberRepository.findByTeam(team);
-        String imageUrl = (imageUrls != null && !imageUrls.isEmpty()) ? imageUrls.get(0) : "";
+        String imageUrl = (requestDto.getImageUrls() != null && !requestDto.getImageUrls().isEmpty())
+            ? requestDto.getImageUrls().get(0)
+            : "";
 
         notificationService.sendNotificationToTeam(
             teamMembers,
@@ -93,6 +84,12 @@ public class NoticeService {
         );
 
         return NoticeResponseDto.from(savedNotice);
+    }
+
+    private void unpinExistingNotices(Team team) {
+        List<Notice> pinnedNotices = noticeRepository.findByTeamAndPinnedTrue(team);
+        pinnedNotices.forEach(Notice::unpin);
+        noticeRepository.saveAll(pinnedNotices);
     }
 
     @Transactional
