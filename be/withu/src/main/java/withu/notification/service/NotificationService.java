@@ -24,7 +24,6 @@ public class NotificationService {
 
     private final MemberRepository memberRepository;
     private final TeamRepository teamRepository;
-    private final TeamService teamService;
 
     public void sendTeamAlert(Long teamId, NotificationRequestDto requestDto, Member sender) {
         if (!sender.isLeader()) {
@@ -40,7 +39,8 @@ public class NotificationService {
 
         List<Member> targetMembers = memberRepository.findAllById(requestDto.getTargetMemberIds());
 
-        if (targetMembers.stream().anyMatch(member -> !member.getTeam().getId().equals(team.getId()))) {
+        if (targetMembers.stream()
+            .anyMatch(member -> !member.getTeam().getId().equals(team.getId()))) {
             throw new CustomException(INVALID_TEAM_MEMBERS);
         }
 
@@ -50,7 +50,8 @@ public class NotificationService {
         sendNotificationToTeam(targetMembers, title, body, null);
     }
 
-    public void sendNotificationToTeam(List<Member> teamMembers, String title, String body, String imageUrl) {
+    public void sendNotificationToTeam(List<Member> teamMembers, String title, String body,
+        String imageUrl) {
         teamMembers.forEach(member -> {
             if (member.getFirebaseToken() != null) {
                 sendNotification(member, title, body, imageUrl);
@@ -97,5 +98,17 @@ public class NotificationService {
             log.error("Failed to send message to member ID {}", member.getId(), e);
             throw new CustomException(NOTIFICATION_ERROR);
         }
+    }
+
+    // 팀장의 위치가 업데이트되었을 때 팀원들에게 알림을 보내는 메서드
+    public void sendLocationUpdateNotificationToTeam(Member leader) {
+        List<Member> teamMembers = memberRepository.findByTeam(leader.getTeam());
+
+        teamMembers.removeIf(member -> member.getId().equals(leader.getId()));
+
+        String title = "팀장님의 새로운 위치를 확인해 주세요";
+        String body = leader.getName() + " 팀장님이 새로운 위치로 이동하셨습니다. 위치 정보를 확인해 주세요.";
+
+        sendNotificationToTeam(teamMembers, title, body, null);
     }
 }
