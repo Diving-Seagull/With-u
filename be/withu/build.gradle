@@ -35,10 +35,13 @@ dependencies {
 	// Firebase Admin SDK
 	implementation 'com.google.firebase:firebase-admin:9.2.0'
 
-	runtimeOnly 'mysql:mysql-connector-java'
-	implementation 'mysql:mysql-connector-java:8.0.33'
+	// MySQL 커넥터
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// Logging (Spring Boot 3.3.1에 맞는 버전 사용)
+	implementation 'org.springframework.boot:spring-boot-starter-logging'
 }
 
 tasks.named('test') {
