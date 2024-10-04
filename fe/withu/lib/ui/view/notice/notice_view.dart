@@ -6,12 +6,12 @@ import 'package:provider/provider.dart';
 import 'package:withu/data/model/notice.dart';
 import 'package:withu/ui/global/custom_appbar.dart';
 import 'package:withu/ui/global/custom_shadow.dart';
-import 'package:withu/ui/view/main/add_notice_view.dart';
-import 'package:withu/ui/viewmodel/main/notice_viewmodel.dart';
+import 'package:withu/ui/view/notice/add_notice_view.dart';
+import 'package:withu/ui/viewmodel/notice/notice_viewmodel.dart';
 
 import '../../../data/model/member.dart';
 import '../../global/color_data.dart';
-import '../../page/main/add_notice_page.dart';
+import '../../page/notice/add_notice_page.dart';
 import 'noticedetail_view.dart';
 
 class NoticeView extends StatefulWidget {
