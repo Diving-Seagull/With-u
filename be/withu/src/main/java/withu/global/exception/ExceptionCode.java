@@ -46,9 +46,12 @@ public enum ExceptionCode {
 
     MEMBER_LOCATION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 사용자의 위치를 찾을 수 없습니다."),
 
+    CSV_FILE_ERROR(HttpStatus.BAD_REQUEST, "CSV 파일을 처리하는 중 오류가 발생했습니다."),
+    CSV_PARSING_ERROR(HttpStatus.BAD_REQUEST, "CSV 파일 파싱 중 오류가 발생했습니다."),
+    CSV_SAVE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "CSV 데이터를 저장하는 중 오류가 발생했습니다."),
 
 
-        ;
+    ;
 
     private final HttpStatus httpStatus;
     private final String message;
