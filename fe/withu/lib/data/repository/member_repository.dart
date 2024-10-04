@@ -24,4 +24,9 @@ class MemberRepository {
     _initMember = await _dataSource.editMember(jwtToken, member);
     return _initMember;
   }
+
+  Future<List<Member>?> getTeamMember() async {
+    String? jwtToken = await storage.read(key: 'jwtToken') as String;
+    return _dataSource.getTeamMember(jwtToken);
+  }
 }
