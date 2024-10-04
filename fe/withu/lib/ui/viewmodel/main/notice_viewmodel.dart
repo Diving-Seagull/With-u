@@ -9,9 +9,7 @@ class NoticeViewModel with ChangeNotifier {
 
 
   Future<void> getTeamNotice() async {
-    if(_noticeList == null) {
-      _noticeList = await _repository.getTeamNotice() ?? List.empty();
-      notifyListeners();
-    }
+    _noticeList = await _repository.getTeamNotice() ?? List.empty();
+    notifyListeners();
   }
 }

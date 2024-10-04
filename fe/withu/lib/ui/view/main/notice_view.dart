@@ -162,7 +162,12 @@ class _NoticeView extends State<NoticeView> {
         child: FloatingActionButton.large(
             onPressed: () {
               Navigator.push(
-                  context, CupertinoPageRoute(builder: (context) => AddNoticePage()));
+                  context, CupertinoPageRoute(builder: (context) => AddNoticePage()))
+                  .then((value) => {
+                    setState(() {
+                      initData();
+                    })
+                });
               },
             backgroundColor: ColorData.COLOR_SUBCOLOR1,
             shape:
