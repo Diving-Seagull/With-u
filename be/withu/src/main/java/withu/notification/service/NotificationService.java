@@ -45,7 +45,7 @@ public class NotificationService {
         }
 
         String title = "팀 알림";
-        String body = sender.getName() + " 팀장이 당신을 찾고 있습니다. 앱에 접속해 주세요.";
+        String body = sender.getName() + " 팀장님이 당신을 찾고 있습니다.";
 
         sendNotificationToTeam(targetMembers, title, body, null);
     }

@@ -18,7 +18,7 @@ public class MemberLocationController {
 
     private final MemberLocationService memberLocationService;
 
-    @PutMapping()
+    @PutMapping
     public ResponseEntity<LocationResponseDto> updateLocation(@LoginMember Member member,
         @RequestParam Double latitude, @RequestParam Double longitude) {
         LocationResponseDto updatedMember = memberLocationService.updateMemberLocation(member, latitude, longitude);

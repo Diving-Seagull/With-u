@@ -13,6 +13,7 @@ import withu.member.dto.MemberResponseDto;
 import withu.member.entity.Member;
 import withu.member.enums.Role;
 import withu.member.repository.MemberRepository;
+import withu.memberlocation.service.MemberLocationService;
 import withu.team.entity.Team;
 import withu.team.service.TeamService;
 
