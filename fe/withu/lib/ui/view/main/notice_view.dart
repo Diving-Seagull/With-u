@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -148,11 +150,14 @@ class _NoticeView extends State<NoticeView> {
                           style: TextStyle(fontSize: 12))
                     ],
                   ),
+                  _viewModel.noticeList[index].images.isNotEmpty ?
                   Container(
                     width: 72,
                     height: 72,
-                    color: Colors.blue,
+                    child: Image.file(File(_viewModel.noticeList[index].images.first.imageUrl), fit: BoxFit.cover),
                   )
+                      :
+                  Container()
                 ],
               ),
             )));
