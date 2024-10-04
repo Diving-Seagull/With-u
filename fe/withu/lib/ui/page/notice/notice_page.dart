@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
 import '../../../data/model/member.dart';
-import '../../view/main/notice_view.dart';
-import '../../viewmodel/main/notice_viewmodel.dart';
+import '../../view/notice/notice_view.dart';
+import '../../viewmodel/notice/notice_viewmodel.dart';
 
 class NoticePage extends StatelessWidget {
 
