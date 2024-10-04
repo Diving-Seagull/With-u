@@ -50,7 +50,7 @@ class _CheckTeamView extends State<CheckTeamView> {
               withServices: _deviceList
                   .map((data) => Guid(ConvertUuid.nameUUIDFromBytes(data)))
                   .toList(),
-              timeout: Duration(seconds: 10));
+              timeout: Duration(seconds: 2));
           isFirst = false;
         }
         else {
@@ -79,10 +79,12 @@ class _CheckTeamView extends State<CheckTeamView> {
   }
 
   void checkScanResult() {
-    for(var search in _searchList) {
-      var searched = noMemberList.where((data) => ConvertUuid.nameUUIDFromBytes(data.deviceUuid!) == search).first;
-      noMemberList.remove(searched);
-      memberList.add(searched);
+    if(noMemberList.isNotEmpty) {
+      for(var search in _searchList) {
+        var searched = noMemberList.where((data) => ConvertUuid.nameUUIDFromBytes(data.deviceUuid!) == search).first;
+        noMemberList.remove(searched);
+        memberList.add(searched);
+      }
     }
     setState(() {
       _searchBtnText = '인원 확인하기';

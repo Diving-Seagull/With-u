@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:withu/ui/view/login/permission_view.dart';
 import 'package:withu/ui/view/login/usertype_view.dart';
@@ -28,13 +29,16 @@ final  AndroidNotificationChannel _channel = AndroidNotificationChannel(
     playSound: true);
 
 void main() async {
-  // env 파일 로드
-  await dotenv.load(fileName: 'assets/config/.env');
+  // 프레임워크 초기화 여부 확인 (비동기 작업 시 수행)
+  WidgetsFlutterBinding.ensureInitialized();
 
   //Firebase 초기화
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // env 파일 로드
+  await dotenv.load(fileName: 'assets/config/.env');
 
   // FCM 설정
   await fcmSetting();
@@ -45,12 +49,11 @@ void main() async {
   // Firebase 백그라운드 메시지 핸들러 등록
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-  // 프레임워크 초기화 여부 확인 (비동기 작업 시 수행)
-  WidgetsFlutterBinding.ensureInitialized();
-
   String? kakaoNativeAppKey = dotenv.env['KAKAO_APP_KEY'];
   KakaoSdk.init(nativeAppKey: kakaoNativeAppKey);
 
+  // await UserApi.instance.logout();
+  // await GoogleSignIn().signOut();
 
   runApp(const MyApp());
 }
@@ -121,12 +124,17 @@ Future<void> addFcmToken() async {
   final storage = FlutterSecureStorage();
   String? token = await storage.read(key: "fcmtoken");
   // print('fcm $token');
-  if(token == null){
-    var fcmToken = await FirebaseMessaging.instance.getToken();
-    if(fcmToken != null){
-      await storage.write(key: "fcmtoken", value: fcmToken);
-      print('fcm 토큰 저장 완료 ${await storage.read(key: "fcmtoken")}');
-    }
+  // if(token == null){
+  //   var fcmToken = await FirebaseMessaging.instance.getToken();
+  //   if(fcmToken != null){
+  //     await storage.write(key: "fcmtoken", value: fcmToken);
+  //     print('fcm 토큰 저장 완료 ${await storage.read(key: "fcmtoken")}');
+  //   }
+  // }
+  var fcmToken = await FirebaseMessaging.instance.getToken();
+  if(fcmToken != null){
+    await storage.write(key: "fcmtoken", value: fcmToken);
+    print('fcm 토큰 저장 완료 ${await storage.read(key: "fcmtoken")}');
   }
   print('getFcmToken() : $token');
 }
@@ -164,6 +172,8 @@ class MyApp extends StatelessWidget {
       statusBarColor: CupertinoColors.systemGrey, // 원하는 색상으로 변경
       statusBarBrightness: Brightness.light, // 상태바의 아이콘 색상 (밝은 배경에 어두운 아이콘)
     ));
+
+
 
     return CupertinoApp(
       theme: CupertinoThemeData(
