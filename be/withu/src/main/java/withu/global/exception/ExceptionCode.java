@@ -26,10 +26,20 @@ public enum ExceptionCode {
     TEAM_CODE_REQUIRED(HttpStatus.BAD_REQUEST, "팀 코드가 제공되지 않았습니다."),
     MEMBER_NOT_IN_TEAM(HttpStatus.BAD_REQUEST, "팀에 소속되지 않은 사용자입니다."),
     TEAM_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 팀을 찾을 수 없습니다."),
+    NOTICE_IMAGE_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "공지사항 이미지는 최대 5개까지만 추가할 수 있습니다."),
+    NOTICE_IMAGE_COUNT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 이미지 개수입니다."),
+    NOTICE_IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "요청한 공지사항 이미지를 찾을 수 없습니다."),
+    NOTICE_IMAGE_ORDER_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 이미지 순서입니다."),
 
     SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 일정을 찾을 수 없습니다."),
     NOT_USERS_SCHEDULE(HttpStatus.FORBIDDEN, "해당 작업을 수행할 권한이 없습니다."),
     SCHEDULE_CONFLICT(HttpStatus.CONFLICT, "이미 해당 시간에 기존 일정이 존재합니다."),
+
+    NOT_TEAM_LEADER(HttpStatus.FORBIDDEN, "팀장 권한이 없습니다."),
+    TEAM_MISMATCH(HttpStatus.FORBIDDEN, "요청한 팀과 팀장의 팀이 일치하지 않습니다."),
+    INVALID_TEAM_MEMBERS(HttpStatus.BAD_REQUEST, "유효하지 않은 팀원이 포함되어 있습니다."),
+
+    NOTIFICATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Firebase 알림 전송 중 오류가 발생했습니다."),
 
 
 
