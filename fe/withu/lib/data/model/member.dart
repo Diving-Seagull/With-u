@@ -1,7 +1,7 @@
 import 'package:withu/data/model/social_type.dart';
 
 class Member {
-  final int id;
+  final int? id;
   final String email;
   final String name;
   final String profile;
