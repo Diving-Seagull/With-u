@@ -3,6 +3,7 @@ package withu.notification.service;
 import static withu.global.exception.ExceptionCode.*;
 
 import com.google.firebase.messaging.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import withu.global.exception.CustomException;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import withu.team.service.TeamService;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
@@ -24,23 +26,20 @@ public class NotificationService {
     private final TeamRepository teamRepository;
     private final TeamService teamService;
 
-    public void sendTeamAlert(NotificationRequestDto requestDto, Member sender) {
-        // 팀장 권한 확인
+    public void sendTeamAlert(Long teamId, NotificationRequestDto requestDto, Member sender) {
         if (!sender.isLeader()) {
             throw new CustomException(NOT_TEAM_LEADER);
         }
 
-        Team team = teamRepository.findById(requestDto.getTeamId())
+        Team team = teamRepository.findById(teamId)
             .orElseThrow(() -> new CustomException(TEAM_NOT_FOUND));
 
-        // 팀장이 속한 팀과 요청된 팀 ID가 일치하는지 확인
         if (!sender.getTeam().getId().equals(team.getId())) {
             throw new CustomException(TEAM_MISMATCH);
         }
 
         List<Member> targetMembers = memberRepository.findAllById(requestDto.getTargetMemberIds());
 
-        // 대상 멤버들이 모두 같은 팀에 속해 있는지 확인
         if (targetMembers.stream().anyMatch(member -> !member.getTeam().getId().equals(team.getId()))) {
             throw new CustomException(INVALID_TEAM_MEMBERS);
         }
@@ -89,11 +88,13 @@ public class NotificationService {
 
         try {
             String response = FirebaseMessaging.getInstance().sendAsync(message).get();
-            System.out.println("Successfully sent message to " + member.getName() + ": " + response);
+            log.info("Successfully sent message to member ID {}: {}", member.getId(), response);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+            log.error("Interrupted while sending message to member ID {}", member.getId(), e);
             throw new CustomException(NOTIFICATION_ERROR);
         } catch (ExecutionException e) {
+            log.error("Failed to send message to member ID {}", member.getId(), e);
             throw new CustomException(NOTIFICATION_ERROR);
         }
     }
