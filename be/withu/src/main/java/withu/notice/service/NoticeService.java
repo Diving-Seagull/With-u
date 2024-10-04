@@ -1,12 +1,6 @@
 package withu.notice.service;
 
-import static withu.global.exception.ExceptionCode.FIREBASE_NOTIFICATION_ERROR;
-import static withu.global.exception.ExceptionCode.MEMBER_NOT_IN_TEAM;
-import static withu.global.exception.ExceptionCode.NOTICE_IMAGE_LIMIT_EXCEEDED;
-import static withu.global.exception.ExceptionCode.NOTICE_IMAGE_NOT_FOUND;
-import static withu.global.exception.ExceptionCode.NOTICE_NOT_FOUND;
-import static withu.global.exception.ExceptionCode.NOTICE_NOT_IN_USER_TEAM;
-import static withu.global.exception.ExceptionCode.USER_NOT_LEADER;
+import static withu.global.exception.ExceptionCode.*;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -24,7 +18,7 @@ import withu.notice.dto.NoticeUpdateRequestDto;
 import withu.notice.entity.Notice;
 import withu.notice.entity.NoticeImage;
 import withu.notice.repository.NoticeRepository;
-import withu.notification.service.FirebaseService;
+import withu.notification.service.NotificationService;
 import withu.team.entity.Team;
 
 @Slf4j
@@ -34,7 +28,7 @@ public class NoticeService {
 
     private final NoticeRepository noticeRepository;
     private final MemberRepository memberRepository;
-    private final FirebaseService firebaseService;
+    private final NotificationService notificationService;
 
     public NoticeResponseDto getNotice(Member member, Long noticeId) {
         Notice notice = noticeRepository.findById(noticeId)
@@ -91,7 +85,7 @@ public class NoticeService {
         List<Member> teamMembers = memberRepository.findByTeam(team);
         String imageUrl = (imageUrls != null && !imageUrls.isEmpty()) ? imageUrls.get(0) : "";
 
-        firebaseService.sendNotificationToTeam(
+        notificationService.sendNotificationToTeam(
             teamMembers,
             "새로운 공지사항",
             author.getName() + "님이 새 공지사항을 작성했습니다: " + requestDto.getTitle(),
@@ -154,14 +148,14 @@ public class NoticeService {
         String imageUrl = updatedNotice.getImages().isEmpty() ? "" : updatedNotice.getImages().get(0).getImageUrl();
 
         try {
-            firebaseService.sendNotificationToTeam(
+            notificationService.sendNotificationToTeam(
                 teamMembers,
                 "공지사항 업데이트",
                 member.getName() + "님이 공지사항을 수정했습니다: " + updatedNotice.getTitle(),
                 imageUrl
             );
         } catch (CustomException e) {
-            if (e.getExceptionCode() == FIREBASE_NOTIFICATION_ERROR) {
+            if (e.getExceptionCode() == NOTIFICATION_ERROR) {
                 // 알림 전송 실패를 로그로 남기고 계속 진행
                 log.error("Failed to send Firebase notification for updated notice: {}", e.getMessage());
             } else {
