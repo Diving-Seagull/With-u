@@ -40,6 +40,12 @@ public class NoticeController {
         return ResponseEntity.ok(noticeService.getAllNotices(member));
     }
 
+    @GetMapping("/pinned")
+    public ResponseEntity<NoticeResponseDto> getPinnedNotice(@LoginMember Member member) {
+        return noticeService.getPinnedNotice(member)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.noContent().build());
+    }
 
     @PostMapping
     public ResponseEntity<NoticeResponseDto> createNotice(@LoginMember Member member,

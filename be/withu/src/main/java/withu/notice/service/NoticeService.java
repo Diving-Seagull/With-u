@@ -4,6 +4,7 @@ import static withu.global.exception.ExceptionCode.*;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +51,15 @@ public class NoticeService {
         return notices.stream()
             .map(NoticeResponseDto::from)
             .collect(Collectors.toList());
+    }
+
+    public Optional<NoticeResponseDto> getPinnedNotice(Member member) {
+        if (member.getTeam() == null) {
+            throw new CustomException(MEMBER_NOT_IN_TEAM);
+        }
+
+        return noticeRepository.findFirstByTeamAndPinnedTrueOrderByCreatedAtDesc(member.getTeam())
+            .map(NoticeResponseDto::from);
     }
 
     @Transactional
