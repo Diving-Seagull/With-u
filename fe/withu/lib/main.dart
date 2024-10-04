@@ -1,13 +1,16 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:withu/ui/view/main_view.dart';
-import 'package:withu/ui/page/splash_page.dart';
+import 'package:withu/ui/view/login/permission_view.dart';
+import 'package:withu/ui/view/login/usertype_view.dart';
 import 'firebase_options.dart';
 
 // 최상단에 위치해 있어야 함.
@@ -26,13 +29,16 @@ final  AndroidNotificationChannel _channel = AndroidNotificationChannel(
     playSound: true);
 
 void main() async {
-  // env 파일 로드
-  await dotenv.load(fileName: 'assets/config/.env');
+  // 프레임워크 초기화 여부 확인 (비동기 작업 시 수행)
+  WidgetsFlutterBinding.ensureInitialized();
 
   //Firebase 초기화
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // env 파일 로드
+  await dotenv.load(fileName: 'assets/config/.env');
 
   // FCM 설정
   await fcmSetting();
@@ -43,24 +49,17 @@ void main() async {
   // Firebase 백그라운드 메시지 핸들러 등록
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-  // 프레임워크 초기화 여부 확인 (비동기 작업 시 수행)
-  WidgetsFlutterBinding.ensureInitialized();
-
   String? kakaoNativeAppKey = dotenv.env['KAKAO_APP_KEY'];
   KakaoSdk.init(nativeAppKey: kakaoNativeAppKey);
 
+  // await UserApi.instance.logout();
+  // await GoogleSignIn().signOut();
 
   runApp(const MyApp());
 }
 
 Future<void> fcmSetting() async {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-  await messaging.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
 
   NotificationSettings settings = await messaging.requestPermission(
     alert: true,
@@ -72,38 +71,51 @@ Future<void> fcmSetting() async {
     sound: true,
   );
 
-  var initialzationSettingsIOS = const DarwinInitializationSettings(
-    requestSoundPermission: true,
-    requestBadgePermission: true,
-    requestAlertPermission: true,
-  );
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
 
-  var initializationSettingsAndroid = const AndroidInitializationSettings(
-      '@mipmap/ic_launcher');
+    var initialzationSettingsIOS = const DarwinInitializationSettings(
+      requestSoundPermission: true,
+      requestBadgePermission: true,
+      requestAlertPermission: true,
+    );
 
-  var initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initialzationSettingsIOS);
+    var initializationSettingsAndroid = const AndroidInitializationSettings(
+        '@mipmap/ic_launcher');
 
-  await _flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(_channel);
+    var initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid,
+        iOS: initialzationSettingsIOS);
 
-  await _flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-      IOSFlutterLocalNotificationsPlugin>()
-      ?.getActiveNotifications();
+    if(Platform.isAndroid) {
+      await _flutterLocalNotificationsPlugin.initialize(
+          initializationSettings,
+          onDidReceiveNotificationResponse: (notificationResponse) {
+            // notification 클릭 이벤트
+            print('notification 클릭 이벤트 발생!');
+            // notification 데이터 불러오기
+            // notificationResponse.payload
+          }
+      );
 
-  await _flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-    onDidReceiveNotificationResponse: (notificationResponse) {
-      // notification 클릭 이벤트
-      print('notification 클릭 이벤트 발생!');
-      // notification 데이터 불러오기
-      // notificationResponse.payload
+      await _flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+          ?.createNotificationChannel(_channel);
     }
-  );
+    else if(Platform.isIOS) {
+      await messaging.setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+    }
+
+    // await _flutterLocalNotificationsPlugin
+    //     .resolvePlatformSpecificImplementation<
+    //     IOSFlutterLocalNotificationsPlugin>()
+    //     ?.getActiveNotifications();
+  }
+
   // 토큰 발급
   await addFcmToken();
 }
@@ -112,14 +124,19 @@ Future<void> addFcmToken() async {
   final storage = FlutterSecureStorage();
   String? token = await storage.read(key: "fcmtoken");
   // print('fcm $token');
-  if(token == null){
-    var fcmToken = await FirebaseMessaging.instance.getToken();
-    if(fcmToken != null){
-      print('getFcmToken() : $fcmToken');
-      await storage.write(key: "fcmtoken", value: fcmToken);
-      // print('fcm 토큰 저장 완료 ${await storage.read(key: "fcmtoken")}');
-    }
+  // if(token == null){
+  //   var fcmToken = await FirebaseMessaging.instance.getToken();
+  //   if(fcmToken != null){
+  //     await storage.write(key: "fcmtoken", value: fcmToken);
+  //     print('fcm 토큰 저장 완료 ${await storage.read(key: "fcmtoken")}');
+  //   }
+  // }
+  var fcmToken = await FirebaseMessaging.instance.getToken();
+  if(fcmToken != null){
+    await storage.write(key: "fcmtoken", value: fcmToken);
+    print('fcm 토큰 저장 완료 ${await storage.read(key: "fcmtoken")}');
   }
+  print('getFcmToken() : $token');
 }
 
 void showFlutterNotification(RemoteMessage message) {
@@ -135,7 +152,6 @@ void showFlutterNotification(RemoteMessage message) {
           presentAlert: true,
           presentBadge: true,
           presentSound: true,
-          badgeNumber: 1,
         ),
         android: AndroidNotificationDetails(
           _channel.id,
@@ -152,8 +168,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: CupertinoColors.systemGrey, // 원하는 색상으로 변경
+      statusBarBrightness: Brightness.light, // 상태바의 아이콘 색상 (밝은 배경에 어두운 아이콘)
+    ));
+
+
+
     return CupertinoApp(
-      home: SplashPage(),
+      theme: CupertinoThemeData(
+          scaffoldBackgroundColor: CupertinoColors.white,
+      ),
+      home: PermissionView(),
     );
   }
 }

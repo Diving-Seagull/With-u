@@ -2,13 +2,15 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
-import 'package:withu/ui/view/main_view.dart';
-import 'package:withu/ui/viewmodel/login_viewmodel.dart';
+import 'package:withu/ui/page/login/add_info_page.dart';
+import 'package:withu/ui/page/main/home_page.dart';
+import 'package:withu/ui/view/login/usertype_view.dart';
+import 'package:withu/ui/view/main/home_view.dart';
+import 'package:withu/ui/viewmodel/login/login_viewmodel.dart';
 
-import '../../data/model/token_dto.dart';
+import '../../../data/model/token_dto.dart';
 
 class LoginView extends StatelessWidget {
   late final LoginViewModel _viewModel;
@@ -37,10 +39,14 @@ class LoginView extends StatelessWidget {
         onPressed: () async {
           TokenDto? jwt = await _viewModel.setGoogleLogin();
           if(jwt != null) {
-            print('구글 로그인 성공 $jwt');
+            print('구글 로그인 성공 ${jwt.token}');
             await _storage.write(key: 'jwtToken', value: jsonEncode(jwt));
             // 메인 화면 이동
-            if(context.mounted) moveMainScreen(context);
+            if(context.mounted) {
+              // moveMainScreen(context);
+              // moveAddInfoScreen(context);
+              moveTypeScreen(context);
+            }
           }
         }, child: Text('구글 로그인'),
       )
@@ -52,21 +58,24 @@ class LoginView extends StatelessWidget {
       onPressed: () async {
         TokenDto? jwt = await _viewModel.setKakaoLogin();
         if(jwt != null) {
-          print('카카오 로그인 성공 $jwt');
+          print('카카오 로그인 성공 ${jwt.token}');
           await _storage.write(key: 'jwtToken', value: jsonEncode(jwt));
           // 메인 화면 이동
-          if(context.mounted) moveMainScreen(context);
+          if(context.mounted){
+            // moveMainScreen(context);
+            moveTypeScreen(context);
+          }
         }
       }, child: Text('카카오 로그인'),
     )
   );
 
-  // 메인 화면 이동
-  void moveMainScreen(BuildContext context) {
+
+  void moveTypeScreen(BuildContext context) {
     if(context.mounted){
       Navigator.pop(context); //Splash 화면 제거
       Navigator.push(
-          context, CupertinoPageRoute(builder: (context) => MainView()));
+          context, CupertinoPageRoute(builder: (context) => UserTypeView()));
     }
   }
 }

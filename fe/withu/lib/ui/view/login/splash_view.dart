@@ -5,13 +5,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/data/model/token_dto.dart';
-import 'package:withu/ui/page/login_page.dart';
-import 'package:withu/ui/view/main_view.dart';
+import 'package:withu/ui/page/login/login_page.dart';
+import 'package:withu/ui/page/main/home_page.dart';
+import 'package:withu/ui/view/login/usertype_view.dart';
+import 'package:withu/ui/view/main/home_view.dart';
 import 'dart:async';
 
-import 'package:withu/ui/viewmodel/splash_viewmodel.dart';
+import 'package:withu/ui/viewmodel/login/splash_viewmodel.dart';
+
+import '../../page/login/add_info_page.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -39,7 +44,7 @@ class _SplashViewState extends State<SplashView> {
   Future<void> kakaoCheckAuth() async {
     OAuthToken? tokenInfo = await viewModel.kakaoRecentLogin();
     if (tokenInfo != null) {
-      print('카카오 토큰 정보 불러옴');
+      print('카카오 토큰 정보 불러옴 ${tokenInfo.accessToken}');
       //JWT 토큰 요청
       TokenDto? jwtToken =
           await viewModel.getJwtToken(tokenInfo.accessToken, "kakao");
@@ -47,7 +52,8 @@ class _SplashViewState extends State<SplashView> {
       if (jwtToken != null) {
         print('카카오 자동 로그인 성공 ${jwtToken.token}');
         await _storage.write(key: 'jwtToken', value: jsonEncode(jwtToken));
-        moveMainScreen();
+        // moveMainScreen();
+        checkRegister();
         return;
       }
     }
@@ -66,12 +72,23 @@ class _SplashViewState extends State<SplashView> {
       if (jwtToken != null) {
         print('구글 자동 로그인 성공 ${jwtToken.token}');
         await _storage.write(key: 'jwtToken', value: jsonEncode(jwtToken));
-        moveMainScreen();
+        // moveMainScreen();
+        checkRegister();
         return;
       }
     }
     print('구글 자동 로그인 실패');
     moveLoginScreen();
+  }
+
+  void checkRegister() async {
+    var member = await viewModel.getMember();
+    if(member!.deviceUuid == null) {
+      moveTypeScreen();
+    }
+    else {
+      moveMainScreen();
+    }
   }
 
   // 로그인 화면 이동
@@ -83,12 +100,20 @@ class _SplashViewState extends State<SplashView> {
     }
   }
 
+  // 유저 추가 정보 기입 화면 이동
+  void moveTypeScreen() {
+    if(mounted){
+      Navigator.pop(context); //Splash 화면 제거
+      Navigator.push(
+          context, CupertinoPageRoute(builder: (context) => UserTypeView()));
+    }
+  }
   // 메인 화면 이동
   void moveMainScreen() {
     if (mounted) {
       Navigator.pop(context); //Splash 화면 제거
       Navigator.push(
-          context, CupertinoPageRoute(builder: (context) => MainView()));
+          context, CupertinoPageRoute(builder: (context) => HomePage()));
     }
   }
 
