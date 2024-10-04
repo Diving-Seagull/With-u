@@ -28,7 +28,6 @@ class MemberDataSource {
         print(json.decode(utf8.decode(response.bodyBytes)));
         Map<String, dynamic> result =
             json.decode(utf8.decode(response.bodyBytes));
-        result.remove('id');
         result.remove('createdAt');
         result.remove('updatedAt');
         return Member.fromJson(result);

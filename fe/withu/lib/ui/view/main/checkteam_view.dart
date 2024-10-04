@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/data/model/member.dart';
+import 'package:withu/data/model/notification_request.dart';
 import 'package:withu/ui/global/convert_uuid.dart';
 import 'package:withu/ui/viewmodel/main/checkteam_viewmodel.dart';
 
@@ -29,18 +30,35 @@ class _CheckTeamView extends State<CheckTeamView> {
   final List<String> _searchList = [];
   late double _deviceWidth, _deviceHeight;
   String _searchBtnText = '인원 확인하기';
-
+  var initFirst = false;
   void init(BuildContext context) async {
-    await _viewModel.getTeamMember();
-    noMemberList  = _viewModel.teamMemberList;
-    _deviceList =
-        _viewModel.teamMemberList.map((data) => data.deviceUuid!).toList();
+    if(!initFirst) {
+      await _viewModel.getTeamMember();
+      noMemberList  = _viewModel.teamMemberList;
+      _deviceList =
+          _viewModel.teamMemberList.map((data) => data.deviceUuid!).toList();
+    }
   }
 
   // 10초 간 스캔
   void startScanForTeamMembers(BuildContext context) async {
-    var flutterBlue = FlutterBluePlus.instance;
     var isFirst = true;
+    FlutterBluePlus.isScanning.listen((isScanning) {
+      if(!isScanning) {
+        if(isFirst) {
+          FlutterBluePlus.startScan(
+              withServices: _deviceList
+                  .map((data) => Guid(ConvertUuid.nameUUIDFromBytes(data)))
+                  .toList(),
+              timeout: Duration(seconds: 10));
+          isFirst = false;
+        }
+        else {
+          checkScanResult();
+        }
+      }
+    });
+
     FlutterBluePlus.scanResults.listen((results) {
       for (ScanResult r in results) {
         // print('Device Data found: ${r.rssi.toString()}');
@@ -58,25 +76,14 @@ class _CheckTeamView extends State<CheckTeamView> {
     }, onError: (e) {
       print('Error During scan: $e');
     });
-
-    FlutterBluePlus.isScanning.listen((isScanning) {
-      if(!isScanning) {
-        if(isFirst) {
-          FlutterBluePlus.startScan(
-              withServices: _deviceList
-                  .map((data) => Guid(ConvertUuid.nameUUIDFromBytes(data)))
-                  .toList(),
-              timeout: Duration(seconds: 10));
-          isFirst = false;
-        }
-        else {
-          checkScanResult();
-        }
-      }
-    });
   }
 
   void checkScanResult() {
+    for(var search in _searchList) {
+      var searched = noMemberList.where((data) => ConvertUuid.nameUUIDFromBytes(data.deviceUuid!) == search).first;
+      noMemberList.remove(searched);
+      memberList.add(searched);
+    }
     setState(() {
       _searchBtnText = '인원 확인하기';
     });
@@ -132,6 +139,8 @@ class _CheckTeamView extends State<CheckTeamView> {
                           setState(() {
                             _searchBtnText = '확인 중';
                           });
+                          memberList.clear();
+                          _searchList.clear();
                           startScanForTeamMembers(context);
                         }
                       })
@@ -157,7 +166,9 @@ class _CheckTeamView extends State<CheckTeamView> {
                     child: Text('알림 보내기',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 12, color: Colors.white)),
-                    onPressed: () {}))
+                    onPressed: () {
+                      sendNotification();
+                    }))
           ],
         ),
       ),
@@ -212,5 +223,14 @@ class _CheckTeamView extends State<CheckTeamView> {
       )
       )
     ]);
+  }
+
+  void sendNotification() async {
+    String? result = await _viewModel.sendTeamNotice(noMemberList.first.teamId!,
+        NotificationRequest(targetMemberIds: noMemberList.map((data) => data.id!).toList()));
+    print(result);
+    if(result == null) {
+      print('오류 발생');
+    }
   }
 }
