@@ -17,7 +17,7 @@ public class TouristSpotController {
 
     private final TouristSpotService touristSpotService;
 
-    @GetMapping("/recommend")
+    @GetMapping
     public ResponseEntity<List<TouristSpotResponseDto>> recommendTouristSpots(@RequestParam Double latitude,
         @RequestParam Double longitude) {
         List<TouristSpotResponseDto> recommendations = touristSpotService.recommendTouristSpots(latitude,

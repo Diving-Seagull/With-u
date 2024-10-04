@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import withu.touristspot.dto.TouristSpotResponseDto;
 import withu.touristspot.entity.TouristSpot;
 import withu.touristspot.repository.TouristSpotRepository;
-import withu.touristspot.dto.TouristSpotResponseDto;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +28,7 @@ public class TouristSpotService {
                 .description(touristSpot.getDescription())
                 .latitude(touristSpot.getLatitude())
                 .longitude(touristSpot.getLongitude())
+                .category(touristSpot.getCategory())
                 .build())
             .collect(Collectors.toList());
     }
@@ -35,7 +36,7 @@ public class TouristSpotService {
     private String parseCityAndDistrict(String fullAddress) {
         String[] addressParts = fullAddress.split("\\s+");
 
-        // 시/광역시 + 구 추출
+        // 시/광역시 + 지역구 추출
         if (addressParts.length >= 3) {
             return addressParts[1] + " " + addressParts[2];
         }
