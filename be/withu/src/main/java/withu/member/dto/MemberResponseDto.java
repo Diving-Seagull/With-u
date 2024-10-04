@@ -24,6 +24,7 @@ public class MemberResponseDto {
     private SocialType socialType;
     private String deviceUuid;
     private Role role;
+    private Long teamId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -37,6 +38,7 @@ public class MemberResponseDto {
             .socialType(member.getSocialType())
             .deviceUuid(member.getDeviceUuid())
             .role(member.getRole())
+            .teamId(member.getTeam().getId())
             .createdAt(member.getCreatedAt())
             .updatedAt(member.getUpdatedAt())
             .build();
