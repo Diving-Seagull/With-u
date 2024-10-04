@@ -35,7 +35,11 @@ public enum ExceptionCode {
     NOT_USERS_SCHEDULE(HttpStatus.FORBIDDEN, "해당 작업을 수행할 권한이 없습니다."),
     SCHEDULE_CONFLICT(HttpStatus.CONFLICT, "이미 해당 시간에 기존 일정이 존재합니다."),
 
-    FIREBASE_NOTIFICATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Firebase 알림 전송 중 오류가 발생했습니다.");
+    NOT_TEAM_LEADER(HttpStatus.FORBIDDEN, "팀장 권한이 없습니다."),
+    TEAM_MISMATCH(HttpStatus.FORBIDDEN, "요청한 팀과 팀장의 팀이 일치하지 않습니다."),
+    INVALID_TEAM_MEMBERS(HttpStatus.BAD_REQUEST, "유효하지 않은 팀원이 포함되어 있습니다."),
+
+    NOTIFICATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Firebase 알림 전송 중 오류가 발생했습니다."),
 
 
 
