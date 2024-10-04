@@ -62,7 +62,8 @@ class HomeView extends StatelessWidget {
 
   // 팀원으로 로그인 시 Bluetooth Advertising 활성화
   void startAdvertisement() async {
-    if(_homeViewModel.member!.role == 'LEADER') {
+    // print(await DeviceInfo.getDeviceInfo());
+    if(_homeViewModel.member!.role == 'TEAMMATE') {
       try {
         // 현재 로그인한 디바이스 정보를 네이티브 코드에 전달
         await DeviceInfo.platform.invokeMethod('startAdvertising',
