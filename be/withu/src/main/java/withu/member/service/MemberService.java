@@ -1,8 +1,6 @@
 package withu.member.service;
 
-import static withu.global.exception.ExceptionCode.MEMBER_NOT_IN_TEAM;
-import static withu.global.exception.ExceptionCode.TEAM_CODE_REQUIRED;
-import static withu.global.exception.ExceptionCode.USER_NOT_FOUND;
+import static withu.global.exception.ExceptionCode.*;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -10,11 +8,11 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import withu.global.exception.CustomException;
-import withu.member.dto.MemberResponseDto;
 import withu.member.dto.MemberInitRequestDto;
+import withu.member.dto.MemberResponseDto;
 import withu.member.entity.Member;
-import withu.member.repository.MemberRepository;
 import withu.member.enums.Role;
+import withu.member.repository.MemberRepository;
 import withu.team.entity.Team;
 import withu.team.service.TeamService;
 
@@ -24,6 +22,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final TeamService teamService;
+    private final MemberLocationService memberLocationService;
 
     @Transactional
     public Member getMemberEntityByEmail(String memberEmail) {
@@ -59,6 +58,7 @@ public class MemberService {
 
         if (newRole == Role.LEADER) {
             team = teamService.createTeam(member);
+            memberLocationService.createInitialLocationForLeader(member);
         } else if (newRole == Role.TEAMMATE && initDto.getTeamCode() != null) {
             team = teamService.findTeamByCode(initDto.getTeamCode());
         }
