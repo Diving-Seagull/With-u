@@ -40,11 +40,7 @@ class _CheckTeamView extends State<CheckTeamView> {
   // 10초 간 스캔
   void startScanForTeamMembers(BuildContext context) async {
     var flutterBlue = FlutterBluePlus.instance;
-    FlutterBluePlus.startScan(
-        withServices: _deviceList
-            .map((data) => Guid(ConvertUuid.nameUUIDFromBytes(data)))
-            .toList(),
-        timeout: Duration(seconds: 10));
+    var isFirst = true;
     FlutterBluePlus.scanResults.listen((results) {
       for (ScanResult r in results) {
         // print('Device Data found: ${r.rssi.toString()}');
@@ -65,8 +61,17 @@ class _CheckTeamView extends State<CheckTeamView> {
 
     FlutterBluePlus.isScanning.listen((isScanning) {
       if(!isScanning) {
-        // 스캔 종료
-        checkScanResult();
+        if(isFirst) {
+          FlutterBluePlus.startScan(
+              withServices: _deviceList
+                  .map((data) => Guid(ConvertUuid.nameUUIDFromBytes(data)))
+                  .toList(),
+              timeout: Duration(seconds: 10));
+          isFirst = false;
+        }
+        else {
+          checkScanResult();
+        }
       }
     });
   }
@@ -84,7 +89,7 @@ class _CheckTeamView extends State<CheckTeamView> {
     _deviceHeight = MediaQuery.of(context).size.height;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      init(context);
+        init(context);
     });
 
     return Scaffold(
