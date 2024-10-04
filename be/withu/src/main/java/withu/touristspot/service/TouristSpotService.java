@@ -16,10 +16,8 @@ public class TouristSpotService {
 
     public List<TouristSpotResponseDto> recommendTouristSpots(Double latitude, Double longitude) {
         String address = geocodingService.getAddressFromCoordinates(latitude, longitude);
-        System.out.println("address: " + address);
 
         String parsedAddress = parseCityAndDistrict(address);
-        System.out.println("parsed address: " + parsedAddress);
 
         List<TouristSpot> spots = touristSpotRepository.findByAddressContaining(parsedAddress);
         return spots.stream()
