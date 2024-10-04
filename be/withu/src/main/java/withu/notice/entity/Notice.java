@@ -1,24 +1,24 @@
 package withu.notice.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import static withu.global.exception.ExceptionCode.NOTICE_IMAGE_COUNT_INVALID;
+import static withu.global.exception.ExceptionCode.NOTICE_IMAGE_LIMIT_EXCEEDED;
+import static withu.global.exception.ExceptionCode.NOTICE_IMAGE_NOT_FOUND;
+
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import withu.global.exception.CustomException;
 import withu.member.entity.Member;
 import withu.team.entity.Team;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 @Entity
 @Table(name = "notices")
@@ -45,6 +45,10 @@ public class Notice {
     @JoinColumn(name = "author_id", nullable = false)
     private Member author;
 
+    @OneToMany(mappedBy = "notice", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("order ASC")
+    private List<NoticeImage> images = new ArrayList<>();
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -64,5 +68,54 @@ public class Notice {
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public void addImage(String imageUrl) {
+        if (this.images == null) {
+            this.images = new ArrayList<>();
+        }
+        if (this.images.size() >= 5) {
+            throw new CustomException(NOTICE_IMAGE_LIMIT_EXCEEDED);
+        }
+        int newOrder = this.images.isEmpty() ? 0 : this.images.stream()
+            .mapToInt(NoticeImage::getOrder)
+            .max()
+            .orElse(-1) + 1;
+        this.images.add(new NoticeImage(this, imageUrl, newOrder));
+    }
+
+    public void removeImage(NoticeImage image) {
+        this.images.remove(image);
+        reorderImages();
+    }
+
+    public void removeImage(Long imageId) {
+        if (this.images == null || this.images.isEmpty()) {
+            throw new CustomException(NOTICE_IMAGE_NOT_FOUND);
+        }
+        boolean removed = this.images.removeIf(img -> img.getId().equals(imageId));
+        if (!removed) {
+            throw new CustomException(NOTICE_IMAGE_NOT_FOUND);
+        }
+        reorderImages();
+    }
+
+    private void reorderImages() {
+        for (int i = 0; i < this.images.size(); i++) {
+            this.images.get(i).updateOrder(i);
+        }
+    }
+
+    public void updateImageOrder(Long imageId, int newOrder) {
+        if (newOrder < 0 || newOrder >= this.images.size()) {
+            throw new CustomException(NOTICE_IMAGE_COUNT_INVALID);
+        }
+        NoticeImage imageToMove = this.images.stream()
+            .filter(img -> img.getId().equals(imageId))
+            .findFirst()
+            .orElseThrow(() -> new CustomException(NOTICE_IMAGE_NOT_FOUND));
+        this.images.remove(imageToMove);
+        this.images.add(newOrder, imageToMove);
+        reorderImages();
     }
 }

@@ -106,4 +106,8 @@ public class Member {
     public void disable() {
         this.isEnabled = false;
     }
+
+    public boolean isLeader() {
+        return this.role == Role.LEADER;
+    }
 }
