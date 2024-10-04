@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/extension/string_extension.dart';
-import 'package:withu/ui/page/main/notice_page.dart';
+import 'package:withu/ui/page/notice/notice_page.dart';
 import 'package:withu/ui/page/main/checkteam_page.dart';
 
 import '../../../data/model/member.dart';
@@ -35,7 +35,7 @@ class HomeView extends StatelessWidget {
       }
     });
     return SafeArea(
-        top: false,
+        top: true,
         bottom: true,
         left: true,
         right: true,
