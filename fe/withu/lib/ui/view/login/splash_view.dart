@@ -43,7 +43,7 @@ class _SplashViewState extends State<SplashView> {
   Future<void> kakaoCheckAuth() async {
     OAuthToken? tokenInfo = await viewModel.kakaoRecentLogin();
     if (tokenInfo != null) {
-      print('카카오 토큰 정보 불러옴');
+      print('카카오 토큰 정보 불러옴 ${tokenInfo.accessToken}');
       //JWT 토큰 요청
       TokenDto? jwtToken =
           await viewModel.getJwtToken(tokenInfo.accessToken, "kakao");

@@ -59,8 +59,12 @@
 	<string>bluetooth</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>bluetooth</string>
-	<key>NSCameraUsageDescription</key>
-	<string>This app requires access to the photo library.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>앱에서 사진을 선택하기 위해 갤러리 접근이 필요합니다.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>앱에서 카메라 접근이 필요합니다.</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>선택한 사진을 저장하려면 갤러리 접근 권한이 필요합니다.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Always and when in use!</string>
 	<key>NSLocationAlwaysUsageDescription</key>
