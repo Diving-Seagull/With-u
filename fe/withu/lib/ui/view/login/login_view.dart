@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/ui/page/login/add_info_page.dart';
 import 'package:withu/ui/page/main/home_page.dart';
+import 'package:withu/ui/view/login/usertype_view.dart';
 import 'package:withu/ui/view/main/home_view.dart';
 import 'package:withu/ui/viewmodel/login/login_viewmodel.dart';
 
@@ -43,7 +44,8 @@ class LoginView extends StatelessWidget {
             // 메인 화면 이동
             if(context.mounted) {
               // moveMainScreen(context);
-              moveAddInfoScreen(context);
+              // moveAddInfoScreen(context);
+              moveTypeScreen(context);
             }
           }
         }, child: Text('구글 로그인'),
@@ -61,28 +63,19 @@ class LoginView extends StatelessWidget {
           // 메인 화면 이동
           if(context.mounted){
             // moveMainScreen(context);
-            moveAddInfoScreen(context);
+            moveTypeScreen(context);
           }
         }
       }, child: Text('카카오 로그인'),
     )
   );
 
-  // 메인 화면 이동
-  void moveMainScreen(BuildContext context) {
-    if(context.mounted){
-      Navigator.pop(context); //Splash 화면 제거
-      Navigator.push(
-          context, CupertinoPageRoute(builder: (context) => HomePage()));
-    }
-  }
 
-  // 유저 추가 정보 기입 화면 이동
-  void moveAddInfoScreen(BuildContext context) {
+  void moveTypeScreen(BuildContext context) {
     if(context.mounted){
       Navigator.pop(context); //Splash 화면 제거
       Navigator.push(
-          context, CupertinoPageRoute(builder: (context) => AddInfoPage()));
+          context, CupertinoPageRoute(builder: (context) => UserTypeView()));
     }
   }
 }

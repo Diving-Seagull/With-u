@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:withu/data/model/token_dto.dart';
 import 'package:withu/ui/page/login/login_page.dart';
 import 'package:withu/ui/page/main/home_page.dart';
+import 'package:withu/ui/view/login/usertype_view.dart';
 import 'package:withu/ui/view/main/home_view.dart';
 import 'dart:async';
 
@@ -83,7 +84,7 @@ class _SplashViewState extends State<SplashView> {
   void checkRegister() async {
     var member = await viewModel.getMember();
     if(member!.deviceUuid == null) {
-      moveAddInfoScreen();
+      moveTypeScreen();
     }
     else {
       moveMainScreen();
@@ -100,14 +101,13 @@ class _SplashViewState extends State<SplashView> {
   }
 
   // 유저 추가 정보 기입 화면 이동
-  void moveAddInfoScreen() {
+  void moveTypeScreen() {
     if(mounted){
       Navigator.pop(context); //Splash 화면 제거
       Navigator.push(
-          context, CupertinoPageRoute(builder: (context) => AddInfoPage()));
+          context, CupertinoPageRoute(builder: (context) => UserTypeView()));
     }
   }
-
   // 메인 화면 이동
   void moveMainScreen() {
     if (mounted) {
