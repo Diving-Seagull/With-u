@@ -8,6 +8,7 @@ import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Builder;
+import withu.touristspot.enums.TouristSpotCategory;
 
 @Entity
 @Getter
@@ -33,13 +34,17 @@ public class TouristSpot {
     @Column(nullable = false)
     private Double longitude;
 
+    @Column(nullable = false)
+    private TouristSpotCategory category;
+
     @Builder
-    private TouristSpot(Long id, String name, String address, String description, Double latitude, Double longitude) {
+    private TouristSpot(Long id, String name, String address, String description, Double latitude, Double longitude, TouristSpotCategory category) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.description = description;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.category = category;
     }
 }

@@ -3,6 +3,7 @@ package withu.touristspot.dto;
 import lombok.Builder;
 import lombok.Getter;
 import withu.touristspot.entity.TouristSpot;
+import withu.touristspot.enums.TouristSpotCategory;
 
 @Getter
 @Builder
@@ -13,6 +14,7 @@ public class TouristSpotResponseDto {
     private String description;
     private Double latitude;
     private Double longitude;
+    private TouristSpotCategory category;
 
     public static TouristSpotResponseDto from(TouristSpot touristSpot) {
         return TouristSpotResponseDto.builder()
@@ -22,6 +24,7 @@ public class TouristSpotResponseDto {
             .description(touristSpot.getDescription())
             .latitude(touristSpot.getLatitude())
             .longitude(touristSpot.getLongitude())
+            .category(touristSpot.getCategory())
             .build();
     }
 }
