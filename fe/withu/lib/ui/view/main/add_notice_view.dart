@@ -26,7 +26,6 @@ class _AddNoticeView extends State<AddNoticeView> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
 
-  List<XFile>? _pickedFiles;
   bool _isImportant = false;
   late double _deviceWidth, _deviceHeight;
   late AddNoticeViewModel _viewModel;
@@ -107,7 +106,7 @@ class _AddNoticeView extends State<AddNoticeView> {
             height: 85,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: _pickedFiles == null ? 1 : _pickedFiles!.length + 1,
+              itemCount: _viewModel.pickedFiles == null ? 1 : _viewModel.pickedFiles!.length + 1,
               itemBuilder: (context, index) {
                 if (index == 0) {
                   return GestureDetector(
@@ -121,7 +120,7 @@ class _AddNoticeView extends State<AddNoticeView> {
                     ),
                   );
                 }
-                if (_pickedFiles != null) {
+                if (_viewModel.pickedFiles != null) {
                   return Stack(
                     children: [
                       Positioned(
@@ -132,7 +131,7 @@ class _AddNoticeView extends State<AddNoticeView> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Image.file(
-                                  File(_pickedFiles![index - 1].path),
+                                  File(_viewModel.pickedFiles![index - 1].path),
                                   fit: BoxFit.cover),
                             ),
                           )),
@@ -187,7 +186,7 @@ class _AddNoticeView extends State<AddNoticeView> {
   }
 
   Widget _setPhotoSection() {
-    if (_pickedFiles == null) {
+    if (_viewModel.pickedFiles == null) {
       return GestureDetector(
         onTap: () {
           _pickImage();
@@ -217,7 +216,7 @@ class _AddNoticeView extends State<AddNoticeView> {
                 height: 100,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: _pickedFiles?.length,
+                  itemCount: _viewModel.pickedFiles?.length,
                   itemBuilder: (context, index) {
                     return Container(
                       width: 85,
@@ -239,12 +238,14 @@ class _AddNoticeView extends State<AddNoticeView> {
       picker.useAndroidPhotoPicker = true;
     }
 
-    _pickedFiles = await picker.getMultiImageWithOptions(
-      options: MultiImagePickerOptions(
-        imageOptions: ImagePickerOptions(requestFullMetadata: false),
-        limit: 5,
-      ),
-    );
+    setState(() async {
+      _viewModel.pickedFiles = await picker.getMultiImageWithOptions(
+        options: MultiImagePickerOptions(
+          imageOptions: ImagePickerOptions(requestFullMetadata: false),
+          limit: 5,
+        ),
+      );
+    });
   }
 
   void createNotice() async {
