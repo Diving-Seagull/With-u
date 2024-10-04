@@ -9,8 +9,8 @@ import 'package:withu/ui/global/custom_appbar.dart';
 import 'package:image_picker_android/image_picker_android.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 import 'package:withu/ui/global/custom_dialog.dart';
-import 'package:withu/ui/viewmodel/main/add_notice_viewmodel.dart';
-import 'package:withu/ui/viewmodel/main/notice_viewmodel.dart';
+import 'package:withu/ui/viewmodel/notice/add_notice_viewmodel.dart';
+import 'package:withu/ui/viewmodel/notice/notice_viewmodel.dart';
 
 import '../../../data/model/notice.dart';
 import '../../global/bottom_modal.dart';
