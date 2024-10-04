@@ -6,9 +6,11 @@ import 'package:withu/ui/global/custom_dialog.dart';
 import 'package:withu/ui/global/device_info.dart';
 import 'package:withu/ui/global/color_data.dart';
 import 'package:withu/ui/page/main/home_page.dart';
+import 'package:withu/ui/view/login/teamcode_view.dart';
 import 'package:withu/ui/view/main/home_view.dart';
 import 'package:withu/ui/viewmodel/login/add_info_viewmodel.dart';
 import '../../../data/model/role.dart';
+import '../../page/login/teamcode_page.dart';
 
 class AddInfoView extends StatefulWidget {
   @override
@@ -18,7 +20,6 @@ class AddInfoView extends StatefulWidget {
 class _AddInfoView extends State<AddInfoView> {
   late AddInfoViewModel _viewModel;
   final ColorData colorData = ColorData();
-  Role? _role = Role.LEADER;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
   late double _deviceWidth, _deviceHeight;
@@ -187,47 +188,47 @@ class _AddInfoView extends State<AddInfoView> {
         ),
 
         // 팀장, 팀명 선택란
-        Column(
-          children: [
-            Container(
-              width: _deviceWidth,
-              child: Text(
-                "역할 선택",
-                style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    color: ColorData.COLOR_DARKGRAY,
-                    fontSize: 18),
-              ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                    child: RadioListTile(
-                        title: Text("팀장"),
-                        value: Role.LEADER,
-                        groupValue: _role,
-                        onChanged: (role) {
-                          setState(() {
-                            _role = role;
-                            print(_role);
-                          });
-                        })),
-                Expanded(
-                  child: RadioListTile(
-                      title: Text("팀원"),
-                      value: Role.TEAMMATE,
-                      groupValue: _role,
-                      onChanged: (role) {
-                        setState(() {
-                          _role = role;
-                          print(_role);
-                        });
-                      }),
-                )
-              ],
-            ),
-          ],
-        )
+        // Column(
+        //   children: [
+        //     Container(
+        //       width: _deviceWidth,
+        //       child: Text(
+        //         "역할 선택",
+        //         style: TextStyle(
+        //             fontWeight: FontWeight.w700,
+        //             color: ColorData.COLOR_DARKGRAY,
+        //             fontSize: 18),
+        //       ),
+        //     ),
+        //     Row(
+        //       children: [
+        //         Expanded(
+        //             child: RadioListTile(
+        //                 title: Text("팀장"),
+        //                 value: Role.LEADER,
+        //                 groupValue: _role,
+        //                 onChanged: (role) {
+        //                   setState(() {
+        //                     _role = role;
+        //                     print(_role);
+        //                   });
+        //                 })),
+        //         Expanded(
+        //           child: RadioListTile(
+        //               title: Text("팀원"),
+        //               value: Role.TEAMMATE,
+        //               groupValue: _role,
+        //               onChanged: (role) {
+        //                 setState(() {
+        //                   _role = role;
+        //                   print(_role);
+        //                 });
+        //               }),
+        //         )
+        //       ],
+        //     ),
+        //   ],
+        // )
       ],
     );
   }
@@ -243,32 +244,33 @@ class _AddInfoView extends State<AddInfoView> {
 
   void _saveMemberData(BuildContext ct) async {
     var deviceInfo = await DeviceInfo.getDeviceInfo();
-    var result = await _viewModel.initMemberInfo(
-        InitMember(
-            role: _role!.name, name: _nameController.text, description: _descController.text,
-            deviceUuid: deviceInfo['device_id']!, profileImage: _viewModel.member?.profile ?? ''));
+    var data = InitMember(
+        role: _viewModel.type,
+        name: _nameController.text,
+        description: _descController.text,
+        deviceUuid: deviceInfo['device_id']!,
+        profileImage: _viewModel.member?.profile ?? '',
+        teamCode: null);
 
-    if(result != null) {
-      if(_role! == Role.LEADER) {
-        // 메인 화면 이동
-        if(ct.mounted){
+    if (_viewModel.type == 'LEADER') {
+      var result = await _viewModel.initMemberInfo(data);
+      if (result != null) {
+        if (ct.mounted) {
           CustomDialog.showYesDialog(ct, '알림', '회원가입이 완료되었습니다!', () {
             Navigator.pop(ct);
+            Navigator.pop(context);
             Navigator.pop(context);
             Navigator.push(
                 ct, CupertinoPageRoute(builder: (context) => HomePage()));
           });
         }
       }
-      else {
-        // 팀 코드 입력 화면 이동
-        if(ct.mounted){
-          CustomDialog.showYesDialog(ct, '알림', '회원가입이 완료되었습니다!', () {
-
-          });
-        }
+    }
+    else {
+      if(ct.mounted) {
+        Navigator.push(
+            ct, CupertinoPageRoute(builder: (context) => TeamCodePage(data)));
       }
     }
   }
-
 }

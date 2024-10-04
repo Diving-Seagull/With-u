@@ -9,6 +9,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:withu/ui/view/login/permission_view.dart';
+import 'package:withu/ui/view/login/usertype_view.dart';
 import 'firebase_options.dart';
 
 // 최상단에 위치해 있어야 함.

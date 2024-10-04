@@ -17,7 +17,7 @@ class Member {
         required this.socialType,
         required this.description,
         required this.deviceUuid,
-        required this.role
+        required this.role,
       });
 
   factory Member.fromJson(Map<String, dynamic> json) {
