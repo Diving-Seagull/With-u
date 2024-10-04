@@ -24,6 +24,7 @@ public class NoticeResponseDto {
     private List<NoticeImageDto> images;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Boolean pinned;
 
     @Getter
     @AllArgsConstructor
@@ -44,6 +45,7 @@ public class NoticeResponseDto {
             .images(notice.getImages().stream()
                 .map(image -> new NoticeImageDto(image.getId(), image.getImageUrl(), image.getOrder()))
                 .collect(Collectors.toList()))
+            .pinned(notice.isPinned())
             .createdAt(notice.getCreatedAt())
             .updatedAt(notice.getUpdatedAt())
             .build();
