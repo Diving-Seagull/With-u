@@ -57,6 +57,9 @@ public class Notice {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(nullable = false)
+    private boolean pinned = false;
+
     @Builder
     private Notice(Team team, String title, String content, Member author) {
         this.team = team;
@@ -117,5 +120,13 @@ public class Notice {
         this.images.remove(imageToMove);
         this.images.add(newOrder, imageToMove);
         reorderImages();
+    }
+
+    public void pin() {
+        this.pinned = true;
+    }
+
+    public void unpin() {
+        this.pinned = false;
     }
 }

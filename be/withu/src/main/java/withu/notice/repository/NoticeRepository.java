@@ -10,4 +10,6 @@ import withu.team.entity.Team;
 public interface NoticeRepository extends JpaRepository<Notice, Long> {
 
     List<Notice> findByTeamOrderByCreatedAtDesc(Team team);
+
+    List<Notice> findByTeamAndPinnedTrue(Team team);
 }
