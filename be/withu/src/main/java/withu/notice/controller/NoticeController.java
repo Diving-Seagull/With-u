@@ -16,6 +16,7 @@ import withu.auth.LoginMember;
 import withu.member.entity.Member;
 import withu.notice.dto.NoticeRequestDto;
 import withu.notice.dto.NoticeResponseDto;
+import withu.notice.dto.NoticeUpdateRequestDto;
 import withu.notice.service.NoticeService;
 
 @RestController
@@ -49,7 +50,7 @@ public class NoticeController {
 
     @PutMapping("/{noticeId}")
     public ResponseEntity<NoticeResponseDto> updateNotice(@LoginMember Member member,
-        @PathVariable Long noticeId, @Valid @RequestBody NoticeRequestDto requestDto) {
+        @PathVariable Long noticeId, @Valid @RequestBody NoticeUpdateRequestDto requestDto) {
         return ResponseEntity.ok(noticeService.updateNotice(member, noticeId, requestDto));
     }
 
