@@ -19,9 +19,8 @@ class _PermissionViewState extends State<PermissionView> {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.notification,
       Permission.location,
-      Permission.camera,
-      Permission.bluetooth,
       Permission.bluetoothConnect,
+      Permission.camera,
       Permission.bluetoothScan,
       Permission.bluetoothAdvertise
     ].request();
@@ -31,10 +30,6 @@ class _PermissionViewState extends State<PermissionView> {
       return;
     }
     if (await Permission.camera.isGranted != true) {
-      openSetting();
-      return;
-    }
-    if (await Permission.bluetooth.isGranted != true) {
       openSetting();
       return;
     }
