@@ -5,13 +5,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Builder;
+import withu.touristspot.enums.TouristSpotCategory;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "tourist_spots")
 public class TouristSpot {
 
     @Id
@@ -33,13 +36,17 @@ public class TouristSpot {
     @Column(nullable = false)
     private Double longitude;
 
+    @Column(nullable = false)
+    private TouristSpotCategory category;
+
     @Builder
-    private TouristSpot(Long id, String name, String address, String description, Double latitude, Double longitude) {
+    private TouristSpot(Long id, String name, String address, String description, Double latitude, Double longitude, TouristSpotCategory category) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.description = description;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.category = category;
     }
 }
