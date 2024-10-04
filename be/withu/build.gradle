@@ -42,6 +42,9 @@ dependencies {
 
 	// Logging (Spring Boot 3.3.1에 맞는 버전 사용)
 	implementation 'org.springframework.boot:spring-boot-starter-logging'
+
+	// Apache Commons CSV
+	implementation 'org.apache.commons:commons-csv:1.10.0'
 }
 
 tasks.named('test') {
