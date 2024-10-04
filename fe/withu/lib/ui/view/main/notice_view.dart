@@ -10,6 +10,7 @@ import 'package:withu/ui/viewmodel/main/notice_viewmodel.dart';
 import '../../../data/model/member.dart';
 import '../../global/color_data.dart';
 import '../../page/main/add_notice_page.dart';
+import 'noticedetail_view.dart';
 
 class NoticeView extends StatefulWidget {
   final Member? _member;
@@ -26,15 +27,15 @@ class _NoticeView extends State<NoticeView> {
 
   _NoticeView(this._member);
 
-  void initData() async {
-    await _viewModel.getTeamNotice();
+  void initData(bool isNew) async {
+    await _viewModel.getTeamNotice(isNew);
   }
 
   @override
   Widget build(BuildContext context) {
     //build 후 콜백 호출
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      initData();
+      initData(false);
     });
     _viewModel = Provider.of<NoticeViewModel>(context, listen: true);
     return Scaffold(
@@ -108,7 +109,12 @@ class _NoticeView extends State<NoticeView> {
         child: ListView.builder(
       itemCount: _viewModel.noticeList.length, // 데이터의 총 개수
       itemBuilder: (context, index) {
-        return Container(
+        return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context, CupertinoPageRoute(builder: (context) => NoticeDetailView(_viewModel.noticeList[index])));
+            },
+            child: Container(
             margin: EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 0),
             decoration: BoxDecoration(
                 border:
@@ -149,7 +155,7 @@ class _NoticeView extends State<NoticeView> {
                   )
                 ],
               ),
-            ));
+            )));
       },
     ));
   }
@@ -165,7 +171,7 @@ class _NoticeView extends State<NoticeView> {
                   context, CupertinoPageRoute(builder: (context) => AddNoticePage()))
                   .then((value) => {
                     setState(() {
-                      initData();
+                      initData(true);
                     })
                 });
               },
