@@ -35,7 +35,7 @@ class HomeView extends StatelessWidget {
       }
     });
     return SafeArea(
-        top: true,
+        top: false,
         bottom: true,
         left: true,
         right: true,
@@ -91,11 +91,11 @@ class _HomeView extends StatelessWidget {
         .height;
     // TODO: implement build
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size.fromHeight(60), child: _topBar(context)),
+      appBar: _topBar(context),
         body: SingleChildScrollView(
               child: Container(
                 margin: EdgeInsets.all(24.0),
-                height: _deviceHeight - 60,
+                height: _deviceHeight,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -110,48 +110,64 @@ class _HomeView extends StatelessWidget {
         );
   }
 
-  Widget _topBar(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: 24, right: 24, top: 10, bottom: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Flexible(
-            flex: 1,
-            child: Container(
-              width: _deviceWidth / 2,
-              height: 60,
-              child: Image.asset(
-                'assets/images/logo_blue.png',
+
+  PreferredSize _topBar(BuildContext context) {
+    return PreferredSize(
+      preferredSize: Size.fromHeight(70),
+      child: Container(
+          height: 70,
+          child: CupertinoNavigationBar(
+              backgroundColor: Colors.white,
+              leading: Align(
+                  widthFactor: 1.0,
+                  alignment: Alignment.center,
+                  child: Image.asset('assets/images/logo_blue.png', width:60, height: 60)
               ),
-            ),
+              border: Border(bottom: BorderSide(color: Colors.transparent)), //그림자 제거
           ),
-          Flexible(
-            flex: 4,
-            child: Container(
-              width: _deviceWidth / 2,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  GestureDetector(
-                    child: Text('알림'),
-                  ),
-                  GestureDetector(
-                      child: Text('설정'),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (context) => SettingView()));
-                      }),
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
+        ),
     );
+    // return Padding(
+    //   padding: EdgeInsets.only(left: 24, right: 24, top: 10, bottom: 10),
+    //   child: Row(
+    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //     crossAxisAlignment: CrossAxisAlignment.center,
+    //     children: [
+    //       Flexible(
+    //         flex: 1,
+    //         child: Container(
+    //           width: _deviceWidth / 2,
+    //           height: 60,
+    //           child: Image.asset(
+    //             'assets/images/logo_blue.png',
+    //           ),
+    //         ),
+    //       ),
+    //       Flexible(
+    //         flex: 4,
+    //         child: Container(
+    //           width: _deviceWidth / 2,
+    //           child: Row(
+    //             mainAxisAlignment: MainAxisAlignment.end,
+    //             children: [
+    //               GestureDetector(
+    //                 child: Text('알림'),
+    //               ),
+    //               GestureDetector(
+    //                   child: Text('설정'),
+    //                   onTap: () {
+    //                     Navigator.push(
+    //                         context,
+    //                         CupertinoPageRoute(
+    //                             builder: (context) => SettingView()));
+    //                   }),
+    //             ],
+    //           ),
+    //         ),
+    //       )
+    //     ],
+    //   ),
+    // );
   }
 
   Widget _userInfoSection() {
