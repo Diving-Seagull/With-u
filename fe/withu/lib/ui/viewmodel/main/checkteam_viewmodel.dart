@@ -3,11 +3,14 @@ import 'package:withu/data/repository/member_repository.dart';
 
 import '../../../data/model/member.dart';
 
-class TeammateViewModel with ChangeNotifier {
+class CheckteamViewModel with ChangeNotifier {
   final MemberRepository _repository = MemberRepository();
+  List<Member>? _teamMemberList;
+  List<Member> get teamMemberList => _teamMemberList ?? List.empty();
 
-  Future<List<Member>?> getTeamMember() async {
-    return await _repository.getTeamMember();
+  Future<void> getTeamMember() async {
+    _teamMemberList = await _repository.getTeamMember();
+    notifyListeners();
   }
 
 }
