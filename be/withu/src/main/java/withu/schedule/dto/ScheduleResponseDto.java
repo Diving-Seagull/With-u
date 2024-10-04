@@ -1,11 +1,10 @@
 package withu.schedule.dto;
 
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import withu.schedule.entity.Schedule;
 import withu.schedule.enums.ScheduleType;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Builder
