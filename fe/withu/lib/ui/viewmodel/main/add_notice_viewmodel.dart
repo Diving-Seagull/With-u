@@ -9,7 +9,14 @@ class AddNoticeViewModel with ChangeNotifier {
   final NoticeRepository _repository = NoticeRepository();
   List<XFile>? pickedFiles;
 
-  Future<Notice?> addNotice(NoticeRequest notice) async {
-    return await _repository.addTeamNotice(notice);
+  void setPickedFiles(List<XFile> files) {
+    pickedFiles = files;
+    notifyListeners();
+  }
+
+  Future<Notice?> addNotice(String title, String content) async {
+    NoticeRequest request = NoticeRequest(title: title, content: content,
+        imageUrls: pickedFiles?.map((file) => file.path).toList() ?? List.empty());
+    return await _repository.addTeamNotice(request);
   }
 }

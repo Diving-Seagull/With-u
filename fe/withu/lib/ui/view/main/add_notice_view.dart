@@ -238,14 +238,12 @@ class _AddNoticeView extends State<AddNoticeView> {
       picker.useAndroidPhotoPicker = true;
     }
 
-    setState(() async {
-      _viewModel.pickedFiles = await picker.getMultiImageWithOptions(
-        options: MultiImagePickerOptions(
-          imageOptions: ImagePickerOptions(requestFullMetadata: false),
-          limit: 5,
-        ),
-      );
-    });
+    _viewModel.setPickedFiles(await picker.getMultiImageWithOptions(
+      options: MultiImagePickerOptions(
+        imageOptions: ImagePickerOptions(requestFullMetadata: false),
+        limit: 5,
+      ),
+    ));
   }
 
   void createNotice() async {
@@ -253,13 +251,12 @@ class _AddNoticeView extends State<AddNoticeView> {
       CustomDialog.showYesDialog(context, '알림', '제목을 입력해주세요.', () => Navigator.pop(context));
       return;
     }
-    if(_titleController.text.trim() == '') {
+    if(_contentController.text.trim() == '') {
       CustomDialog.showYesDialog(context, '알림', '내용을 입력해주세요.', () => Navigator.pop(context));
       return;
     }
 
-    NoticeRequest request = NoticeRequest(title: _titleController.text, content: _contentController.text);
-    Notice? result = await _viewModel.addNotice(request);
+    Notice? result = await _viewModel.addNotice(_titleController.text, _contentController.text);
     if(result != null) {
       CustomDialog.showYesDialog(context, '알림', '공지사항이 등록되었습니다!', () {
         Navigator.pop(context);
