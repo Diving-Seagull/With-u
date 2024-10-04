@@ -68,7 +68,7 @@ public class AuthService {
 
     private Member registerNewGoogleMember(GoogleUserInfo googleUserInfo, String firebaseToken) {
         if (firebaseToken == null) {
-            throw new IllegalArgumentException("Firebase token is required for signup");
+            throw new CustomException(ExceptionCode.FIREBASE_TOKEN_MISSING);
         }
         Member newMember = Member.builder()
             .email(googleUserInfo.getEmail())
