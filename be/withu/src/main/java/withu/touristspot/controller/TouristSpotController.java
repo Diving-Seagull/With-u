@@ -3,10 +3,13 @@ package withu.touristspot.controller;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import withu.touristspot.dto.TouristSpotResponseDto;
 import withu.touristspot.service.TouristSpotService;
 
@@ -23,5 +26,11 @@ public class TouristSpotController {
         List<TouristSpotResponseDto> recommendations = touristSpotService.recommendTouristSpots(latitude,
             longitude);
         return ResponseEntity.ok(recommendations);
+    }
+
+    @PostMapping
+    public ResponseEntity<String> uploadTours(@RequestParam("file") MultipartFile file) {
+        touristSpotService.saveToursFromCsv(file);
+        return ResponseEntity.ok("CSV file successfully processed and saved.");
     }
 }
