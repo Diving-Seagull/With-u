@@ -58,7 +58,7 @@ class LoginView extends StatelessWidget {
       onPressed: () async {
         TokenDto? jwt = await _viewModel.setKakaoLogin();
         if(jwt != null) {
-          print('카카오 로그인 성공 $jwt');
+          print('카카오 로그인 성공 ${jwt.token}');
           await _storage.write(key: 'jwtToken', value: jsonEncode(jwt));
           // 메인 화면 이동
           if(context.mounted){

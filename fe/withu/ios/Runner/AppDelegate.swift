@@ -33,7 +33,6 @@ class AppDelegate: FlutterAppDelegate {
                 result(FlutterMethodNotImplemented)
             }
         }
-        
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 
