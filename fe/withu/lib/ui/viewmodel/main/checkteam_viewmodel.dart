@@ -9,8 +9,9 @@ class CheckteamViewModel with ChangeNotifier {
   List<Member> get teamMemberList => _teamMemberList ?? List.empty();
 
   Future<void> getTeamMember() async {
-    _teamMemberList = await _repository.getTeamMember();
-    notifyListeners();
+    if(_teamMemberList == null) {
+      _teamMemberList = await _repository.getTeamMember();
+      notifyListeners();
+    }
   }
-
 }
