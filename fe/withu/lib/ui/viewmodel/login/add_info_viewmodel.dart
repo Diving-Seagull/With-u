@@ -5,6 +5,9 @@ import '../../../data/model/member.dart';
 import '../../../data/repository/member_repository.dart';
 
 class AddInfoViewModel with ChangeNotifier {
+  String type;
+  AddInfoViewModel(this.type);
+
   final MemberRepository _repository = MemberRepository();
 
   Member? _member;
