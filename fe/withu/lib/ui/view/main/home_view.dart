@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:withu/extension/string_extension.dart';
 import 'package:withu/ui/page/notice/notice_page.dart';
 import 'package:withu/ui/page/main/checkteam_page.dart';
+import 'package:withu/ui/view/timetable/timetable_view.dart';
+import 'package:withu/ui/viewmodel/timetable/timetable_viewmodel.dart';
 
 import '../../../data/model/member.dart';
 import '../../global/convert_uuid.dart';
@@ -42,7 +44,7 @@ class HomeView extends StatelessWidget {
         child: CupertinoTabScaffold(
             tabBar: CupertinoTabBar(items: [
               BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: '테스트'),
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: '시간표'),
               BottomNavigationBarItem(icon: Icon(Icons.home), label: '테스트2')
             ]),
             tabBuilder: (context, index) {
@@ -50,7 +52,10 @@ class HomeView extends StatelessWidget {
                 return _HomeView(_homeViewModel);
               }
               else if(index == 1) {
-                return SecondView();
+                return ChangeNotifierProvider(
+                    create: (_) => TimeTableViewModel(),
+                    child: TimeTableView(),
+                );
               }
               else {
                 return ThirdView();
