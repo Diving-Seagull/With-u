@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import withu.global.exception.CustomException;
+import withu.global.utils.TranslationUtil;
 import withu.member.entity.Member;
 import withu.member.repository.MemberRepository;
 import withu.notification.dto.NotificationRequestDto;
@@ -32,6 +33,7 @@ public class NotificationService {
 
     private final MemberRepository memberRepository;
     private final TeamRepository teamRepository;
+    private final TranslationUtil translationUtil;
 
     public void sendTeamAlert(Long teamId, NotificationRequestDto requestDto, Member sender) {
         if (!sender.isLeader()) {
@@ -58,10 +60,12 @@ public class NotificationService {
         sendNotificationToTeam(targetMembers, title, body, null);
     }
 
-    public void sendNotificationToTeam(List<Member> teamMembers, String title, String body,
+    public void sendNotificationToTeam(List<Member> teamMembers, String defaultTitle, String defaultBody,
         String imageUrl) {
         teamMembers.forEach(member -> {
             if (member.getFirebaseToken() != null) {
+                String title = translationUtil.translateText(defaultTitle, member.getLanguageCode());
+                String body = translationUtil.translateText(defaultBody, member.getLanguageCode());
                 sendNotification(member, title, body, imageUrl);
             }
         });

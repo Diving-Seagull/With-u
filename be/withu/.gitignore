@@ -42,3 +42,4 @@ src/main/resources/application.properties
 
 ### firebase account ###
 src/main/resources/firebase-service-account.json
+src/main/resources/withu-436404-5b6f9b4db3c4.json
