@@ -12,6 +12,11 @@ class NoticeRepository {
     return _dataSource.getTeamNotice(jwtToken);
   }
 
+  Future<Notice?> getPinnedTeamNotice() async {
+    String? jwtToken = await storage.read(key: 'jwtToken') as String;
+    return _dataSource.getPinnedNotice(jwtToken);
+  }
+
   Future<Notice?> addTeamNotice(NoticeRequest notice) async {
     String? jwtToken = await storage.read(key: 'jwtToken') as String;
     return _dataSource.addTeamNotice(jwtToken, notice);
