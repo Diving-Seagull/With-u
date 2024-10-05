@@ -1,14 +1,23 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/extension/string_extension.dart';
-import 'package:withu/ui/page/main/notice_page.dart';
+import 'package:withu/ui/page/main/manageteam_page.dart';
+import 'package:withu/ui/page/main/setting_page.dart';
+import 'package:withu/ui/page/notice/notice_page.dart';
 import 'package:withu/ui/page/main/checkteam_page.dart';
+import 'package:withu/ui/view/timetable/timetable_view.dart';
+import 'package:withu/ui/viewmodel/timetable/timetable_viewmodel.dart';
 
 import '../../../data/model/member.dart';
+import '../../global/color_data.dart';
 import '../../global/convert_uuid.dart';
 import '../../global/device_info.dart';
+import '../../page/main/findleader_page.dart';
+import '../../page/tour/tour_page.dart';
 import '../../viewmodel/main/home_viewmodel.dart';
 import '../empty_view.dart';
 import 'setting_view.dart';
@@ -35,14 +44,14 @@ class HomeView extends StatelessWidget {
       }
     });
     return SafeArea(
-        top: false,
+        top: true,
         bottom: true,
         left: true,
         right: true,
         child: CupertinoTabScaffold(
             tabBar: CupertinoTabBar(items: [
               BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: '테스트'),
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: '시간표'),
               BottomNavigationBarItem(icon: Icon(Icons.home), label: '테스트2')
             ]),
             tabBuilder: (context, index) {
@@ -50,7 +59,10 @@ class HomeView extends StatelessWidget {
                 return _HomeView(_homeViewModel);
               }
               else if(index == 1) {
-                return SecondView();
+                return ChangeNotifierProvider(
+                    create: (_) => TimeTableViewModel(),
+                    child: TimeTableView(),
+                );
               }
               else {
                 return ThirdView();
@@ -83,8 +95,17 @@ class _HomeView extends StatelessWidget {
 
   late double _deviceWidth, _deviceHeight;
 
+  Future<void> init() async {
+    _homeViewModel.pinnedNotice = null;
+    await _homeViewModel.getPinnedNotice();
+  }
+
   @override
   Widget build(BuildContext context) {
+    //build 후 콜백 호출
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      init();
+    });
     _deviceWidth = MediaQuery
         .of(context)
         .size
@@ -93,13 +114,11 @@ class _HomeView extends StatelessWidget {
         .of(context)
         .size
         .height;
-    // TODO: implement build
     return Scaffold(
       appBar: _topBar(context),
         body: SingleChildScrollView(
               child: Container(
                 margin: EdgeInsets.all(24.0),
-                height: _deviceHeight,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -147,11 +166,14 @@ class _HomeView extends StatelessWidget {
                   GestureDetector(
                       child: Text('설정'),
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (context) => SettingView()));
-                      }),
+                        if(_homeViewModel.member != null) {
+                          Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                  builder: (context) => SettingPage(_homeViewModel.member!)));
+                          }
+                        }
+                  ),
                 ],
               ),
             ),
@@ -183,6 +205,12 @@ class _HomeView extends StatelessWidget {
                 'WYD 행사에 오신 것을\n환영합니다.',
                 style: TextStyle(fontSize: 25),
                 textAlign: TextAlign.left,
+              ),
+              SizedBox(height: 10),
+              Text(
+                '윗유를 통해 행사에 참여해보세요!',
+                style: TextStyle(fontSize: 14, color: ColorData.COLOR_SEMIGRAY),
+                textAlign: TextAlign.left,
               )
             ],
           ),
@@ -191,6 +219,58 @@ class _HomeView extends StatelessWidget {
   }
 
   Widget _menuSection(BuildContext context) {
+    if(_homeViewModel.member != null) {
+      if(_homeViewModel.member!.role == 'LEADER') {
+        return _leaderMenuSection(context);
+      }
+      else {
+        return _memberMenuSection(context);
+      }
+    }
+    else {
+      return Container();
+    }
+  }
+
+  Widget _createMemberMenuBtn(String name, String path, int cnt) {
+    return Padding(
+      padding: EdgeInsets.only(top: 10, left: 5, right: 5),
+      child: Container(
+        height: (_deviceWidth / cnt) - 20,
+        decoration: BoxDecoration(
+            color: Colors.red, borderRadius: BorderRadius.circular(15)),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Padding(padding: EdgeInsets.only(top: 24, bottom: 5, left: 32, right: 32),
+                child: Image.asset(path, width: 40, height: 40)),
+            Padding(padding: EdgeInsets.only(top: 0), child: Text(name, style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500
+            ),))
+          ],
+        ),
+      )
+    );
+  }
+
+  Widget _createMenuBtn(String name, int cnt) {
+    return Padding(
+      padding: EdgeInsets.only(top: 10, left: 5, right: 5),
+      child: Column(
+        children: [
+          Container(
+            height: (_deviceWidth / cnt) - 20,
+            decoration: BoxDecoration(
+                color: Colors.red, borderRadius: BorderRadius.circular(15)),
+          ),
+          Padding(padding: EdgeInsets.only(top: 14), child: Text(name))
+        ],
+      ),
+    );
+  }
+
+  Widget _memberMenuSection(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
       child: Column(
@@ -205,30 +285,42 @@ class _HomeView extends StatelessWidget {
               flex: 2,
               child: Row(
                 children: [
-                  Flexible(flex: 1, child: _createMenuBtn('path', '멤버관리')),
+                  Flexible(flex: 1,
+                      child: GestureDetector(
+                          child: _createMemberMenuBtn('팀장찾기', 'assets/images/icon_findleader.png', 3),
+                          onTap: () {
+                            if(_homeViewModel.member != null) {
+                              Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                      builder: (context) => FindLeaderPage(_homeViewModel.member!)))
+                                  .then((_) async => await init());
+                            }
+                          })),
                   Flexible(
                       flex: 1,
                       child: GestureDetector(
-                        child: _createMenuBtn('path', '인원확인'),
+                        child: _createMemberMenuBtn('공지사항', 'assets/images/icon_notification.png', 3),
                         onTap: () {
                           Navigator.push(
                               context,
                               CupertinoPageRoute(
-                                  builder: (context) => TeamMatePage()));
+                                  builder: (context) => TeamMatePage()))
+                              .then((_) async => await init());
                         },
                       )),
                   Flexible(
                       flex: 1,
                       child: GestureDetector(
-                          child: _createMenuBtn('path', '공지사항'),
+                          child: _createMemberMenuBtn('공지사항', 'assets/images/icon_tourmap.png', 3),
                           onTap: () {
                             Navigator.push(
                                 context,
                                 CupertinoPageRoute(
                                     builder: (context) =>
-                                        NoticePage(_homeViewModel.member)));
-                          })),
-                  Flexible(flex: 1, child: _createMenuBtn('path', '관광지도'))
+                                        NoticePage(_homeViewModel.member)))
+                                .then((_) async => await init());
+                          }))
                 ],
               ))
         ],
@@ -236,17 +328,66 @@ class _HomeView extends StatelessWidget {
     );
   }
 
-  Widget _createMenuBtn(String path, String name) {
+  Widget _leaderMenuSection(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 10, left: 5, right: 5),
+      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min, //Column의 크기를 자식들의 크기에 맞게 최소화
         children: [
-          Container(
-            height: (_deviceWidth / 4) - 20,
-            decoration: BoxDecoration(
-                color: Colors.red, borderRadius: BorderRadius.circular(15)),
-          ),
-          Padding(padding: EdgeInsets.only(top: 14), child: Text(name))
+          Flexible(
+              flex: 1,
+              child: const Text('바로가기 >',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700))),
+          Flexible(
+              flex: 2,
+              child: Row(
+                children: [
+                  Flexible(flex: 1,
+                      child: GestureDetector(
+                          child: _createMenuBtn('멤버관리', 4),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => ManageTeamPage()))
+                                .then((_) async => await init());
+                          })),
+                  Flexible(
+                      flex: 1,
+                      child: GestureDetector(
+                        child: _createMenuBtn('인원확인', 4),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                  builder: (context) => TeamMatePage()))
+                              .then((_) async => await init());
+                        },
+                      )),
+                  Flexible(
+                      flex: 1,
+                      child: GestureDetector(
+                          child: _createMenuBtn('공지사항', 4),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) =>
+                                        NoticePage(_homeViewModel.member)))
+                                .then((_) async => await init());
+                          })),
+                  Flexible(flex: 1, child: GestureDetector(
+                      child: _createMenuBtn('관광지도', 4),
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => TourPage()))
+                            .then((_) async => await init());
+                      }))
+                ],
+              ))
         ],
       ),
     );
@@ -281,7 +422,7 @@ class _HomeView extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.red,
+        color: Colors.white,
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 28),
@@ -297,18 +438,33 @@ class _HomeView extends StatelessWidget {
                     style:
                     TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                 Container(
-                  margin: EdgeInsets.only(top: 0, bottom: 4, left: 0, right: 0),
-                  child: Text('중요 공지!!',
+                  width:  _deviceWidth - 200,
+                  margin: EdgeInsets.only(top: 0, bottom: 10, left: 0, right: 0),
+                  child: Text(_homeViewModel.pinnedNotice == null ? '공지사항이 없습니다.' : _homeViewModel.pinnedNotice!.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style:
                       TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                 ),
-                Text('description\ndescription', style: TextStyle(fontSize: 12))
+                Container(
+                    width:  _deviceWidth - 200,
+                    child: Text(_homeViewModel.pinnedNotice == null ? '공지사항이 없습니다.' : _homeViewModel.pinnedNotice!.content,
+                    maxLines: 2,
+                    style: TextStyle(
+                        fontSize: 12,
+                      color: ColorData.COLOR_SEMIGRAY,
+                    ),
+                  overflow: TextOverflow.ellipsis,
+                ))
               ],
             ),
-            Container(
+            SizedBox(
               width: 90,
               height: 90,
-              color: Colors.blue,
+              child: _homeViewModel.pinnedNotice == null ? SizedBox() :
+                      (_homeViewModel.pinnedNotice!.images.isNotEmpty ?
+                      Image.file(File(_homeViewModel.pinnedNotice!.images.first.imageUrl), fit: BoxFit.cover) :
+                      SizedBox())
             )
           ],
         ),

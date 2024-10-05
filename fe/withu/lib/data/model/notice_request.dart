@@ -1,11 +1,13 @@
 class NoticeRequest {
   final String title;
   final String content;
+  final bool pinned;
   final List<String> imageUrls;
 
   NoticeRequest({
     required this.title,
     required this.content,
+    required this.pinned,
     required this.imageUrls
   });
 
@@ -13,6 +15,7 @@ class NoticeRequest {
     return NoticeRequest(
         title: json['title'],
         content: json['content'],
+        pinned: json['pinned'],
         imageUrls: json['imageUrls']
     );
   }
@@ -21,6 +24,7 @@ class NoticeRequest {
     return {
       'title': title,
       'content': content,
+      'pinned': pinned,
       'imageUrls': imageUrls
     };
   }

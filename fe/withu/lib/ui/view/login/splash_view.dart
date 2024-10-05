@@ -83,7 +83,10 @@ class _SplashViewState extends State<SplashView> {
 
   void checkRegister() async {
     var member = await viewModel.getMember();
-    if(member!.deviceUuid == null) {
+    if(member == null) {
+      moveLoginScreen();
+    }
+    else if(member.teamId == null) {
       moveTypeScreen();
     }
     else {

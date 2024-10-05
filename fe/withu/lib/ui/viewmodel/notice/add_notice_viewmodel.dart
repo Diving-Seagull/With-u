@@ -14,8 +14,8 @@ class AddNoticeViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Notice?> addNotice(String title, String content) async {
-    NoticeRequest request = NoticeRequest(title: title, content: content,
+  Future<Notice?> addNotice(String title, String content, bool pinned) async {
+    NoticeRequest request = NoticeRequest(title: title, content: content, pinned: pinned,
         imageUrls: pickedFiles?.map((file) => file.path).toList() ?? List.empty());
     return await _repository.addTeamNotice(request);
   }
