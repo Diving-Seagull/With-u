@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/extension/string_extension.dart';
 import 'package:withu/ui/page/main/manageteam_page.dart';
+import 'package:withu/ui/page/main/setting_page.dart';
 import 'package:withu/ui/page/notice/notice_page.dart';
 import 'package:withu/ui/page/main/checkteam_page.dart';
 import 'package:withu/ui/view/timetable/timetable_view.dart';
@@ -169,7 +170,7 @@ class _HomeView extends StatelessWidget {
                           Navigator.push(
                               context,
                               CupertinoPageRoute(
-                                  builder: (context) => SettingView(_homeViewModel.member!)));
+                                  builder: (context) => SettingPage(_homeViewModel.member!)));
                           }
                         }
                   ),

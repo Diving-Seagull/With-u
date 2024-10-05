@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:withu/data/model/memberlocation.dart';
 import 'package:withu/ui/global/custom_appbar.dart';
 
 import '../../viewmodel/main/findleader_viewmodel.dart';
 
 class FindLeaderView extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() => _FindLeaderView();
 }
@@ -20,6 +20,7 @@ class _FindLeaderView extends State<FindLeaderView> {
   final Completer<NaverMapController> mapControllerCompleter = Completer();
   NaverMapController? _controller;
   NLatLng? _currentPosition;
+  MemberLocation? leaderLocation;
 
   Future<void> init() async {
     // 위치 가져오기
@@ -36,18 +37,24 @@ class _FindLeaderView extends State<FindLeaderView> {
     if (_currentPosition != null && _controller != null) {
       var camera = NCameraUpdate.scrollAndZoomTo(target: _currentPosition);
       await _controller!.updateCamera(camera);
-      setTourData();
+      await _viewModel.getLeaderLocation();
+      await setLeaderLocation();
     }
   }
 
-  Future<void> setTourData() async {
-    setState(() {
-      _controller!.clearOverlays(); // 마커 제거
-      // final marker = NMarker(id: tour.id.toString(), position: NLatLng(tour.latitude, tour.longitude));
-      // marker.setCaption(NOverlayCaption(text: tour.name));
-      // marker.setOnTapListener((marker) {
-      // _controller!.addOverlay(marker);
-    });
+  Future<void> setLeaderLocation() async {
+    if (_viewModel.location != null) {
+      setState(() {
+        _controller!.clearOverlays(); // 마커 제거
+        final marker = NMarker(id: '1',
+            position: NLatLng(
+                _viewModel.location!.latitude, _viewModel.location!.longitude));
+        marker.setOnTapListener((marker) {
+          _controller!.addOverlay(marker);
+        });
+        _controller!.addOverlay(marker);
+      });
+    }
   }
 
   @override
