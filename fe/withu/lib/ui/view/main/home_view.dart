@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/extension/string_extension.dart';
+import 'package:withu/ui/page/main/manageteam_page.dart';
 import 'package:withu/ui/page/notice/notice_page.dart';
 import 'package:withu/ui/page/main/checkteam_page.dart';
 import 'package:withu/ui/view/timetable/timetable_view.dart';
@@ -211,7 +212,15 @@ class _HomeView extends StatelessWidget {
               flex: 2,
               child: Row(
                 children: [
-                  Flexible(flex: 1, child: _createMenuBtn('path', '멤버관리')),
+                  Flexible(flex: 1,
+                      child: GestureDetector(
+                          child: _createMenuBtn('path', '멤버관리'),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => ManageTeamPage()));
+                          })),
                   Flexible(
                       flex: 1,
                       child: GestureDetector(
