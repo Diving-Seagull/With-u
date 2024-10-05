@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import withu.global.exception.CustomException;
+import withu.global.utils.TranslationUtil;
 import withu.member.entity.Member;
 import withu.schedule.dto.ScheduleRequestDto;
 import withu.schedule.dto.ScheduleResponseDto;
@@ -30,6 +31,7 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final TeamRepository teamRepository;
+    private final TranslationUtil translationUtil;
 
     @Transactional(readOnly = true)
     public List<ScheduleResponseDto> getMorningSchedules(LocalDate date, Member member) {
@@ -45,10 +47,8 @@ public class ScheduleService {
         return getFilteredSchedules(start, end, member);
     }
 
-    private List<ScheduleResponseDto> getFilteredSchedules(LocalDateTime start, LocalDateTime end,
-        Member member) {
-        List<Schedule> allSchedules = scheduleRepository.findByMemberAndTimeBetween(member, start,
-            end);
+    private List<ScheduleResponseDto> getFilteredSchedules(LocalDateTime start, LocalDateTime end, Member member) {
+        List<Schedule> allSchedules = scheduleRepository.findByMemberAndTimeBetween(member, start, end);
 
         List<Schedule> personalSchedules = allSchedules.stream()
             .filter(s -> s.getType() == ScheduleType.PERSONAL)
@@ -64,7 +64,7 @@ public class ScheduleService {
         personalSchedules.addAll(teamSchedules);
 
         return personalSchedules.stream()
-            .map(ScheduleResponseDto::from)
+            .map(schedule -> ScheduleResponseDto.fromWithTranslation(schedule, member.getLanguageCode(), translationUtil))
             .collect(Collectors.toList());
     }
 
