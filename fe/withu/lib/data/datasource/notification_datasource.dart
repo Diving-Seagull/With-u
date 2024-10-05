@@ -5,10 +5,11 @@ import 'package:http/http.dart' as http;
 import 'package:withu/data/model/notification_request.dart';
 
 import '../api/rest_api_session.dart';
+import '../ip_address.dart';
 import '../model/token_dto.dart';
 
 class NotificationDataSource {
-  final _uriPath = 'http://172.20.10.9:8080/api/teams';
+  final _uriPath = 'http://${IpAddress.IP_PATH}:8080/api/teams';
 
   final Map<String, String> headers = {
     'Content-Type': 'application/json',
