@@ -9,6 +9,7 @@ import withu.member.entity.Member;
 import withu.member.enums.Role;
 import withu.member.repository.MemberRepository;
 import withu.memberlocation.dto.LocationResponseDto;
+import withu.memberlocation.dto.LocationUpdateRequestDto;
 import withu.memberlocation.entity.MemberLocation;
 import withu.memberlocation.repository.MemberLocationRepository;
 import withu.notification.service.NotificationService;
@@ -26,6 +27,7 @@ public class MemberLocationService {
             .member(member)
             .latitude(null)
             .longitude(null)
+            .message(null)
             .build();
 
         memberLocationRepository.save(memberLocation);
@@ -41,16 +43,20 @@ public class MemberLocationService {
         return LocationResponseDto.from(leaderLocation);
     }
 
-    public LocationResponseDto updateMemberLocation(Member member, Double latitude, Double longitude) {
+    public LocationResponseDto updateMemberLocation(Member member, LocationUpdateRequestDto requestDto) {
         if (!member.isLeader()) {
             throw new CustomException(USER_NOT_LEADER);
         }
 
         MemberLocation memberLocation = memberLocationRepository.findByMember(member)
-            .orElse(MemberLocation.builder().member(member).latitude(latitude).longitude(longitude)
+            .orElse(MemberLocation.builder()
+                .member(member)
+                .latitude(requestDto.getLatitude())
+                .longitude(requestDto.getLongitude())
+                .message(requestDto.getMessage())
                 .build());
 
-        memberLocation.updateLocation(latitude, longitude);
+        memberLocation.updateLocation(requestDto.getLatitude(), requestDto.getLongitude(), requestDto.getMessage());
         memberLocationRepository.save(memberLocation);
 
         notificationService.sendLocationUpdateNotificationToTeam(member);

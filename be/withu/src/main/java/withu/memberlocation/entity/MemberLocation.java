@@ -39,18 +39,23 @@ public class MemberLocation {
     @Column(nullable = true)
     private Double longitude;
 
+    @Column(length = 500)
+    private String message;
+
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
     @Builder
-    public MemberLocation(Member member, Double latitude, Double longitude) {
+    public MemberLocation(Member member, Double latitude, Double longitude, String message) {
         this.member = member;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.message = message;
     }
 
-    public void updateLocation(Double latitude, Double longitude) {
+    public void updateLocation(Double latitude, Double longitude, String message) {
         this.latitude = latitude;
         this.longitude = longitude;
+        this.message = message;
     }
 }
