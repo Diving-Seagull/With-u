@@ -2,6 +2,7 @@ package withu.notice.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Base64;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,8 +30,9 @@ public class NoticeResponseDto {
     @AllArgsConstructor
     public static class NoticeImageDto {
         private Long id;
-        private String imageUrl;
+        private String contentType;
         private int order;
+        private String imageData;  // Base64로 인코딩된 이미지 데이터
     }
 
     public static NoticeResponseDto from(Notice notice) {
@@ -42,7 +44,12 @@ public class NoticeResponseDto {
             .authorId(notice.getAuthor().getId())
             .authorName(notice.getAuthor().getName())
             .images(notice.getImages().stream()
-                .map(image -> new NoticeImageDto(image.getId(), image.getImageUrl(), image.getOrder()))
+                .map(image -> new NoticeImageDto(
+                    image.getId(),
+                    image.getContentType(),
+                    image.getOrder(),
+                    Base64.getEncoder().encodeToString(image.getImageData())
+                ))
                 .collect(Collectors.toList()))
             .pinned(notice.isPinned())
             .createdAt(notice.getCreatedAt())

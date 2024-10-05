@@ -30,6 +30,7 @@ public enum ExceptionCode {
     NOTICE_IMAGE_COUNT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 이미지 개수입니다."),
     NOTICE_IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "요청한 공지사항 이미지를 찾을 수 없습니다."),
     NOTICE_IMAGE_ORDER_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 이미지 순서입니다."),
+    INVALID_IMAGE_DATA(HttpStatus.BAD_REQUEST, "유효하지 않은 이미지입니다."),
 
     SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 일정을 찾을 수 없습니다."),
     NOT_USERS_SCHEDULE(HttpStatus.FORBIDDEN, "해당 작업을 수행할 권한이 없습니다."),
