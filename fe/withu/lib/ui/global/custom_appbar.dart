@@ -7,7 +7,7 @@ class CustomAppBar {
     return PreferredSize(
       preferredSize: Size.fromHeight(80),
       child: Container(
-        height: 70,
+        height: 80,
         child: CupertinoNavigationBar(
           backgroundColor: Colors.white,
           leading: Align(
@@ -28,7 +28,7 @@ class CustomAppBar {
     return PreferredSize(
       preferredSize: Size.fromHeight(80),
       child: Container(
-        height: 70,
+        height: 80,
         child: CupertinoNavigationBar(
           backgroundColor: Colors.white,
           middle: Text(title, style: TextStyle(fontSize: 18, color: Colors.black)),

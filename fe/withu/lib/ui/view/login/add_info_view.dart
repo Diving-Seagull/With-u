@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/data/model/init_member.dart';
+import 'package:withu/ui/global/custom_appbar.dart';
 import 'package:withu/ui/global/custom_dialog.dart';
 import 'package:withu/ui/global/device_info.dart';
 import 'package:withu/ui/global/color_data.dart';
@@ -40,6 +41,8 @@ class _AddInfoView extends State<AddInfoView> {
     init();
     // TODO: implement build
     return Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: CustomAppBar.getNavigationBar(context, '회원가입', () => Navigator.pop(context)),
         body: SafeArea(
             top: true,
             bottom: true,
@@ -131,7 +134,7 @@ class _AddInfoView extends State<AddInfoView> {
         ),
         Container(
           child: CupertinoTextField(
-              keyboardType: TextInputType.name,
+              keyboardType: TextInputType.text,
               placeholder: '닉네임을 입력해주세요',
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -171,7 +174,7 @@ class _AddInfoView extends State<AddInfoView> {
 
         Container(
           child: CupertinoTextField(
-              keyboardType: TextInputType.name,
+              keyboardType: TextInputType.text,
               placeholder: '자신을 소개하는 글을 적어보세요!',
               textAlignVertical: TextAlignVertical.top,
               decoration: BoxDecoration(
@@ -236,7 +239,10 @@ class _AddInfoView extends State<AddInfoView> {
   Widget _saveSection(BuildContext context) {
     return Container(
       width: _deviceWidth,
-      child: CupertinoButton.filled(child: Text('저장하기'), onPressed: () {
+      height: 56,
+      child: CupertinoButton(
+          color: ColorData.COLOR_SUBCOLOR1,
+          child: Text('저장하기', style: TextStyle(fontWeight: FontWeight.w700)), onPressed: () {
         _saveMemberData(context);
       }),
     );

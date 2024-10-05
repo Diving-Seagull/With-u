@@ -11,6 +11,7 @@ import 'package:withu/ui/view/main/home_view.dart';
 import 'package:withu/ui/viewmodel/login/login_viewmodel.dart';
 
 import '../../../data/model/token_dto.dart';
+import '../../global/color_data.dart';
 
 class LoginView extends StatelessWidget {
   late final LoginViewModel _viewModel;
@@ -21,21 +22,42 @@ class LoginView extends StatelessWidget {
     // TODO: implement build
     _viewModel = Provider.of<LoginViewModel>(context); //ViewModel 가져오기
     return Scaffold( // AppBar 없애기
-      body: Center(
+      body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.all(24),
+              child:Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text("Welcome!", style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold
+            ),),
+            SizedBox(height: 15),
+            Text("3초만에 시작해보세요!", style: TextStyle(
+                fontSize: 14,
+                color: ColorData.COLOR_DARKGRAY
+            )),
+            SizedBox(height: 60),
             _kakaoLoginBtn(context),
             _googleLoginBtn(context)
           ],
         ),
-      ),
+      ))),
     );
   }
 
   Widget _googleLoginBtn(BuildContext context) => Padding(
       padding: const EdgeInsets.all(3.0),
-      child: CupertinoButton.filled(
+      child: Container(
+          height: 58,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: ColorData.COLOR_GRAY)
+          ),
+          child: CupertinoButton(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
         onPressed: () async {
           TokenDto? jwt = await _viewModel.setGoogleLogin();
           if(jwt != null) {
@@ -48,13 +70,23 @@ class LoginView extends StatelessWidget {
               moveTypeScreen(context);
             }
           }
-        }, child: Text('구글 로그인'),
-      )
+        }, child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Flexible(flex: 1, child: Image.asset('assets/images/google.png', width: 20, height: 20)),
+          Flexible(flex: 3, child: Text('Google로 시작하기', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700)))
+        ],
+      ),
+      ))
   );
 
   Widget _kakaoLoginBtn(BuildContext context) => Padding(
       padding: const EdgeInsets.all(3.0),
-      child: CupertinoButton.filled(
+      child: Container(
+        height: 58,
+          child: CupertinoButton(
+        color: Color(0xFFFDE500),
       onPressed: () async {
         TokenDto? jwt = await _viewModel.setKakaoLogin();
         if(jwt != null) {
@@ -66,8 +98,15 @@ class LoginView extends StatelessWidget {
             moveTypeScreen(context);
           }
         }
-      }, child: Text('카카오 로그인'),
-    )
+      }, child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Flexible(flex: 1, child: Image.asset('assets/images/kakao.png', width: 20, height: 20)),
+          Flexible(flex: 3, child: Text('카카오로 시작하기', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700)))
+        ]
+      ),
+    ))
   );
 
 

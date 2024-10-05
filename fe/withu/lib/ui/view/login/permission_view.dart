@@ -49,7 +49,9 @@ class _PermissionViewState extends State<PermissionView> {
     if(context.mounted) {
       Navigator.pop(context);
       Navigator.push(
-          context, CupertinoPageRoute(builder: (context) => SplashPage()));
+          context, PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => SplashPage(),
+          transitionDuration: Duration(seconds: 0)));
     }
   }
 
@@ -77,7 +79,9 @@ class _PermissionViewState extends State<PermissionView> {
     if(context.mounted) {
       Navigator.pop(context);
       Navigator.push(
-          context, CupertinoPageRoute(builder: (context) => SplashPage()));
+          context, PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => SplashPage(),
+          transitionDuration: Duration(seconds: 0)));
     }
   }
 
@@ -96,15 +100,6 @@ class _PermissionViewState extends State<PermissionView> {
         await checkPermissioniOS(context);
       }
     });
-    return Scaffold(
-        body: Center(
-          child: Container(
-              height: double.infinity, // 너비 꽉 채우기
-              width: double.infinity, // 높이 꽉 채우기
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 28, 72, 161),
-              ),
-              child: Image.asset('assets/images/logo_white.png')),
-        ));
+    return Scaffold();
   }
 }

@@ -12,9 +12,7 @@ class TimeTableViewModel with ChangeNotifier {
     if(scheduleFlag == false) {
       scheduleFlag = true;
       scheduleList = await _repository.getSchedules(date);
-      if(scheduleList.isNotEmpty) {
-        notifyListeners();
-      }
+      notifyListeners();
     }
   }
 }
