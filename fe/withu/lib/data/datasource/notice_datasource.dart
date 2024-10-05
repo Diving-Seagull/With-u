@@ -43,6 +43,29 @@ class NoticeDataSource {
     // }
   }
 
+  Future<Notice?> getPinnedNotice(String jwtToken) async {
+    TokenDto tokenDto = TokenDto.fromJson(json.decode(jwtToken));
+    headers['Authorization'] = 'Bearer ${tokenDto.token}';
+    try {
+      http.Response response = await RestApiSession.getUrl(
+          Uri.parse('$_uriPath/pinned'), headers);
+      final int statusCode = response.statusCode;
+
+      if (statusCode == 200) {
+        return Notice.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+      }
+      else {
+        print('getPinnedNotice() 에러 발생 $statusCode');
+      }
+    } on http.ClientException {
+      print('인터넷 문제 발생');
+    } on TimeoutException {
+      print('$_uriPath TimeoutException');
+    }
+    return null;
+    // }
+  }
+
   Future<Notice?> addTeamNotice(String jwtToken, NoticeRequest notice) async {
     TokenDto tokenDto = TokenDto.fromJson(json.decode(jwtToken));
     headers['Authorization'] = 'Bearer ${tokenDto.token}';

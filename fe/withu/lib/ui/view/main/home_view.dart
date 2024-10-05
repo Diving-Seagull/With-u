@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +12,7 @@ import 'package:withu/ui/view/timetable/timetable_view.dart';
 import 'package:withu/ui/viewmodel/timetable/timetable_viewmodel.dart';
 
 import '../../../data/model/member.dart';
+import '../../global/color_data.dart';
 import '../../global/convert_uuid.dart';
 import '../../global/device_info.dart';
 import '../../page/tour/tour_page.dart';
@@ -90,8 +93,14 @@ class _HomeView extends StatelessWidget {
 
   late double _deviceWidth, _deviceHeight;
 
+  void init() async {
+    _homeViewModel.pinnedNotice = null;
+    await _homeViewModel.getPinnedNotice();
+  }
+
   @override
   Widget build(BuildContext context) {
+    init();
     _deviceWidth = MediaQuery
         .of(context)
         .size
@@ -100,13 +109,11 @@ class _HomeView extends StatelessWidget {
         .of(context)
         .size
         .height;
-    // TODO: implement build
     return Scaffold(
       appBar: _topBar(context),
         body: SingleChildScrollView(
               child: Container(
                 margin: EdgeInsets.all(24.0),
-                height: _deviceHeight,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -249,7 +256,7 @@ class _HomeView extends StatelessWidget {
                         Navigator.push(
                             context,
                             CupertinoPageRoute(
-                                builder: (context) => TourPage()));
+                                builder: (context) => TourPage())) ;
                   }))
                 ],
               ))
@@ -303,7 +310,7 @@ class _HomeView extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.red,
+        color: Colors.white,
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 28),
@@ -319,18 +326,28 @@ class _HomeView extends StatelessWidget {
                     style:
                     TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                 Container(
-                  margin: EdgeInsets.only(top: 0, bottom: 4, left: 0, right: 0),
-                  child: Text('중요 공지!!',
+                  margin: EdgeInsets.only(top: 0, bottom: 10, left: 0, right: 0),
+                  child: Text(_homeViewModel.pinnedNotice == null ? '공지사항이 없습니다.' : _homeViewModel.pinnedNotice!.title,
                       style:
                       TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                 ),
-                Text('description\ndescription', style: TextStyle(fontSize: 12))
+                Container(
+                    width:  _deviceWidth - 200,
+                    child: Text(_homeViewModel.pinnedNotice == null ? '공지사항이 없습니다.' : _homeViewModel.pinnedNotice!.content,
+                    maxLines: 2,
+                    style: TextStyle(
+                        fontSize: 12,
+                      color: ColorData.COLOR_SEMIGRAY,
+                    ),
+                  overflow: TextOverflow.ellipsis,
+                ))
               ],
             ),
             Container(
               width: 90,
               height: 90,
-              color: Colors.blue,
+              child: _homeViewModel.pinnedNotice == null ? Container() :
+                        Image.file(File(_homeViewModel.pinnedNotice!.images.first.imageUrl), fit: BoxFit.cover)
             )
           ],
         ),

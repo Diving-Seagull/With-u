@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/data/model/notice.dart';
+import 'package:withu/extension/string_extension.dart';
 import 'package:withu/ui/global/custom_appbar.dart';
 import 'package:withu/ui/global/custom_shadow.dart';
 import 'package:withu/ui/view/notice/add_notice_view.dart';
@@ -31,6 +32,7 @@ class _NoticeView extends State<NoticeView> {
 
   void initData(bool isNew) async {
     await _viewModel.getTeamNotice(isNew);
+    await _viewModel.getPinnedNotice(isNew);
   }
 
   @override
@@ -78,26 +80,30 @@ class _NoticeView extends State<NoticeView> {
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 height: 50,
+                padding: EdgeInsets.only(top: 20),
                 child: Column(
                   children: [
                     Image.asset('assets/images/icon_notice.png',
                         width: 20, height: 20),
-                    SizedBox(height: 20),
                   ],
                 ),
               ),
               SizedBox(width: 20),
-              Text(
-                'title\ntitle',
+              Container(
+                  padding: EdgeInsets.only(top: 14),
+                  child: Text(
+                    maxLines: 2,
+                _viewModel.pinnedNotice == null ? '' :  _viewModel.pinnedNotice!.title.insertZwj(),
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     color: ColorData.COLOR_SUBCOLOR1,
                     fontWeight: FontWeight.bold,
-                    fontSize: 22),
+                    fontSize: 18),
+                )
               )
             ],
           ),
@@ -132,7 +138,7 @@ class _NoticeView extends State<NoticeView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        width: 240,
+                        width: 160,
                         height: 50,
                         child: Text(_viewModel.noticeList[index].title,
                             // 제목
@@ -140,14 +146,17 @@ class _NoticeView extends State<NoticeView> {
                                 fontSize: 18, fontWeight: FontWeight.w700)),
                       ),
                       SizedBox(height: 8),
-                      Text(
+                      Container(
+                          width: 200,
+                          child: Text(
                           _viewModel.noticeList[index].content.substring(
                               0,
                               _viewModel.noticeList[index].content.length > 50
                                   ? 50
                                   : _viewModel
                                       .noticeList[index].content.length), // 내용
-                          style: TextStyle(fontSize: 12))
+                          style: TextStyle(fontSize: 12),
+                          overflow: TextOverflow.ellipsis))
                     ],
                   ),
                   _viewModel.noticeList[index].images.isNotEmpty ?

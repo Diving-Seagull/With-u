@@ -256,7 +256,7 @@ class _AddNoticeView extends State<AddNoticeView> {
       return;
     }
 
-    Notice? result = await _viewModel.addNotice(_titleController.text, _contentController.text);
+    Notice? result = await _viewModel.addNotice(_titleController.text, _contentController.text, _isImportant);
     if(result != null) {
       CustomDialog.showYesDialog(context, '알림', '공지사항이 등록되었습니다!', () {
         Navigator.pop(context);
