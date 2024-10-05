@@ -29,6 +29,7 @@ class _TeamCodeView extends State<TeamCodeView> {
     _deviceWidth = MediaQuery.of(context).size.width;
     _deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: CustomAppBar.getNavigationBar(
             context, '초대코드', () => Navigator.pop(context)),
         body: SafeArea(

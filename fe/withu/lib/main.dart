@@ -12,6 +12,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:withu/ui/global/color_data.dart';
+import 'package:withu/ui/page/login/login_page.dart';
 import 'package:withu/ui/view/login/permission_view.dart';
 import 'package:withu/ui/view/login/usertype_view.dart';
 import 'firebase_options.dart';

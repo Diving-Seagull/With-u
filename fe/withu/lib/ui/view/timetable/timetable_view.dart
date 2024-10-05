@@ -23,6 +23,7 @@ class _TimeTableView extends State<TimeTableView> {
   List<String> list = ['1', '2'];
   late double _deviceWidth, _deviceHeight;
   var apiForm = DateFormat('yyyy-MM-dd');
+  var timeForm = DateFormat('a kk:mm');
 
   void init() async {
     if(!_viewModel.scheduleFlag){
@@ -39,14 +40,23 @@ class _TimeTableView extends State<TimeTableView> {
     _deviceWidth = MediaQuery.of(context).size.width;
     _deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: CustomAppBar.getNavigationBar(context, '', () => Navigator.pop(context)),
       body: SafeArea(
           child: Container(
               padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // _morningTable(),
-                  // _afternoonTable()
+                  SizedBox(height: 20),
+                  Text('본식 행사 일정', style: TextStyle(
+                    fontSize: 12,
+                    color: ColorData.COLOR_SUBCOLOR1,
+                    fontWeight: FontWeight.w500
+                  )),
+                  Text('시간표', style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black
+                  )),
                   _createMorningTable(),
                   _setSchedule()
                 ],
@@ -79,6 +89,8 @@ class _TimeTableView extends State<TimeTableView> {
       onDaySelected: (before, after) {
         setState(() {
           selectedDate = after;
+          _viewModel.scheduleFlag = false;
+          init();
         });
       },
       selectedDayPredicate: (date) =>
@@ -109,7 +121,7 @@ class _TimeTableView extends State<TimeTableView> {
                   color: ColorData.COLOR_SUBCOLOR1
                   ),
                 )),
-               Flexible(flex: 4, child: Container(
+               Flexible(flex: 5, child: Container(
                  width: _deviceWidth,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,17 +138,18 @@ class _TimeTableView extends State<TimeTableView> {
                     ],
                   ),
                 )),
-                Flexible(flex: 1, child: Container(
+                Flexible(flex: 2, child: Container(
+                  width: 80,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text('AM 9:00', style: TextStyle(
+                      Text('${timeForm.format(item.startTime)}', style: TextStyle(
+                        fontSize: 14,
+                        color: ColorData.COLOR_DARKGRAY
+                      )),
+                      Text('${timeForm.format(item.endTime)}', style: TextStyle(
                         fontSize: 14,
                         color: ColorData.COLOR_SEMIGRAY
-                      )),
-                      Text('AM 19:00', style: TextStyle(
-                        fontSize: 14,
-                        color: ColorData.COLOR_GRAY
                       ))
                     ],
                   ),
