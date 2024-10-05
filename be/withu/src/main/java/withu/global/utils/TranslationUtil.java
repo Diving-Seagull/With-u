@@ -37,29 +37,28 @@ public class TranslationUtil {
     }
 
     public String translateText(String text, String targetLanguageCode) {
-        if ("en".equals(targetLanguageCode)) {
-            return text; // 대상 언어가 영어인 경우 번역하지 않음
-        }
-
         DetectLanguageResponseDto detectedLanguage = detectLanguage(text);
 
         if (detectedLanguage.getLanguageCode().equals(targetLanguageCode)) {
             return text;
         }
 
-        String cacheKey = text + "_" + detectedLanguage.getLanguageCode() + "_" + targetLanguageCode;
+        String cacheKey =
+            text + "_" + detectedLanguage.getLanguageCode() + "_" + targetLanguageCode;
         try {
             return translationCache.computeIfAbsent(cacheKey, k -> {
                 try {
                     Translation translation = translate.translate(
                         text,
-                        Translate.TranslateOption.sourceLanguage(detectedLanguage.getLanguageCode()),
+                        Translate.TranslateOption.sourceLanguage(
+                            detectedLanguage.getLanguageCode()),
                         Translate.TranslateOption.targetLanguage(targetLanguageCode)
                     );
                     String translatedText = translation.getTranslatedText();
                     return decodeHtmlEntities(translatedText); // HTML 엔티티 디코딩 추가
                 } catch (Exception e) {
-                    log.error("Translation failed for text: '{}' from {} to {}.", text, detectedLanguage.getLanguageCode(), targetLanguageCode, e);
+                    log.error("Translation failed for text: '{}' from {} to {}.", text,
+                        detectedLanguage.getLanguageCode(), targetLanguageCode, e);
                     return text; // 번역 실패 시 원본 텍스트 반환
                 }
             });
