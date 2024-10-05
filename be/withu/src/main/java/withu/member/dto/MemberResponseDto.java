@@ -37,7 +37,7 @@ public class MemberResponseDto {
             .socialType(member.getSocialType())
             .deviceUuid(member.getDeviceUuid())
             .role(member.getRole())
-            .teamId(member.getTeam().getId())
+            .teamId(member.getTeam() != null ? member.getTeam().getId() : null)
             .createdAt(member.getCreatedAt())
             .updatedAt(member.getUpdatedAt())
             .build();

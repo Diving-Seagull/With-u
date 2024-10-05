@@ -20,7 +20,7 @@ public class GoogleGeocodingService implements GeocodingService {
     private final String apiUrl = "https://maps.googleapis.com/maps/api/geocode/json";
 
     @Autowired
-    public GoogleGeocodingService(RestTemplate restTemplate, @Value("${google.geocoding.api-key}") String apiKey) {
+    public GoogleGeocodingService(RestTemplate restTemplate, @Value("${google.api.key}") String apiKey) {
         this.restTemplate = restTemplate;
         this.apiKey = apiKey;
     }

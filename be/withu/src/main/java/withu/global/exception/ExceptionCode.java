@@ -51,6 +51,9 @@ public enum ExceptionCode {
     CSV_SAVE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "CSV 데이터를 저장하는 중 오류가 발생했습니다."),
 
 
+    LANGUAGE_DETECTION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "언어 감지 중 오류가 발생했습니다."),
+    TRANSLATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "번역 중 오류가 발생했습니다."),
+
     ;
 
     private final HttpStatus httpStatus;
