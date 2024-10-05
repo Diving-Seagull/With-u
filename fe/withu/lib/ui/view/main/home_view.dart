@@ -11,6 +11,7 @@ import 'package:withu/ui/viewmodel/timetable/timetable_viewmodel.dart';
 import '../../../data/model/member.dart';
 import '../../global/convert_uuid.dart';
 import '../../global/device_info.dart';
+import '../../page/tour/tour_page.dart';
 import '../../viewmodel/main/home_viewmodel.dart';
 import '../empty_view.dart';
 import 'setting_view.dart';
@@ -233,7 +234,14 @@ class _HomeView extends StatelessWidget {
                                     builder: (context) =>
                                         NoticePage(_homeViewModel.member)));
                           })),
-                  Flexible(flex: 1, child: _createMenuBtn('path', '관광지도'))
+                  Flexible(flex: 1, child: GestureDetector(
+                      child: _createMenuBtn('path', '관광지도'),
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => TourPage()));
+                  }))
                 ],
               ))
         ],

@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
@@ -32,13 +33,21 @@ void main() async {
   // 프레임워크 초기화 여부 확인 (비동기 작업 시 수행)
   WidgetsFlutterBinding.ensureInitialized();
 
+  // env 파일 로드
+  await dotenv.load(fileName: 'assets/config/.env');
+
+  String? naverMapKey = dotenv.env['NAVER_MAP_KEY'];
+
+  //NaverMap 초기화
+  await NaverMapSdk.instance.initialize(
+    clientId: naverMapKey,
+    onAuthFailed: (e) => print('네이버맵 인증오류 : $e')
+  );
+
   //Firebase 초기화
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  // env 파일 로드
-  await dotenv.load(fileName: 'assets/config/.env');
 
   // FCM 설정
   await fcmSetting();
