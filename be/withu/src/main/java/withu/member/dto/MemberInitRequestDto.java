@@ -27,4 +27,7 @@ public class MemberInitRequestDto {
     private String name;
 
     private Integer teamCode;
+
+    @Size(min = 2, max = 10, message = "언어 코드는 2자 이상 10자 이하여야 합니다.")
+    private String languageCode;
 }

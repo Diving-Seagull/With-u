@@ -58,7 +58,8 @@ public class MemberService {
             initDto.getDescription(),
             initDto.getProfileImage(),
             initDto.getDeviceUuid(),
-            team
+            team,
+            initDto.getLanguageCode()
         );
 
         Member updatedMember = memberRepository.save(member);

@@ -72,9 +72,13 @@ public class Member {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    @Column(nullable = false, length = 10)
+    @ColumnDefault("'en'")
+    private String languageCode = "en";
+
     @Builder
     private Member(Long id, String email, String name, String description, String profile,
-        SocialType socialType, String firebaseToken, String deviceUuid, Team team, Role role) {
+        SocialType socialType, String firebaseToken, String deviceUuid, Team team, Role role, String languageCode) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -85,9 +89,10 @@ public class Member {
         this.deviceUuid = deviceUuid;
         this.team = team;
         this.role = (role != null) ? role : Role.TEAMMATE;
+        this.languageCode = (languageCode != null) ? languageCode : "en";
     }
 
-    public void initMember(Role role, String name, String description, String profile, String deviceUuid, Team team) {
+    public void initMember(Role role, String name, String description, String profile, String deviceUuid, Team team, String languageCode) {
         this.role = (role != null) ? role : this.role;
         this.description = description;
         this.deviceUuid = deviceUuid;
@@ -101,6 +106,13 @@ public class Member {
         if (team != null) {
             this.team = team;
         }
+        if (languageCode != null) {
+            this.languageCode = languageCode;
+        }
+    }
+
+    public void changeLanguage(String languageCode) {
+        this.languageCode = languageCode;
     }
 
     public void disable() {
