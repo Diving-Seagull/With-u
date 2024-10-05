@@ -12,16 +12,13 @@ import 'package:withu/ui/page/notice/notice_page.dart';
 import 'package:withu/ui/page/main/checkteam_page.dart';
 import 'package:withu/ui/view/timetable/timetable_view.dart';
 import 'package:withu/ui/viewmodel/timetable/timetable_viewmodel.dart';
-
-import '../../../data/model/member.dart';
 import '../../global/color_data.dart';
 import '../../global/convert_uuid.dart';
 import '../../global/device_info.dart';
 import '../../page/main/findleader_page.dart';
 import '../../page/tour/tour_page.dart';
 import '../../viewmodel/main/home_viewmodel.dart';
-import '../empty_view.dart';
-import 'setting_view.dart';
+import 'memberinfo_view.dart';
 
 
 class HomeView extends StatelessWidget {
@@ -53,7 +50,7 @@ class HomeView extends StatelessWidget {
             tabBar: CupertinoTabBar(items: [
               BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
               BottomNavigationBarItem(icon: Icon(Icons.home), label: '시간표'),
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: '테스트2')
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: '프로필')
             ]),
             tabBuilder: (context, index) {
               if(index == 0) {
@@ -66,7 +63,7 @@ class HomeView extends StatelessWidget {
                 );
               }
               else {
-                return ThirdView();
+                return MemberInfoView(_homeViewModel.member);
               }
             }
         )
