@@ -97,7 +97,7 @@ class _NoticeView extends State<NoticeView> {
                   padding: EdgeInsets.only(top: 14),
                   child: Text(
                     maxLines: 1,
-                _viewModel.pinnedNotice == null ? '' :  _viewModel.pinnedNotice!.title.insertZwj(),
+                _viewModel.pinnedNotice == null ? '공지사항이 없습니다.' :  _viewModel.pinnedNotice!.title.insertZwj(),
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     color: ColorData.COLOR_SUBCOLOR1,
@@ -162,19 +162,30 @@ class _NoticeView extends State<NoticeView> {
                           overflow: TextOverflow.ellipsis))
                     ],
                   ),
-                  _viewModel.noticeList[index].images.isNotEmpty ?
                   Container(
                     width: 72,
                     height: 72,
-                    child: Image.file(File(_viewModel.noticeList[index].images.first.imageUrl), fit: BoxFit.cover),
+                    child: _setImage(index),
                   )
-                      :
-                  Container()
                 ],
               ),
             )));
       },
     ));
+  }
+
+  Widget _setImage(int index) {
+    try{
+      if(_viewModel.noticeList[index].images.isNotEmpty) {
+        return Container(width: 72, height: 72,
+            child: Image.file(File(_viewModel.noticeList[index].images.first.imageUrl), fit: BoxFit.cover));
+      }
+      else {
+        return Container();
+      }
+    } catch (e) {
+      return Container();
+    }
   }
 
   Widget _floatBtn() {
