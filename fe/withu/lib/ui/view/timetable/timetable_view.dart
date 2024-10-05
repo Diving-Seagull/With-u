@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:withu/ui/global/custom_appbar.dart';
 import 'package:withu/ui/viewmodel/timetable/timetable_viewmodel.dart';
 
 import '../../global/color_data.dart';
@@ -12,22 +14,32 @@ class TimeTableView extends StatefulWidget {
 }
 
 class _TimeTableView extends State<TimeTableView> {
-  late TimeTableViewModel viewModel;
-
+  late TimeTableViewModel _viewModel;
   // List week = ['월', '화', '수', '목', '금'];
   // var kColumnLength = 26;
   // double kBoxSize = 40;
   // double kFirstColumnHeight = 40;
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime.tryParse('2024-10-30')!;
   List<String> list = ['1', '2'];
   late double _deviceWidth, _deviceHeight;
+  var apiForm = DateFormat('yyyy-MM-dd');
+
+  void init() async {
+    if(!_viewModel.scheduleFlag){
+      await _viewModel.getSchedules(apiForm.format(selectedDate));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    viewModel = Provider.of<TimeTableViewModel>(context, listen: true);
+    _viewModel = Provider.of<TimeTableViewModel>(context, listen: true);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      init();
+    });
     _deviceWidth = MediaQuery.of(context).size.width;
     _deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      appBar: CustomAppBar.getNavigationBar(context, '', () => Navigator.pop(context)),
       body: SafeArea(
           child: Container(
               padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
@@ -79,8 +91,9 @@ class _TimeTableView extends State<TimeTableView> {
   Widget _setSchedule() {
     return Expanded(child:
       ListView.builder(
-        itemCount: list.length,
+        itemCount: _viewModel.scheduleList.length,
         itemBuilder: (context, index) {
+          var item = _viewModel.scheduleList[index];
           return Container(
               padding: EdgeInsets.symmetric(vertical: 12, horizontal: 0),
             height: 70,
@@ -96,24 +109,24 @@ class _TimeTableView extends State<TimeTableView> {
                   color: ColorData.COLOR_SUBCOLOR1
                   ),
                 )),
-               Flexible(flex: 3, child: Container(
+               Flexible(flex: 4, child: Container(
                  width: _deviceWidth,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('장소', style: TextStyle(
+                      Text(item.title, style: TextStyle(
                         color: ColorData.COLOR_SEMIGRAY,
                         fontSize: 14,
                         fontWeight: FontWeight.w500
                       ),),
-                      Text('내용', style: TextStyle(
+                      Text(item.description, style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500
                       ))
                     ],
                   ),
                 )),
-                Flexible(flex: 2, child: Container(
+                Flexible(flex: 1, child: Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [

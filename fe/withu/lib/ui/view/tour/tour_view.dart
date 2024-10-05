@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:withu/ui/global/custom_appbar.dart';
 import 'package:withu/ui/viewmodel/tour/tour_viewmodel.dart';
 
 import '../../../data/model/tourplace.dart';
@@ -61,6 +62,7 @@ class _TourView extends State<TourView> {
     _viewModel = Provider.of<TourViewModel>(context, listen: true);
     // TODO: implement build
     return Scaffold(
+      appBar: CustomAppBar.getNavigationBar(context, '관광지도', () => Navigator.pop(context)),
       body: NaverMap(
         options: const NaverMapViewOptions(
           locationButtonEnable: true,

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:withu/extension/string_extension.dart';
 import 'package:withu/ui/page/main/manageteam_page.dart';
@@ -95,16 +96,20 @@ class _HomeView extends StatelessWidget {
 
   late double _deviceWidth, _deviceHeight;
 
-  Future<void> init() async {
-    _homeViewModel.pinnedNotice = null;
+  Future<void> initNotice() async {
     await _homeViewModel.getPinnedNotice();
+  }
+
+  Future<void> initSchedule() async {
+    await _homeViewModel.getRecentSchedule();
   }
 
   @override
   Widget build(BuildContext context) {
     //build 후 콜백 호출
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      init();
+      initNotice();
+      initSchedule();
     });
     _deviceWidth = MediaQuery
         .of(context)
@@ -294,7 +299,7 @@ class _HomeView extends StatelessWidget {
                                   context,
                                   CupertinoPageRoute(
                                       builder: (context) => FindLeaderPage(_homeViewModel.member!)))
-                                  .then((_) async => await init());
+                                  .then((_) async => await initNotice());
                             }
                           })),
                   Flexible(
@@ -305,21 +310,21 @@ class _HomeView extends StatelessWidget {
                           Navigator.push(
                               context,
                               CupertinoPageRoute(
-                                  builder: (context) => TeamMatePage()))
-                              .then((_) async => await init());
+                                  builder: (context) => NoticePage(_homeViewModel.member)))
+                              .then((_) async => await initNotice());
                         },
                       )),
                   Flexible(
                       flex: 1,
                       child: GestureDetector(
-                          child: _createMemberMenuBtn('공지사항', 'assets/images/icon_tourmap.png', 3),
+                          child: _createMemberMenuBtn('관광지도', 'assets/images/icon_tourmap.png', 3),
                           onTap: () {
                             Navigator.push(
                                 context,
                                 CupertinoPageRoute(
                                     builder: (context) =>
-                                        NoticePage(_homeViewModel.member)))
-                                .then((_) async => await init());
+                                        TourPage()))
+                                .then((_) async => await initNotice());
                           }))
                 ],
               ))
@@ -351,7 +356,7 @@ class _HomeView extends StatelessWidget {
                                 context,
                                 CupertinoPageRoute(
                                     builder: (context) => ManageTeamPage()))
-                                .then((_) async => await init());
+                                .then((_) async => await initNotice());
                           })),
                   Flexible(
                       flex: 1,
@@ -362,7 +367,7 @@ class _HomeView extends StatelessWidget {
                               context,
                               CupertinoPageRoute(
                                   builder: (context) => TeamMatePage()))
-                              .then((_) async => await init());
+                              .then((_) async => await initNotice());
                         },
                       )),
                   Flexible(
@@ -375,7 +380,7 @@ class _HomeView extends StatelessWidget {
                                 CupertinoPageRoute(
                                     builder: (context) =>
                                         NoticePage(_homeViewModel.member)))
-                                .then((_) async => await init());
+                                .then((_) async => await initNotice());
                           })),
                   Flexible(flex: 1, child: GestureDetector(
                       child: _createMenuBtn('관광지도', 4),
@@ -384,7 +389,7 @@ class _HomeView extends StatelessWidget {
                             context,
                             CupertinoPageRoute(
                                 builder: (context) => TourPage()))
-                            .then((_) async => await init());
+                            .then((_) async => await initNotice());
                       }))
                 ],
               ))
@@ -404,15 +409,36 @@ class _HomeView extends StatelessWidget {
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: _setScheduleData()
+          ),
+        );
+  }
+
+  Widget _setScheduleData() {
+    if(_homeViewModel.schedule != null) {
+      var form = DateFormat('HH:mm');
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
             children: [
-              Text('지금은 미사 시간입니다', textAlign: TextAlign.start),
-              Text('시간', textAlign: TextAlign.end)
+              Text('지금은 '),
+              Text('${_homeViewModel.schedule!.title}'),
+              Text(' 시간입니다.'),
             ],
           ),
-        ));
+          Text('${ form.format(_homeViewModel.schedule!.startTime)}~${form.format(_homeViewModel.schedule!.endTime)}')
+        ],
+      );
+    }
+    else {
+      return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [Text('현재 등록된 일정이 없습니다.') ]
+      );
+    }
   }
 
   Widget _noticeSection() {
@@ -461,14 +487,26 @@ class _HomeView extends StatelessWidget {
             SizedBox(
               width: 90,
               height: 90,
-              child: _homeViewModel.pinnedNotice == null ? SizedBox() :
-                      (_homeViewModel.pinnedNotice!.images.isNotEmpty ?
-                      Image.file(File(_homeViewModel.pinnedNotice!.images.first.imageUrl), fit: BoxFit.cover) :
-                      SizedBox())
+              child: _setNoticeImage()
             )
           ],
         ),
       ),
     );
+  }
+  Widget _setNoticeImage() {
+    if(_homeViewModel.pinnedNotice == null){
+      return SizedBox();
+    }
+    try{
+      if(_homeViewModel.pinnedNotice!.images.isNotEmpty){
+        return  Image.file(File(_homeViewModel.pinnedNotice!.images.first.imageUrl), fit: BoxFit.cover);
+      }
+      else {
+        return SizedBox();
+      }
+    }catch(e) {
+      return SizedBox();
+    }
   }
 }
