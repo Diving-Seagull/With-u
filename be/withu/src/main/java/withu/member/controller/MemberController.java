@@ -36,11 +36,6 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getMemberByEmail(email));
     }
 
-    @GetMapping("/team-members")
-    public ResponseEntity<List<MemberResponseDto>> getTeamMembers(@LoginMember Member member) {
-        return ResponseEntity.ok(memberService.getTeamMembers(member));
-    }
-
     @PutMapping
     public ResponseEntity<MemberResponseDto> initMember(@LoginMember Member member,
         @Valid @RequestBody MemberInitRequestDto initRequestDto) {
