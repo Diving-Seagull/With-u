@@ -1,7 +1,6 @@
 package withu.global.utils;
 
-import static withu.global.exception.ExceptionCode.LANGUAGE_DETECTION_FAILED;
-import static withu.global.exception.ExceptionCode.TRANSLATION_FAILED;
+import static withu.global.exception.ExceptionCode.*;
 
 import com.google.cloud.translate.Detection;
 import com.google.cloud.translate.Translate;
@@ -17,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import withu.global.exception.CustomException;
 import withu.global.utils.dto.DetectLanguageResponseDto;
+import org.apache.commons.text.StringEscapeUtils;
 
 @Slf4j
 @Component
@@ -37,27 +37,29 @@ public class TranslationUtil {
     }
 
     public String translateText(String text, String targetLanguageCode) {
+        if ("en".equals(targetLanguageCode)) {
+            return text; // 대상 언어가 영어인 경우 번역하지 않음
+        }
+
         DetectLanguageResponseDto detectedLanguage = detectLanguage(text);
 
         if (detectedLanguage.getLanguageCode().equals(targetLanguageCode)) {
             return text;
         }
 
-        String cacheKey =
-            text + "_" + detectedLanguage.getLanguageCode() + "_" + targetLanguageCode;
+        String cacheKey = text + "_" + detectedLanguage.getLanguageCode() + "_" + targetLanguageCode;
         try {
             return translationCache.computeIfAbsent(cacheKey, k -> {
                 try {
                     Translation translation = translate.translate(
                         text,
-                        Translate.TranslateOption.sourceLanguage(
-                            detectedLanguage.getLanguageCode()),
+                        Translate.TranslateOption.sourceLanguage(detectedLanguage.getLanguageCode()),
                         Translate.TranslateOption.targetLanguage(targetLanguageCode)
                     );
-                    return translation.getTranslatedText();
+                    String translatedText = translation.getTranslatedText();
+                    return decodeHtmlEntities(translatedText); // HTML 엔티티 디코딩 추가
                 } catch (Exception e) {
-                    log.error("Translation failed for text: '{}' from {} to {}.", text,
-                        detectedLanguage.getLanguageCode(), targetLanguageCode, e);
+                    log.error("Translation failed for text: '{}' from {} to {}.", text, detectedLanguage.getLanguageCode(), targetLanguageCode, e);
                     return text; // 번역 실패 시 원본 텍스트 반환
                 }
             });
@@ -65,6 +67,10 @@ public class TranslationUtil {
             log.error("Unexpected error during translation cache access for text: '{}'", text, e);
             return text; // 캐시 접근 중 오류 발생 시 원본 텍스트 반환
         }
+    }
+
+    private String decodeHtmlEntities(String text) {
+        return StringEscapeUtils.unescapeHtml4(text);
     }
 
     public DetectLanguageResponseDto detectLanguage(String text) {

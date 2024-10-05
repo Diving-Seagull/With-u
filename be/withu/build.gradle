@@ -48,6 +48,9 @@ dependencies {
 
 	// Google Cloud Translation API
 	implementation 'com.google.cloud:google-cloud-translate:2.30.0'
+
+	// Apache Commons Text
+	implementation 'org.apache.commons:commons-text:1.9'
 }
 
 tasks.named('test') {
