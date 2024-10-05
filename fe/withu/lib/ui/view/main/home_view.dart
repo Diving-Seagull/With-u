@@ -93,14 +93,17 @@ class _HomeView extends StatelessWidget {
 
   late double _deviceWidth, _deviceHeight;
 
-  void init() async {
+  Future<void> init() async {
     _homeViewModel.pinnedNotice = null;
     await _homeViewModel.getPinnedNotice();
   }
 
   @override
   Widget build(BuildContext context) {
-    init();
+    //build 후 콜백 호출
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      init();
+    });
     _deviceWidth = MediaQuery
         .of(context)
         .size
@@ -197,6 +200,12 @@ class _HomeView extends StatelessWidget {
                 'WYD 행사에 오신 것을\n환영합니다.',
                 style: TextStyle(fontSize: 25),
                 textAlign: TextAlign.left,
+              ),
+              SizedBox(height: 10),
+              Text(
+                '윗유를 통해 행사에 참여해보세요!',
+                style: TextStyle(fontSize: 14, color: ColorData.COLOR_SEMIGRAY),
+                textAlign: TextAlign.left,
               )
             ],
           ),
@@ -226,7 +235,8 @@ class _HomeView extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 CupertinoPageRoute(
-                                    builder: (context) => ManageTeamPage()));
+                                    builder: (context) => ManageTeamPage()))
+                            .then((_) async => await init());
                           })),
                   Flexible(
                       flex: 1,
@@ -236,7 +246,8 @@ class _HomeView extends StatelessWidget {
                           Navigator.push(
                               context,
                               CupertinoPageRoute(
-                                  builder: (context) => TeamMatePage()));
+                                  builder: (context) => TeamMatePage()))
+                              .then((_) async => await init());
                         },
                       )),
                   Flexible(
@@ -248,7 +259,8 @@ class _HomeView extends StatelessWidget {
                                 context,
                                 CupertinoPageRoute(
                                     builder: (context) =>
-                                        NoticePage(_homeViewModel.member)));
+                                        NoticePage(_homeViewModel.member)))
+                                .then((_) async => await init());
                           })),
                   Flexible(flex: 1, child: GestureDetector(
                       child: _createMenuBtn('path', '관광지도'),
@@ -256,7 +268,8 @@ class _HomeView extends StatelessWidget {
                         Navigator.push(
                             context,
                             CupertinoPageRoute(
-                                builder: (context) => TourPage())) ;
+                                builder: (context) => TourPage()))
+                            .then((_) async => await init());
                   }))
                 ],
               ))
@@ -326,8 +339,11 @@ class _HomeView extends StatelessWidget {
                     style:
                     TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                 Container(
+                  width:  _deviceWidth - 200,
                   margin: EdgeInsets.only(top: 0, bottom: 10, left: 0, right: 0),
                   child: Text(_homeViewModel.pinnedNotice == null ? '공지사항이 없습니다.' : _homeViewModel.pinnedNotice!.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style:
                       TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                 ),
@@ -343,11 +359,13 @@ class _HomeView extends StatelessWidget {
                 ))
               ],
             ),
-            Container(
+            SizedBox(
               width: 90,
               height: 90,
-              child: _homeViewModel.pinnedNotice == null ? Container() :
-                        Image.file(File(_homeViewModel.pinnedNotice!.images.first.imageUrl), fit: BoxFit.cover)
+              child: _homeViewModel.pinnedNotice == null ? SizedBox() :
+                      (_homeViewModel.pinnedNotice!.images.isNotEmpty ?
+                      Image.file(File(_homeViewModel.pinnedNotice!.images.first.imageUrl), fit: BoxFit.cover) :
+                      SizedBox())
             )
           ],
         ),
