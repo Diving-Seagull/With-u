@@ -3,6 +3,7 @@ package withu.schedule.dto;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
+import withu.global.utils.TranslationUtil;
 import withu.schedule.entity.Schedule;
 import withu.schedule.enums.ScheduleType;
 
@@ -32,5 +33,12 @@ public class ScheduleResponseDto {
             .memberName(schedule.getMember().getName())
             .teamId(schedule.getTeam() != null ? schedule.getTeam().getId() : null)
             .build();
+    }
+
+    public static ScheduleResponseDto fromWithTranslation(Schedule schedule, String languageCode, TranslationUtil translationUtil) {
+        ScheduleResponseDto dto = from(schedule);
+        dto.title = translationUtil.translateText(dto.title, languageCode);
+        dto.description = translationUtil.translateText(dto.description, languageCode);
+        return dto;
     }
 }
