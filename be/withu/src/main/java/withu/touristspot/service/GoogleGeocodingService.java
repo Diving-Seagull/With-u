@@ -1,6 +1,7 @@
 package withu.touristspot.service;
 
-import static withu.global.exception.ExceptionCode.*;
+import static withu.global.exception.ExceptionCode.ADDRESS_NOT_FOUND;
+import static withu.global.exception.ExceptionCode.GEOCODING_API_ERROR;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class GoogleGeocodingService implements GeocodingService {
     private final String apiUrl = "https://maps.googleapis.com/maps/api/geocode/json";
 
     @Autowired
-    public GoogleGeocodingService(RestTemplate restTemplate, @Value("${google.geocoding.api-key}") String apiKey) {
+    public GoogleGeocodingService(RestTemplate restTemplate, @Value("${google.api.key}") String apiKey) {
         this.restTemplate = restTemplate;
         this.apiKey = apiKey;
     }

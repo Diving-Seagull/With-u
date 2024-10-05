@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import withu.member.entity.Member;
 import withu.member.enums.Role;
 import withu.member.enums.SocialType;
-import withu.team.entity.Team;
 
 @Getter
 @NoArgsConstructor
@@ -27,6 +26,7 @@ public class MemberResponseDto {
     private Long teamId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String languageCode;
 
     public static MemberResponseDto from(Member member) {
         return MemberResponseDto.builder()
@@ -38,9 +38,10 @@ public class MemberResponseDto {
             .socialType(member.getSocialType())
             .deviceUuid(member.getDeviceUuid())
             .role(member.getRole())
-            .teamId(member.getTeam().getId())
+            .teamId(member.getTeam() != null ? member.getTeam().getId() : null)
             .createdAt(member.getCreatedAt())
             .updatedAt(member.getUpdatedAt())
+            .languageCode(member.getLanguageCode())
             .build();
     }
 }

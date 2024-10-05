@@ -2,6 +2,7 @@ package withu.touristspot.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import withu.global.utils.TranslationUtil;
 import withu.touristspot.entity.TouristSpot;
 import withu.touristspot.enums.TouristSpotCategory;
 
@@ -26,5 +27,11 @@ public class TouristSpotResponseDto {
             .longitude(touristSpot.getLongitude())
             .category(touristSpot.getCategory())
             .build();
+    }
+
+    public void translate(String languageCode, TranslationUtil translationUtil) {
+        this.name = translationUtil.translateText(this.name, languageCode);
+        this.address = translationUtil.translateText(this.address, languageCode);
+        this.description = translationUtil.translateText(this.description, languageCode);
     }
 }

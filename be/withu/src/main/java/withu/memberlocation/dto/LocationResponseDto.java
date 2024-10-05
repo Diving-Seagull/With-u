@@ -2,6 +2,7 @@ package withu.memberlocation.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import withu.global.utils.TranslationUtil;
 import withu.memberlocation.entity.MemberLocation;
 
 @Getter
@@ -20,5 +21,11 @@ public class LocationResponseDto {
             .longitude(memberLocation.getLongitude())
             .message(memberLocation.getMessage())
             .build();
+    }
+
+    public void translate(String languageCode, TranslationUtil translationUtil) {
+        if (this.message != null) {
+            this.message = translationUtil.translateText(this.message, languageCode);
+        }
     }
 }

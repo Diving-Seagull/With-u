@@ -1,10 +1,8 @@
 package withu.member.service;
 
-import static withu.global.exception.ExceptionCode.*;
+import static withu.global.exception.ExceptionCode.USER_NOT_FOUND;
 
 import jakarta.transaction.Transactional;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import withu.global.exception.CustomException;
@@ -60,7 +58,8 @@ public class MemberService {
             initDto.getDescription(),
             initDto.getProfileImage(),
             initDto.getDeviceUuid(),
-            team
+            team,
+            initDto.getLanguageCode()
         );
 
         Member updatedMember = memberRepository.save(member);

@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import withu.notice.entity.Notice;
-import withu.notice.entity.NoticeImage;
 
 @Getter
 @NoArgsConstructor
@@ -48,6 +47,21 @@ public class NoticeResponseDto {
             .pinned(notice.isPinned())
             .createdAt(notice.getCreatedAt())
             .updatedAt(notice.getUpdatedAt())
+            .build();
+    }
+
+    public NoticeResponseDto withTranslation(String translatedTitle, String translatedContent) {
+        return NoticeResponseDto.builder()
+            .id(this.id)
+            .teamId(this.teamId)
+            .title(translatedTitle)
+            .content(translatedContent)
+            .authorId(this.authorId)
+            .authorName(this.authorName)
+            .images(this.images)
+            .pinned(this.pinned)
+            .createdAt(this.createdAt)
+            .updatedAt(this.updatedAt)
             .build();
     }
 }
