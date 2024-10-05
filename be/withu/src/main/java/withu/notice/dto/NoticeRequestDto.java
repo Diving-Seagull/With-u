@@ -3,6 +3,7 @@ package withu.notice.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,9 +28,17 @@ public class NoticeRequestDto {
 
     @Builder.Default
     @Size(max = 5, message = "이미지는 최대 5개까지만 등록할 수 있습니다.")
-    private List<String> imageUrls = new ArrayList<>();
+    private List<ImageDto> images = new ArrayList<>();
 
     private boolean pinned;
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ImageDto {
+        private String base64Data;
+        private String contentType;
+    }
 
     public Notice toEntity(Member author) {
         Notice notice = Notice.builder()
@@ -39,8 +48,11 @@ public class NoticeRequestDto {
             .author(author)
             .build();
 
-        if (imageUrls != null && !imageUrls.isEmpty()) {
-            imageUrls.forEach(notice::addImage);
+        if (images != null && !images.isEmpty()) {
+            for (ImageDto imageDto : images) {
+                byte[] imageData = Base64.getDecoder().decode(imageDto.getBase64Data());
+                notice.addImage(imageData, imageDto.getContentType());
+            }
         }
 
         if (pinned) {

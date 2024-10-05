@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -26,15 +27,20 @@ public class NoticeImage {
     @JoinColumn(name = "notice_id", nullable = false)
     private Notice notice;
 
+    @Lob
     @Column(nullable = false)
-    private String imageUrl;
+    private byte[] imageData;
+
+    @Column(nullable = false)
+    private String contentType;
 
     @Column(name = "image_order", nullable = false)
     private int order;
 
-    public NoticeImage(Notice notice, String imageUrl, int order) {
+    public NoticeImage(Notice notice, byte[] imageData, String contentType, int order) {
         this.notice = notice;
-        this.imageUrl = imageUrl;
+        this.imageData = imageData;
+        this.contentType = contentType;
         this.order = order;
     }
 
