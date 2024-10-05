@@ -19,7 +19,6 @@ class _TourView extends State<TourView> {
   late TourViewModel _viewModel;
   final Completer<NaverMapController> mapControllerCompleter = Completer();
   NaverMapController? _controller;
-  final TourRepository _repository = TourRepository();
   List<TourPlace>? _tourList;
   NLatLng? _currentPosition;
 
