@@ -49,4 +49,19 @@ public class NoticeResponseDto {
             .updatedAt(notice.getUpdatedAt())
             .build();
     }
+
+    public NoticeResponseDto withTranslation(String translatedTitle, String translatedContent) {
+        return NoticeResponseDto.builder()
+            .id(this.id)
+            .teamId(this.teamId)
+            .title(translatedTitle)
+            .content(translatedContent)
+            .authorId(this.authorId)
+            .authorName(this.authorName)
+            .images(this.images)
+            .pinned(this.pinned)
+            .createdAt(this.createdAt)
+            .updatedAt(this.updatedAt)
+            .build();
+    }
 }
