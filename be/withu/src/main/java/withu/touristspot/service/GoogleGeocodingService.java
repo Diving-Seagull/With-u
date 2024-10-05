@@ -1,6 +1,7 @@
 package withu.touristspot.service;
 
-import static withu.global.exception.ExceptionCode.*;
+import static withu.global.exception.ExceptionCode.ADDRESS_NOT_FOUND;
+import static withu.global.exception.ExceptionCode.GEOCODING_API_ERROR;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;

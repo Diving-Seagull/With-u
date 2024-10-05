@@ -1,6 +1,8 @@
 package withu.memberlocation.service;
 
-import static withu.global.exception.ExceptionCode.*;
+import static withu.global.exception.ExceptionCode.MEMBER_LOCATION_NOT_FOUND;
+import static withu.global.exception.ExceptionCode.USER_NOT_FOUND;
+import static withu.global.exception.ExceptionCode.USER_NOT_LEADER;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

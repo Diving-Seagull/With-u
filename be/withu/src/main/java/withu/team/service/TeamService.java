@@ -1,6 +1,9 @@
 package withu.team.service;
 
-import static withu.global.exception.ExceptionCode.*;
+import static withu.global.exception.ExceptionCode.MEMBER_NOT_IN_TEAM;
+import static withu.global.exception.ExceptionCode.TEAM_NOT_FOUND;
+import static withu.global.exception.ExceptionCode.USER_NOT_FOUND;
+import static withu.global.exception.ExceptionCode.USER_NOT_LEADER;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,10 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import withu.global.exception.CustomException;
 import withu.member.dto.MemberResponseDto;
+import withu.member.entity.Member;
 import withu.member.repository.MemberRepository;
 import withu.team.entity.Team;
 import withu.team.repository.TeamRepository;
-import withu.member.entity.Member;
 
 @Service
 @RequiredArgsConstructor

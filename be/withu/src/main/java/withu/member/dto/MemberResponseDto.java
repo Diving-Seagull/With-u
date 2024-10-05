@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import withu.member.entity.Member;
 import withu.member.enums.Role;
 import withu.member.enums.SocialType;
-import withu.team.entity.Team;
 
 @Getter
 @NoArgsConstructor
