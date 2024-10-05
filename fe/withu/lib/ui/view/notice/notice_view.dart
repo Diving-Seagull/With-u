@@ -96,7 +96,7 @@ class _NoticeView extends State<NoticeView> {
               Container(
                   padding: EdgeInsets.only(top: 14),
                   child: Text(
-                    maxLines: 2,
+                    maxLines: 1,
                 _viewModel.pinnedNotice == null ? '' :  _viewModel.pinnedNotice!.title.insertZwj(),
                 textAlign: TextAlign.start,
                 style: TextStyle(
@@ -141,6 +141,8 @@ class _NoticeView extends State<NoticeView> {
                         width: 160,
                         height: 50,
                         child: Text(_viewModel.noticeList[index].title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             // 제목
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.w700)),
@@ -156,6 +158,7 @@ class _NoticeView extends State<NoticeView> {
                                   : _viewModel
                                       .noticeList[index].content.length), // 내용
                           style: TextStyle(fontSize: 12),
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis))
                     ],
                   ),
