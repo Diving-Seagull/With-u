@@ -5,11 +5,12 @@ import 'package:http/http.dart' as http;
 import 'package:withu/data/model/memberlocation_request.dart';
 
 import '../api/rest_api_session.dart';
+import '../ip_address.dart';
 import '../model/memberlocation.dart';
 import '../model/token_dto.dart';
 
 class MemberLocationDataSource {
-  final _uriPath = 'http://172.20.10.9:8080/api/member-location';
+  final _uriPath = 'http://${IpAddress.IP_PATH}:8080/api/member-location';
 
   final Map<String, String> headers = {
     'Content-Type': 'application/json',

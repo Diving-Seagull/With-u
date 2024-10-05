@@ -3,13 +3,14 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:withu/data/api/rest_api_session.dart';
+import 'package:withu/data/ip_address.dart';
 import 'package:withu/data/model/token_dto.dart';
 
 class LoginDataSource {
 
   // final _uriPath = 'http://10.0.2.2:8080/api/auth';
   // final _uriPath = 'http://127.0.0.1:8080/api/auth';
-  final _uriPath = 'http://172.20.10.9:8080/api/auth';
+  final _uriPath = 'http://${IpAddress.IP_PATH}:8080/api/auth';
 
   final Map<String, String> headers = {
     'Content-Type': 'application/json',
