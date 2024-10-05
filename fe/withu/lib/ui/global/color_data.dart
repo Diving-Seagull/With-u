@@ -9,4 +9,5 @@ class ColorData {
   static const Color COLOR_LIGHTGRAY = Color(0xFFFAFAFA);
 
   static const Color COLOR_SUBCOLOR1 = Color(0xFF1C48A1);
+  static const Color COLOR_SUBCOLOR1_LIGHT = Color(0xFFE7EFFF);
 }

@@ -8,9 +8,7 @@ class TourViewModel with ChangeNotifier {
   List<TourPlace> get tourList => _tourList ?? List.empty();
 
   Future<void> getTourList(double lat, double lng) async {
-    if(_tourList == null) {
-      _tourList = await _repository.getTouristSpot(lat, lng);
-      notifyListeners();
-    }
+    _tourList = await _repository.getTouristSpot(lat, lng);
+    notifyListeners();
   }
 }

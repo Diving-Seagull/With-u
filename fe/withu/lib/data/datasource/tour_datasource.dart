@@ -5,10 +5,11 @@ import 'package:http/http.dart' as http;
 import 'package:withu/data/model/tourplace.dart';
 
 import '../api/rest_api_session.dart';
+import '../ip_address.dart';
 import '../model/token_dto.dart';
 
 class TourDataSource {
-  final _uriPath = 'http://172.20.10.9:8080/api/tourist-spots';
+  final _uriPath = 'http://${IpAddress.IP_PATH}:8080/api/tourist-spots';
 
   final Map<String, String> headers = {
     'Content-Type': 'application/json',

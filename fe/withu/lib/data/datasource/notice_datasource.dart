@@ -6,13 +6,14 @@ import 'package:withu/data/model/notice.dart';
 import 'package:withu/data/model/notice_request.dart';
 
 import '../api/rest_api_session.dart';
+import '../ip_address.dart';
 import '../model/token_dto.dart';
 
 class NoticeDataSource {
 
   // final _uriPath = 'http://127.0.0.1:8080/api/notice';
   // final _uriPath = 'http://10.0.2.2:8080/api/notice';
-  final _uriPath = 'http://172.20.10.9:8080/api/notice';
+  final _uriPath = 'http://${IpAddress.IP_PATH}:8080/api/notice';
 
   final Map<String, String> headers = {
     'Content-Type': 'application/json',
