@@ -1,22 +1,8 @@
 package withu.notice.entity;
 
-import static withu.global.exception.ExceptionCode.NOTICE_IMAGE_COUNT_INVALID;
-import static withu.global.exception.ExceptionCode.NOTICE_IMAGE_LIMIT_EXCEEDED;
-import static withu.global.exception.ExceptionCode.NOTICE_IMAGE_NOT_FOUND;
+import static withu.global.exception.ExceptionCode.*;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderBy;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +69,7 @@ public class Notice {
         this.content = content;
     }
 
-    public void addImage(String imageUrl) {
+    public void addImage(byte[] imageData, String contentType) {
         if (this.images == null) {
             this.images = new ArrayList<>();
         }
@@ -94,7 +80,7 @@ public class Notice {
             .mapToInt(NoticeImage::getOrder)
             .max()
             .orElse(-1) + 1;
-        this.images.add(new NoticeImage(this, imageUrl, newOrder));
+        this.images.add(new NoticeImage(this, imageData, contentType, newOrder));
     }
 
     public void removeImage(NoticeImage image) {
