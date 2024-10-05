@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import withu.notice.entity.Notice;
-import withu.notice.entity.NoticeImage;
 
 @Getter
 @NoArgsConstructor

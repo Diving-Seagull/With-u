@@ -1,11 +1,14 @@
 package withu.schedule.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import withu.schedule.enums.ScheduleType;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter

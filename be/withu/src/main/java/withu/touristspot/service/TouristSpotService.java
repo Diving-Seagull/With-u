@@ -1,6 +1,8 @@
 package withu.touristspot.service;
 
-import static withu.global.exception.ExceptionCode.*;
+import static withu.global.exception.ExceptionCode.CSV_FILE_ERROR;
+import static withu.global.exception.ExceptionCode.CSV_PARSING_ERROR;
+import static withu.global.exception.ExceptionCode.CSV_SAVE_ERROR;
 
 import java.io.BufferedReader;
 import java.io.IOException;

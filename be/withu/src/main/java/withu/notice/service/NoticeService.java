@@ -1,6 +1,12 @@
 package withu.notice.service;
 
-import static withu.global.exception.ExceptionCode.*;
+import static withu.global.exception.ExceptionCode.MEMBER_NOT_IN_TEAM;
+import static withu.global.exception.ExceptionCode.NOTICE_IMAGE_LIMIT_EXCEEDED;
+import static withu.global.exception.ExceptionCode.NOTICE_IMAGE_NOT_FOUND;
+import static withu.global.exception.ExceptionCode.NOTICE_NOT_FOUND;
+import static withu.global.exception.ExceptionCode.NOTICE_NOT_IN_USER_TEAM;
+import static withu.global.exception.ExceptionCode.NOTIFICATION_ERROR;
+import static withu.global.exception.ExceptionCode.USER_NOT_LEADER;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -17,7 +23,6 @@ import withu.notice.dto.NoticeRequestDto;
 import withu.notice.dto.NoticeResponseDto;
 import withu.notice.dto.NoticeUpdateRequestDto;
 import withu.notice.entity.Notice;
-import withu.notice.entity.NoticeImage;
 import withu.notice.repository.NoticeRepository;
 import withu.notification.service.NotificationService;
 import withu.team.entity.Team;
