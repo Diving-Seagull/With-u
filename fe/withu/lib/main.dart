@@ -34,6 +34,12 @@ void main() async {
   // 프레임워크 초기화 여부 확인 (비동기 작업 시 수행)
   WidgetsFlutterBinding.ensureInitialized();
 
+  // 세로 모드로만 고정
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
   // env 파일 로드
   await dotenv.load(fileName: 'assets/config/.env');
 
