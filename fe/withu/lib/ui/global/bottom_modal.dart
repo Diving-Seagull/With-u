@@ -9,7 +9,7 @@ class BottomModal {
       builder: (BuildContext context) {
         return Container(
           width: width,
-          height: 300, // 모달 높이 크기
+          height: 500, // 모달 높이 크기
           decoration: const BoxDecoration(
             color: Colors.white, // 모달 배경색
             borderRadius: BorderRadius.only(
