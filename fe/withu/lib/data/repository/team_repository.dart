@@ -11,4 +11,9 @@ class TeamRepository {
     String? jwtToken = await _storage.read(key: 'jwtToken') as String;
     return _dataSource.getTeamMember(jwtToken);
   }
+
+  Future<int?> removeTeamMember(int id) async {
+    String? jwtToken = await _storage.read(key: 'jwtToken') as String;
+    return _dataSource.removeTeamMember(jwtToken, id);
+  }
 }

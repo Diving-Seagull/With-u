@@ -21,4 +21,9 @@ class RestApiSession {
     return await http.put(uri, headers: headers, body: json.encode(data))
         .timeout(const Duration(seconds: 10));
   }
+
+  static getDeleteUri(Uri uri, Map<String, String> headers) async {
+    return await http.delete(uri, headers: headers)
+        .timeout(const Duration(seconds: 10));
+  }
 }
