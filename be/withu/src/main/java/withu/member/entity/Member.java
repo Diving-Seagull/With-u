@@ -110,4 +110,9 @@ public class Member {
     public boolean isLeader() {
         return this.role == Role.LEADER;
     }
+
+    public void removeFromTeam() {
+        this.team = null;
+        this.role = Role.TEAMMATE;
+    }
 }

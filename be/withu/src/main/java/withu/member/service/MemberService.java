@@ -42,16 +42,6 @@ public class MemberService {
             .orElseThrow(() -> new CustomException(USER_NOT_FOUND)));
     }
 
-    public List<MemberResponseDto> getTeamMembers(Member member) {
-        if (member.getTeam() == null) {
-            throw new CustomException(MEMBER_NOT_IN_TEAM);
-        }
-        List<Member> teamMembers = memberRepository.findByTeam(member.getTeam());
-        return teamMembers.stream()
-            .map(MemberResponseDto::from)
-            .collect(Collectors.toList());
-    }
-
     @Transactional
     public MemberResponseDto initMember(Member member, MemberInitRequestDto initDto) {
         Role newRole = initDto.getRole();
