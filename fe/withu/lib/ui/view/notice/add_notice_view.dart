@@ -9,8 +9,8 @@ import 'package:withu/ui/global/custom_appbar.dart';
 import 'package:image_picker_android/image_picker_android.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 import 'package:withu/ui/global/custom_dialog.dart';
-import 'package:withu/ui/viewmodel/main/add_notice_viewmodel.dart';
-import 'package:withu/ui/viewmodel/main/notice_viewmodel.dart';
+import 'package:withu/ui/viewmodel/notice/add_notice_viewmodel.dart';
+import 'package:withu/ui/viewmodel/notice/notice_viewmodel.dart';
 
 import '../../../data/model/notice.dart';
 import '../../global/bottom_modal.dart';
@@ -256,7 +256,7 @@ class _AddNoticeView extends State<AddNoticeView> {
       return;
     }
 
-    Notice? result = await _viewModel.addNotice(_titleController.text, _contentController.text);
+    Notice? result = await _viewModel.addNotice(_titleController.text, _contentController.text, _isImportant);
     if(result != null) {
       CustomDialog.showYesDialog(context, '알림', '공지사항이 등록되었습니다!', () {
         Navigator.pop(context);
