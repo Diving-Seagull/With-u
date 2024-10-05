@@ -1,10 +1,13 @@
 package withu.memberlocation.service;
 
-import static withu.global.exception.ExceptionCode.*;
+import static withu.global.exception.ExceptionCode.MEMBER_LOCATION_NOT_FOUND;
+import static withu.global.exception.ExceptionCode.USER_NOT_FOUND;
+import static withu.global.exception.ExceptionCode.USER_NOT_LEADER;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import withu.global.exception.CustomException;
+import withu.global.utils.TranslationUtil;
 import withu.member.entity.Member;
 import withu.member.enums.Role;
 import withu.member.repository.MemberRepository;
@@ -21,6 +24,7 @@ public class MemberLocationService {
     private final MemberRepository memberRepository;
     private final MemberLocationRepository memberLocationRepository;
     private final NotificationService notificationService;
+    private final TranslationUtil translationUtil;
 
     public void createInitialLocationForLeader(Member member) {
         MemberLocation memberLocation = MemberLocation.builder()
@@ -40,7 +44,9 @@ public class MemberLocationService {
         MemberLocation leaderLocation = memberLocationRepository.findByMember(leader)
             .orElseThrow(() -> new CustomException(MEMBER_LOCATION_NOT_FOUND));
 
-        return LocationResponseDto.from(leaderLocation);
+        LocationResponseDto responseDto = LocationResponseDto.from(leaderLocation);
+        responseDto.translate(member.getLanguageCode(), translationUtil);
+        return responseDto;
     }
 
     public LocationResponseDto updateMemberLocation(Member member, LocationUpdateRequestDto requestDto) {

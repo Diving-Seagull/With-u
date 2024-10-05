@@ -1,6 +1,12 @@
 package withu.notice.service;
 
-import static withu.global.exception.ExceptionCode.*;
+import static withu.global.exception.ExceptionCode.MEMBER_NOT_IN_TEAM;
+import static withu.global.exception.ExceptionCode.NOTICE_IMAGE_LIMIT_EXCEEDED;
+import static withu.global.exception.ExceptionCode.NOTICE_IMAGE_NOT_FOUND;
+import static withu.global.exception.ExceptionCode.NOTICE_NOT_FOUND;
+import static withu.global.exception.ExceptionCode.NOTICE_NOT_IN_USER_TEAM;
+import static withu.global.exception.ExceptionCode.NOTIFICATION_ERROR;
+import static withu.global.exception.ExceptionCode.USER_NOT_LEADER;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -10,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import withu.global.exception.CustomException;
+import withu.global.utils.TranslationUtil;
 import withu.member.entity.Member;
 import withu.member.enums.Role;
 import withu.member.repository.MemberRepository;
@@ -17,7 +24,6 @@ import withu.notice.dto.NoticeRequestDto;
 import withu.notice.dto.NoticeResponseDto;
 import withu.notice.dto.NoticeUpdateRequestDto;
 import withu.notice.entity.Notice;
-import withu.notice.entity.NoticeImage;
 import withu.notice.repository.NoticeRepository;
 import withu.notification.service.NotificationService;
 import withu.team.entity.Team;
@@ -30,6 +36,7 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
     private final MemberRepository memberRepository;
     private final NotificationService notificationService;
+    private final TranslationUtil translationUtil;
 
     public NoticeResponseDto getNotice(Member member, Long noticeId) {
         Notice notice = noticeRepository.findById(noticeId)
@@ -39,7 +46,7 @@ public class NoticeService {
             throw new CustomException(NOTICE_NOT_IN_USER_TEAM);
         }
 
-        return NoticeResponseDto.from(notice);
+        return translateNoticeResponse(NoticeResponseDto.from(notice), member.getLanguageCode());
     }
 
     public List<NoticeResponseDto> getAllNotices(Member member) {
@@ -50,6 +57,7 @@ public class NoticeService {
         List<Notice> notices = noticeRepository.findByTeamOrderByCreatedAtDesc(member.getTeam());
         return notices.stream()
             .map(NoticeResponseDto::from)
+            .map(dto -> translateNoticeResponse(dto, member.getLanguageCode()))
             .collect(Collectors.toList());
     }
 
@@ -59,7 +67,16 @@ public class NoticeService {
         }
 
         return noticeRepository.findFirstByTeamAndPinnedTrueOrderByCreatedAtDesc(member.getTeam())
-            .map(NoticeResponseDto::from);
+            .map(NoticeResponseDto::from)
+            .map(dto -> translateNoticeResponse(dto, member.getLanguageCode()));
+    }
+
+    private NoticeResponseDto translateNoticeResponse(NoticeResponseDto dto, String languageCode) {
+        System.out.println("languageCode: " + languageCode);
+        String translatedTitle = translationUtil.translateText(dto.getTitle(), languageCode);
+        String translatedContent = translationUtil.translateText(dto.getContent(), languageCode);
+
+        return dto.withTranslation(translatedTitle, translatedContent);
     }
 
     @Transactional
