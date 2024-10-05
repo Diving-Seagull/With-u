@@ -1,6 +1,6 @@
 package withu.global.utils;
 
-import static withu.global.exception.ExceptionCode.*;
+import static withu.global.exception.ExceptionCode.LANGUAGE_DETECTION_FAILED;
 
 import com.google.cloud.translate.Detection;
 import com.google.cloud.translate.Translate;
@@ -12,11 +12,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import withu.global.exception.CustomException;
 import withu.global.utils.dto.DetectLanguageResponseDto;
-import org.apache.commons.text.StringEscapeUtils;
 
 @Slf4j
 @Component
