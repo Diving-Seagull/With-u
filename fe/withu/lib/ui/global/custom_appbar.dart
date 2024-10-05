@@ -23,4 +23,18 @@ class CustomAppBar {
       ),
     );
   }
+
+  static PreferredSizeWidget getTitleBar(BuildContext context, String title) {
+    return PreferredSize(
+      preferredSize: Size.fromHeight(80),
+      child: Container(
+        height: 70,
+        child: CupertinoNavigationBar(
+          backgroundColor: Colors.white,
+          middle: Text(title, style: TextStyle(fontSize: 18, color: Colors.black)),
+          border: Border(bottom: BorderSide(color: Colors.transparent)), //그림자 제거
+        ),
+      ),
+    );
+  }
 }
