@@ -11,12 +11,14 @@ public class LocationResponseDto {
     private Long memberId;
     private Double latitude;
     private Double longitude;
+    private String message;
 
     public static LocationResponseDto from(MemberLocation memberLocation) {
         return LocationResponseDto.builder()
             .memberId(memberLocation.getMember().getId())
             .latitude(memberLocation.getLatitude())
             .longitude(memberLocation.getLongitude())
+            .message(memberLocation.getMessage())
             .build();
     }
 }
