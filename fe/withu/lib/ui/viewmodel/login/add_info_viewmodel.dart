@@ -15,7 +15,9 @@ class AddInfoViewModel with ChangeNotifier {
 
   Future<void> getMemberInfo() async {
     _member = await _repository.getMember();
-    notifyListeners();
+    if(_member != null) {
+      notifyListeners();
+    }
   }
 
   Future<Member?> initMemberInfo(InitMember member) async {

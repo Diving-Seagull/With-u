@@ -12,7 +12,15 @@ class MemberRepository {
 
   Future<Member?> getMember() async {
     String? jwtToken = await storage.read(key: 'jwtToken') as String;
+    print(jwtToken);
     _member = await _dataSource.getMember(jwtToken);
+    return _member;
+  }
+
+  Future<Member?> getMemberProfile(String email) async {
+    String? jwtToken = await storage.read(key: 'jwtToken') as String;
+    print(jwtToken);
+    _member = await _dataSource.getMemberProfile(jwtToken, email);
     return _member;
   }
 
