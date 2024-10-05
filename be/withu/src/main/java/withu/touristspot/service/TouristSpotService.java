@@ -19,6 +19,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import withu.global.exception.CustomException;
+import withu.global.utils.TranslationUtil;
 import withu.touristspot.dto.TouristSpotResponseDto;
 import withu.touristspot.entity.TouristSpot;
 import withu.touristspot.enums.TouristSpotCategory;
@@ -30,23 +31,16 @@ import withu.touristspot.repository.TouristSpotRepository;
 public class TouristSpotService {
     private final TouristSpotRepository touristSpotRepository;
     private final GeocodingService geocodingService;
+    private final TranslationUtil translationUtil;
 
-    public List<TouristSpotResponseDto> recommendTouristSpots(Double latitude, Double longitude) {
+    public List<TouristSpotResponseDto> recommendTouristSpots(Double latitude, Double longitude, String languageCode) {
         String address = geocodingService.getAddressFromCoordinates(latitude, longitude);
-
         String parsedAddress = parseCityAndDistrict(address);
-
         List<TouristSpot> spots = touristSpotRepository.findByAddressContaining(parsedAddress);
+
         return spots.stream()
-            .map(touristSpot -> TouristSpotResponseDto.builder()
-                .id(touristSpot.getId())
-                .name(touristSpot.getName())
-                .address(touristSpot.getAddress())
-                .description(touristSpot.getDescription())
-                .latitude(touristSpot.getLatitude())
-                .longitude(touristSpot.getLongitude())
-                .category(touristSpot.getCategory())
-                .build())
+            .map(TouristSpotResponseDto::from)
+            .peek(dto -> dto.translate(languageCode, translationUtil))
             .collect(Collectors.toList());
     }
 
