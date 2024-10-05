@@ -28,7 +28,7 @@ public class NoticeImage {
     private Notice notice;
 
     @Lob
-    @Column(nullable = false)
+    @Column(name = "image_data", nullable = false, columnDefinition = "LONGBLOB")
     private byte[] imageData;
 
     @Column(nullable = false)

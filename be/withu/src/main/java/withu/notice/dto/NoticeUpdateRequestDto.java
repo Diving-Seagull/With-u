@@ -25,7 +25,18 @@ public class NoticeUpdateRequestDto {
 
     @Builder.Default
     @Size(max = 5, message = "이미지는 최대 5개까지만 등록할 수 있습니다.")
-    private List<String> newImageUrls = new ArrayList<>();
+    private List<ImageDto> newImages = new ArrayList<>();
 
     private List<Long> imageIdsToRemove;
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ImageDto {
+        @NotBlank(message = "이미지 데이터는 필수입니다.")
+        private String base64Data;
+
+        @NotBlank(message = "이미지 콘텐츠 타입은 필수입니다.")
+        private String contentType;
+    }
 }

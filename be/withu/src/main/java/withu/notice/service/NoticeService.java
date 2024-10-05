@@ -1,14 +1,9 @@
 package withu.notice.service;
 
-import static withu.global.exception.ExceptionCode.MEMBER_NOT_IN_TEAM;
-import static withu.global.exception.ExceptionCode.NOTICE_IMAGE_LIMIT_EXCEEDED;
-import static withu.global.exception.ExceptionCode.NOTICE_IMAGE_NOT_FOUND;
-import static withu.global.exception.ExceptionCode.NOTICE_NOT_FOUND;
-import static withu.global.exception.ExceptionCode.NOTICE_NOT_IN_USER_TEAM;
-import static withu.global.exception.ExceptionCode.NOTIFICATION_ERROR;
-import static withu.global.exception.ExceptionCode.USER_NOT_LEADER;
+import static withu.global.exception.ExceptionCode.*;
 
 import jakarta.transaction.Transactional;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -88,7 +83,24 @@ public class NoticeService {
             throw new CustomException(MEMBER_NOT_IN_TEAM);
         }
 
-        Notice notice = requestDto.toEntity(author);
+        Notice notice = Notice.builder()
+            .team(team)
+            .title(requestDto.getTitle())
+            .content(requestDto.getContent())
+            .author(author)
+            .build();
+
+        if (requestDto.getImages() != null && !requestDto.getImages().isEmpty()) {
+            for (NoticeRequestDto.ImageDto imageDto : requestDto.getImages()) {
+                try {
+                    byte[] imageData = Base64.getDecoder().decode(imageDto.getBase64Data());
+                    notice.addImage(imageData, imageDto.getContentType());
+                } catch (IllegalArgumentException e) {
+                    log.error("Error decoding base64 image data", e);
+                    throw new CustomException(INVALID_IMAGE_DATA);
+                }
+            }
+        }
 
         if (requestDto.isPinned()) {
             unpinExistingNotices(team);
@@ -97,26 +109,18 @@ public class NoticeService {
 
         Notice savedNotice = noticeRepository.save(notice);
 
-        // Firebase 알림 전송
+        // Firebase 알림 전송 (이미지 URL 대신 첫 번째 이미지의 ID를 사용)
         List<Member> teamMembers = memberRepository.findByTeam(team);
-        String imageUrl = (requestDto.getImageUrls() != null && !requestDto.getImageUrls().isEmpty())
-            ? requestDto.getImageUrls().get(0)
-            : "";
+        Long firstImageId = savedNotice.getImages().isEmpty() ? null : savedNotice.getImages().get(0).getId();
 
         notificationService.sendNotificationToTeam(
             teamMembers,
             "새로운 공지사항",
             author.getName() + "님이 새 공지사항을 작성했습니다: " + requestDto.getTitle(),
-            imageUrl
+            firstImageId != null ? "/api/notice/image/" + firstImageId : null
         );
 
         return NoticeResponseDto.from(savedNotice);
-    }
-
-    private void unpinExistingNotices(Team team) {
-        List<Notice> pinnedNotices = noticeRepository.findByTeamAndPinnedTrue(team);
-        pinnedNotices.forEach(Notice::unpin);
-        noticeRepository.saveAll(pinnedNotices);
     }
 
     @Transactional
@@ -139,7 +143,6 @@ public class NoticeService {
                     notice.removeImage(imageId);
                 } catch (CustomException e) {
                     if (e.getExceptionCode() == NOTICE_IMAGE_NOT_FOUND) {
-                        // 로그를 남기고 계속 진행
                         log.warn("Image with id {} not found in notice {}. Skipping removal.", imageId, noticeId);
                     } else {
                         throw e;
@@ -149,38 +152,40 @@ public class NoticeService {
         }
 
         // Add new images
-        if (requestDto.getNewImageUrls() != null && !requestDto.getNewImageUrls().isEmpty()) {
-            for (String imageUrl : requestDto.getNewImageUrls()) {
+        if (requestDto.getNewImages() != null && !requestDto.getNewImages().isEmpty()) {
+            for (NoticeUpdateRequestDto.ImageDto imageDto : requestDto.getNewImages()) {
                 try {
-                    notice.addImage(imageUrl);
+                    byte[] imageData = Base64.getDecoder().decode(imageDto.getBase64Data());
+                    notice.addImage(imageData, imageDto.getContentType());
                 } catch (CustomException e) {
                     if (e.getExceptionCode() == NOTICE_IMAGE_LIMIT_EXCEEDED) {
-                        // 이미지 제한에 도달했을 때 처리
                         log.warn("Image limit exceeded for notice {}. Stopping image addition.", noticeId);
                         break;
                     } else {
                         throw e;
                     }
+                } catch (IllegalArgumentException e) {
+                    log.error("Error decoding base64 image data", e);
+                    throw new CustomException(INVALID_IMAGE_DATA);
                 }
             }
         }
 
         Notice updatedNotice = noticeRepository.save(notice);
 
-        // Firebase 알림 전송
+        // Firebase 알림 전송 (이미지 URL 대신 첫 번째 이미지의 ID를 사용)
         List<Member> teamMembers = memberRepository.findByTeam(notice.getTeam());
-        String imageUrl = updatedNotice.getImages().isEmpty() ? "" : updatedNotice.getImages().get(0).getImageUrl();
+        Long firstImageId = updatedNotice.getImages().isEmpty() ? null : updatedNotice.getImages().get(0).getId();
 
         try {
             notificationService.sendNotificationToTeam(
                 teamMembers,
                 "공지사항 업데이트",
                 member.getName() + "님이 공지사항을 수정했습니다: " + updatedNotice.getTitle(),
-                imageUrl
+                firstImageId != null ? "/api/notice/image/" + firstImageId : null
             );
         } catch (CustomException e) {
             if (e.getExceptionCode() == NOTIFICATION_ERROR) {
-                // 알림 전송 실패를 로그로 남기고 계속 진행
                 log.error("Failed to send Firebase notification for updated notice: {}", e.getMessage());
             } else {
                 throw e;
@@ -216,5 +221,15 @@ public class NoticeService {
     private Notice getNoticeById(Long noticeId) {
         return noticeRepository.findById(noticeId)
             .orElseThrow(() -> new CustomException(NOTICE_NOT_FOUND));
+    }
+
+    @Transactional
+    public void unpinExistingNotices(Team team) {
+        List<Notice> pinnedNotices = noticeRepository.findByTeamAndPinnedTrue(team);
+        if (!pinnedNotices.isEmpty()) {
+            pinnedNotices.forEach(Notice::unpin);
+            noticeRepository.saveAll(pinnedNotices);
+            log.info("Unpinned {} notices for team {}", pinnedNotices.size(), team.getId());
+        }
     }
 }
