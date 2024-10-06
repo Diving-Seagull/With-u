@@ -12,6 +12,7 @@ import 'package:withu/ui/page/notice/notice_page.dart';
 import 'package:withu/ui/page/main/checkteam_page.dart';
 import 'package:withu/ui/view/timetable/timetable_view.dart';
 import 'package:withu/ui/viewmodel/timetable/timetable_viewmodel.dart';
+import '../../../data/api/image_convert.dart';
 import '../../global/color_data.dart';
 import '../../global/convert_uuid.dart';
 import '../../global/device_info.dart';
@@ -93,7 +94,7 @@ class _HomeView extends StatelessWidget {
   late double _deviceWidth, _deviceHeight;
 
   Future<void> initNotice() async {
-    await _homeViewModel.getPinnedNotice();
+    // await _homeViewModel.getPinnedNotice();
   }
 
   Future<void> initSchedule() async {
@@ -537,12 +538,14 @@ class _HomeView extends StatelessWidget {
     }
     try{
       if(_homeViewModel.pinnedNotice!.images.isNotEmpty){
-        return  Image.file(File(_homeViewModel.pinnedNotice!.images.first.imageUrl), fit: BoxFit.cover);
+        return Image.memory(ImageConvert.decodeBase64(_homeViewModel.pinnedNotice!.images.first.imageData),
+            fit: BoxFit.cover);
       }
       else {
         return SizedBox();
       }
     }catch(e) {
+      print(e);
       return SizedBox();
     }
   }

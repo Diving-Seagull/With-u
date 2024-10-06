@@ -143,7 +143,7 @@ class _SettingView extends State<SettingView> {
     var result = await _viewModel.updateMemberLocation(MemberLocationRequest(
         latitude: position.latitude,
         longitude: position.longitude,
-        message: '${_viewModel.member.name} 팀장님이 위치를 공유했습니다!'));
+        message: '${_viewModel.member.name} asdfadsfsda!'));
     if (result != null) {
       CustomDialog.showYesDialog(
           context, '알림', '위치 공유가 완료되었습니다.', () => Navigator.pop(context));

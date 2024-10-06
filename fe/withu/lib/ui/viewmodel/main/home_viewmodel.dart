@@ -26,7 +26,7 @@ class HomeViewModel with ChangeNotifier {
   }
 
   Future<void> getPinnedNotice() async {
-    if(!isPinChecked) {
+    if(!isPinChecked || pinnedNotice == null) {
       pinnedNotice = await _noticeRepository.getPinnedTeamNotice();
       isPinChecked = true;
       notifyListeners();

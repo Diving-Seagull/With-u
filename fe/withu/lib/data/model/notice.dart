@@ -1,4 +1,6 @@
-import 'package:withu/data/model/notice_image.dart';
+
+
+import 'notice_image.dart';
 
 class Notice {
   final int id;
@@ -10,6 +12,7 @@ class Notice {
   final List<NoticeImage> images;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final bool pinned;
 
   Notice(
       {required this.id,
@@ -20,7 +23,9 @@ class Notice {
       required this.authorName,
       required this.images,
       required this.createdAt,
-      required this.updatedAt});
+      required this.updatedAt,
+      required this.pinned
+      });
 
   factory Notice.fromJson(Map<String, dynamic> json) {
     return Notice(
@@ -32,7 +37,8 @@ class Notice {
         authorName: json['authorName'],
         images: (json['images'] as List).map((image) => NoticeImage.fromJson(image)).toList(),
         createdAt: DateTime.parse(json['createdAt']),
-        updatedAt: DateTime.parse(json['updatedAt']));
+        updatedAt: DateTime.parse(json['updatedAt']),
+        pinned: json['pinned']) ;
   }
 
   Map<String, dynamic> toJson() {
@@ -45,7 +51,8 @@ class Notice {
       'authorName': authorName,
       'images': images,
       'createdAt': createdAt,
-      'updatedAt': updatedAt
+      'updatedAt': updatedAt,
+      'pinned': pinned
     };
   }
 }

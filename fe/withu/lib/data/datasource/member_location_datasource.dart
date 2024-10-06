@@ -29,7 +29,7 @@ class MemberLocationDataSource {
       } else if (statusCode == 401) {
         print('JWT 인증 시간 초과');
       } else {
-        print('editMember() 에러 발생 $statusCode');
+        print('editMemberLocation() 에러 발생 $statusCode');
       }
     } on http.ClientException {
       print('인터넷 문제 발생');

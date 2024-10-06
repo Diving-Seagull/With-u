@@ -131,7 +131,7 @@ class _SplashViewState extends State<SplashView> {
           decoration: BoxDecoration(
             color: Color.fromARGB(255, 28, 72, 161),
           ),
-          child: Image.asset('assets/images/logo_white.png')),
+          child: Image.asset('assets/images/logo_white.png', width: 150, height: 54)),
     ));
   }
 }

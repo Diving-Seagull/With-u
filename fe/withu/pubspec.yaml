@@ -55,8 +55,11 @@ dependencies:
   table_calendar: ^3.1.2
   intl: ^0.19.0
   responsive_sizer: ^3.3.1
+  flutter_launcher_icons: ^0.14.1
 
 dev_dependencies:
+#  flutter_launcher_icons: ^0.14.1
+
   flutter_test:
     sdk: flutter
 
@@ -71,6 +74,11 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 http:
 provider:
+
+#flutter_icons:
+#  android: true
+#  ios: true
+#  image_path: "assets/images/launch_icon.png"
 
 # The following section is specific to Flutter packages.
 flutter:

@@ -1,5 +1,6 @@
 import UIKit
 import Flutter
+import FirebaseCore
 import CoreBluetooth
 
 @UIApplicationMain
@@ -12,7 +13,8 @@ class AppDelegate: FlutterAppDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-
+        FirebaseApp.initialize()
+        
         GeneratedPluginRegistrant.register(with: self)
         
         let controller: FlutterViewController = window?.rootViewController as! FlutterViewController

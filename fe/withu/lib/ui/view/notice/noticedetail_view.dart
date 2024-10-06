@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:withu/ui/global/custom_appbar.dart';
 
+import '../../../data/api/image_convert.dart';
 import '../../../data/model/notice.dart';
 
 class NoticeDetailView extends StatelessWidget {
@@ -50,7 +51,7 @@ class NoticeDetailView extends StatelessWidget {
               return Container(
                 padding: EdgeInsets.symmetric(horizontal: 5),
                 width: _deviceWidth,
-                child: Image.file(File(notice.images[index].imageUrl), fit: BoxFit.cover),
+                child: Image(image: MemoryImage(ImageConvert.decodeBase64(notice.images[index].imageData)), fit: BoxFit.cover),
               );
     }));
   }

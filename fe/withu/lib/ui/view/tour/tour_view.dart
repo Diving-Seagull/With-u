@@ -66,8 +66,8 @@ class _TourView extends State<TourView> {
 
   void _tourListInfo() {
     if(_viewModel.tourList.isNotEmpty) {
-      var firstAddr = _viewModel.tourList.first.address;
-      var text = firstAddr.substring(0, firstAddr.indexOf(' '));
+      // var firstAddr = _viewModel.tourList.first.address;
+      // var text = firstAddr.substring(0, firstAddr.indexOf(' '));
       showCupertinoModalPopup(
         context: context,
         builder: (BuildContext context) {
@@ -86,7 +86,7 @@ class _TourView extends State<TourView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                Text('${text}에 방문하셨군요!', style: TextStyle(
+                Text('부산에 방문하셨군요!', style: TextStyle(
                     color: Colors.black,
                     fontFamily: 'Pretendard',
                     fontSize: 24,
@@ -94,7 +94,7 @@ class _TourView extends State<TourView> {
                     decoration: TextDecoration.none),
                 ),
                 SizedBox(height: 10),
-                Text('${text}의 유명 관광지를 추천해드릴게요!', style: TextStyle(
+                Text('부산의 유명 관광지를 추천해드릴게요!', style: TextStyle(
                     color: ColorData.COLOR_DARKGRAY,
                     fontFamily: 'Pretendard',
                     fontSize: 14,

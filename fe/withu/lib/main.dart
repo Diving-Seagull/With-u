@@ -141,6 +141,7 @@ Future<void> fcmSetting() async {
 Future<void> addFcmToken() async {
   final storage = FlutterSecureStorage();
   String? token = await storage.read(key: "fcmtoken");
+  print('saved : ${token}');
   // print('fcm $token');
   // if(token == null){
   //   var fcmToken = await FirebaseMessaging.instance.getToken();
@@ -149,12 +150,9 @@ Future<void> addFcmToken() async {
   //     print('fcm 토큰 저장 완료 ${await storage.read(key: "fcmtoken")}');
   //   }
   // }
-  var fcmToken = await FirebaseMessaging.instance.getToken();
-  if(fcmToken != null){
-    await storage.write(key: "fcmtoken", value: fcmToken);
-    print('fcm 토큰 저장 완료 ${await storage.read(key: "fcmtoken")}');
-  }
-  print('getFcmToken() : $token');
+  String? fcmToken = await FirebaseMessaging.instance.getToken();
+  await storage.write(key: "fcmtoken", value: fcmToken);
+  print('Firebase Token Saved : ${fcmToken}');
 }
 
 void showFlutterNotification(RemoteMessage message) {
