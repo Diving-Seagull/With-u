@@ -35,8 +35,31 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  flutter_dotenv: ^5.1.0
+  http: ^1.2.2
+  test: ^1.25.7
+  provider: ^6.1.2
+  kakao_flutter_sdk: ^1.9.6
+  google_sign_in: ^6.2.1
+  flutter_local_notifications: ^17.2.3
+  flutter_secure_storage: ^4.2.1
+  device_info: ^2.0.3
+  permission_handler: ^11.3.1
+  flutter_blue_plus: ^1.32.12
+  uuid: ^4.5.1
+  firebase_core: ^3.6.0
+  firebase_messaging: ^15.1.3
+  image_picker: ^1.1.2
+  flutter_naver_map: ^1.3.0+1
+  geolocator: ^13.0.1
+  table_calendar: ^3.1.2
+  intl: ^0.19.0
+  responsive_sizer: ^3.3.1
+  flutter_launcher_icons: ^0.14.1
 
 dev_dependencies:
+#  flutter_launcher_icons: ^0.14.1
+
   flutter_test:
     sdk: flutter
 
@@ -49,6 +72,13 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+http:
+provider:
+
+#flutter_icons:
+#  android: true
+#  ios: true
+#  image_path: "assets/images/launch_icon.png"
 
 # The following section is specific to Flutter packages.
 flutter:
@@ -58,6 +88,31 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  assets:
+    - assets/images/
+    - assets/config/.env
+
+  fonts:
+    - family: Pretendard
+      fonts:
+        - asset: assets/fonts/Pretendard-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Pretendard-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/Pretendard-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Pretendard-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Pretendard-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Pretendard-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Pretendard-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Pretendard-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Pretendard-Black.ttf
+          weight: 900
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
