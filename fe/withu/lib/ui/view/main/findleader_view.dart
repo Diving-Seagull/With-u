@@ -49,9 +49,6 @@ class _FindLeaderView extends State<FindLeaderView> {
         final marker = NMarker(id: '1',
             position: NLatLng(
                 _viewModel.location!.latitude, _viewModel.location!.longitude));
-        marker.setOnTapListener((marker) {
-          _controller!.addOverlay(marker);
-        });
         _controller!.addOverlay(marker);
       });
     }

@@ -37,9 +37,7 @@ class _AddNoticeView extends State<AddNoticeView> {
     _deviceHeight = MediaQuery.of(context).size.height;
     // TODO: implement build
     return Scaffold(
-      appBar: CustomAppBar.getNavigationBar(context, '공지사항 작성', () {
-        BottomModal.showBottomModal(context, _deviceWidth, Text('테스트!'), () => { Navigator.pop(context) });
-      }),
+      appBar: CustomAppBar.getNavigationBar(context, '공지사항 작성', () => Navigator.pop(context)),
       body: Container(color: Colors.white, child: _insertSection()),
     );
   }

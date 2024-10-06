@@ -12,6 +12,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:withu/ui/global/color_data.dart';
+import 'package:withu/ui/page/login/login_page.dart';
 import 'package:withu/ui/view/login/permission_view.dart';
 import 'package:withu/ui/view/login/usertype_view.dart';
 import 'firebase_options.dart';
@@ -140,6 +141,7 @@ Future<void> fcmSetting() async {
 Future<void> addFcmToken() async {
   final storage = FlutterSecureStorage();
   String? token = await storage.read(key: "fcmtoken");
+  print('saved : ${token}');
   // print('fcm $token');
   // if(token == null){
   //   var fcmToken = await FirebaseMessaging.instance.getToken();
@@ -148,12 +150,9 @@ Future<void> addFcmToken() async {
   //     print('fcm 토큰 저장 완료 ${await storage.read(key: "fcmtoken")}');
   //   }
   // }
-  var fcmToken = await FirebaseMessaging.instance.getToken();
-  if(fcmToken != null){
-    await storage.write(key: "fcmtoken", value: fcmToken);
-    print('fcm 토큰 저장 완료 ${await storage.read(key: "fcmtoken")}');
-  }
-  print('getFcmToken() : $token');
+  String? fcmToken = await FirebaseMessaging.instance.getToken();
+  await storage.write(key: "fcmtoken", value: fcmToken);
+  print('Firebase Token Saved : ${fcmToken}');
 }
 
 void showFlutterNotification(RemoteMessage message) {

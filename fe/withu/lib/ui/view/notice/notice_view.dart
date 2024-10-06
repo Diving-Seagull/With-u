@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:withu/data/api/image_convert.dart';
 import 'package:withu/data/model/notice.dart';
 import 'package:withu/extension/string_extension.dart';
 import 'package:withu/ui/global/custom_appbar.dart';
@@ -178,7 +179,9 @@ class _NoticeView extends State<NoticeView> {
     try{
       if(_viewModel.noticeList[index].images.isNotEmpty) {
         return Container(width: 72, height: 72,
-            child: Image.file(File(_viewModel.noticeList[index].images.first.imageUrl), fit: BoxFit.cover));
+            child: Image(
+                image: MemoryImage(ImageConvert.decodeBase64(_viewModel.noticeList[index].images.first.imageData)),
+                fit: BoxFit.cover));
       }
       else {
         return Container();

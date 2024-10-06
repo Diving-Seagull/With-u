@@ -12,6 +12,7 @@ import 'package:withu/ui/page/notice/notice_page.dart';
 import 'package:withu/ui/page/main/checkteam_page.dart';
 import 'package:withu/ui/view/timetable/timetable_view.dart';
 import 'package:withu/ui/viewmodel/timetable/timetable_viewmodel.dart';
+import '../../../data/api/image_convert.dart';
 import '../../global/color_data.dart';
 import '../../global/convert_uuid.dart';
 import '../../global/device_info.dart';
@@ -42,15 +43,14 @@ class HomeView extends StatelessWidget {
       }
     });
     return SafeArea(
-        top: true,
-        bottom: true,
-        left: true,
-        right: true,
         child: CupertinoTabScaffold(
-            tabBar: CupertinoTabBar(items: [
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: '시간표'),
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: '프로필')
+            tabBar: CupertinoTabBar(
+                activeColor: ColorData.COLOR_SUBCOLOR1,  // 포커스된 탭의 색상
+                inactiveColor: ColorData.COLOR_GRAY,
+                items: [
+              BottomNavigationBarItem(icon: Image.asset('assets/images/icon_home.png', width: 20, height: 20), label: '홈'),
+              BottomNavigationBarItem(icon: Image.asset('assets/images/icon_timetable.png', width: 20, height: 20), label: '시간표'),
+              BottomNavigationBarItem(icon: Image.asset('assets/images/icon_findleader.png', width: 20, height: 20), label: '프로필')
             ]),
             tabBuilder: (context, index) {
               if(index == 0) {
@@ -118,10 +118,11 @@ class _HomeView extends StatelessWidget {
         .height;
     return Scaffold(
       appBar: _topBar(context),
-        body: SingleChildScrollView(
+        body: SafeArea(child: SingleChildScrollView(
               child: Container(
-                margin: EdgeInsets.all(24.0),
+                padding: EdgeInsets.all(24.0),
                 child: Column(
+                  mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     _userInfoSection(),
@@ -131,7 +132,7 @@ class _HomeView extends StatelessWidget {
                   ],
                 ),
               ),
-            )
+            ))
         );
   }
 
@@ -163,10 +164,11 @@ class _HomeView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   GestureDetector(
-                    child: Text('알림'),
+                    child: Image.asset('assets/images/icon_alarm.png', width: 20, height: 20),
                   ),
+                  SizedBox(width: 16),
                   GestureDetector(
-                      child: Text('설정'),
+                      child:  Image.asset('assets/images/icon_menu.png', width: 20, height: 20),
                       onTap: () {
                         if(_homeViewModel.member != null) {
                           Navigator.push(
@@ -240,7 +242,16 @@ class _HomeView extends StatelessWidget {
       child: Container(
         height: (_deviceWidth / cnt) - 20,
         decoration: BoxDecoration(
-            color: Colors.red, borderRadius: BorderRadius.circular(15)),
+          color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Color(0x33000000),
+                blurRadius: 10,
+                spreadRadius: 0,
+                offset: Offset(5, 5)
+              )
+            ],
+            borderRadius: BorderRadius.circular(15)),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -256,15 +267,26 @@ class _HomeView extends StatelessWidget {
     );
   }
 
-  Widget _createMenuBtn(String name, int cnt) {
+  Widget _createMenuBtn(String name, String path, int cnt) {
     return Padding(
       padding: EdgeInsets.only(top: 10, left: 5, right: 5),
       child: Column(
         children: [
           Container(
+            width: (_deviceWidth / cnt) - 20,
             height: (_deviceWidth / cnt) - 20,
             decoration: BoxDecoration(
-                color: Colors.red, borderRadius: BorderRadius.circular(15)),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                      color: Color(0x33000000),
+                      blurRadius: 10,
+                      spreadRadius: 0,
+                      offset: Offset(5, 5)
+                  )
+                ], borderRadius: BorderRadius.circular(15)),
+            child: Padding(padding: EdgeInsets.only(top: 14, bottom: 14, left: 14, right: 14),
+                child: Image.asset(path, width: 40, height: 40)),
           ),
           Padding(padding: EdgeInsets.only(top: 14), child: Text(name))
         ],
@@ -347,7 +369,7 @@ class _HomeView extends StatelessWidget {
                 children: [
                   Flexible(flex: 1,
                       child: GestureDetector(
-                          child: _createMenuBtn('멤버관리', 4),
+                          child: _createMenuBtn('멤버관리', 'assets/images/icon_findleader.png', 4),
                           onTap: () {
                             Navigator.push(
                                 context,
@@ -358,7 +380,7 @@ class _HomeView extends StatelessWidget {
                   Flexible(
                       flex: 1,
                       child: GestureDetector(
-                        child: _createMenuBtn('인원확인', 4),
+                        child: _createMenuBtn('인원확인', 'assets/images/icon_checkmember.png', 4),
                         onTap: () {
                           Navigator.push(
                               context,
@@ -370,7 +392,7 @@ class _HomeView extends StatelessWidget {
                   Flexible(
                       flex: 1,
                       child: GestureDetector(
-                          child: _createMenuBtn('공지사항', 4),
+                          child: _createMenuBtn('공지사항', 'assets/images/icon_notification.png', 4),
                           onTap: () {
                             Navigator.push(
                                 context,
@@ -380,7 +402,7 @@ class _HomeView extends StatelessWidget {
                                 .then((_) async => await initNotice());
                           })),
                   Flexible(flex: 1, child: GestureDetector(
-                      child: _createMenuBtn('관광지도', 4),
+                      child: _createMenuBtn('관광지도','assets/images/icon_location.png' ,4),
                       onTap: (){
                         Navigator.push(
                             context,
@@ -402,7 +424,15 @@ class _HomeView extends StatelessWidget {
         margin: EdgeInsets.only(top: 30, left: 0, right: 0, bottom: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Colors.red,
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+                color: Color(0x33000000),
+                blurRadius: 10,
+                spreadRadius: 0,
+                offset: Offset(5, 5)
+            )
+          ],
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
@@ -421,7 +451,10 @@ class _HomeView extends StatelessWidget {
           Row(
             children: [
               Text('지금은 '),
-              Text('${_homeViewModel.schedule!.title}'),
+              Text('${_homeViewModel.schedule!.title}', style: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.w700
+              ),),
               Text(' 시간입니다.'),
             ],
           ),
@@ -446,6 +479,14 @@ class _HomeView extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+              color: Color(0x33000000),
+              blurRadius: 10,
+              spreadRadius: 0,
+              offset: Offset(5, 5)
+          )
+        ],
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 28),
@@ -497,12 +538,14 @@ class _HomeView extends StatelessWidget {
     }
     try{
       if(_homeViewModel.pinnedNotice!.images.isNotEmpty){
-        return  Image.file(File(_homeViewModel.pinnedNotice!.images.first.imageUrl), fit: BoxFit.cover);
+        return Image.memory(ImageConvert.decodeBase64(_homeViewModel.pinnedNotice!.images.first.imageData),
+            fit: BoxFit.cover);
       }
       else {
         return SizedBox();
       }
     }catch(e) {
+      print(e);
       return SizedBox();
     }
   }

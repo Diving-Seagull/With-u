@@ -75,7 +75,7 @@ class NoticeDataSource {
           Uri.parse(_uriPath), headers, notice);
       final int statusCode = response.statusCode;
 
-      if (statusCode == 200) {
+      if (statusCode == 201) {
         return Notice.fromJson(json.decode(utf8.decode(response.bodyBytes)));
       }
       else {
