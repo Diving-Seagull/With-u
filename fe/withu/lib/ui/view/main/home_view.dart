@@ -94,7 +94,7 @@ class _HomeView extends StatelessWidget {
   late double _deviceWidth, _deviceHeight;
 
   Future<void> initNotice() async {
-    // await _homeViewModel.getPinnedNotice();
+    await _homeViewModel.getPinnedNotice();
   }
 
   Future<void> initSchedule() async {
