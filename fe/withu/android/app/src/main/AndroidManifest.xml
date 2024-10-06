@@ -78,6 +78,7 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="high_importance_channel"
             />
+
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
