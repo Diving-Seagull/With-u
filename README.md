@@ -65,12 +65,12 @@ API의 상세한 사용법과 엔드포인트에 대한 정보는 아래 링크�
       <td align="center" width="33%">
         <img src="https://avatars.githubusercontent.com/u/55781137?v=4" width="100" height="100"><br>
         <a href="https://github.com/J-1ac">이상준</a><br>
-        BE 개발
+        BE
       </td>
       <td align="center" width="33%">
         <img src="https://avatars.githubusercontent.com/u/31505627?v=4" width="100" height="100"><br>
         <a href="https://github.com/JackAhn">안도현</a><br>
-        FE 개발
+        FE
       </td>
       <td align="center" width="33%">
         <img src="https://avatars.githubusercontent.com/u/182388479?v=4" width="100" height="100"><br>
