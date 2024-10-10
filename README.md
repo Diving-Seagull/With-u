@@ -42,9 +42,20 @@ With-u는 WYD2027 행사를 위한 팀 관리 애플리케이션으로, 참가�
 - **Backend**: Spring Boot, Azure Database for MySQL, Intellij
 - **Deploy**: AWS, Docker
 
-## 팀원 소개
+## 사용된 API 및 서비스
+- Naver Map API
+- Google Geocoding API
+- Google Cloud Translation API
+- Firebase Cloud Messaging (FCM)
 
-## 팀원 소개
+## 프로젝트 구조
+
+### ERD (Entity Relationship Diagram)
+![ERD](./assets/erd.png)
+
+### API 명세서
+API의 상세한 사용법과 엔드포인트에 대한 정보는 아래 링크에서 확인할 수 있습니다:
+[API 명세서](https://documenter.getpostman.com/view/34763300/2sAXqzWdvG#intro)
 
 ## 팀원 소개
 
@@ -70,6 +81,15 @@ With-u는 WYD2027 행사를 위한 팀 관리 애플리케이션으로, 참가�
   </table>
 </div>
 
+---
+
+## 포트폴리오
+
+프로젝트 발표 자료 및 상세 정보:
+
+<details>
+<summary>발표 자료 펼치기</summary>
+
 ![발표 자료 1](./assets/presentation_page1.png)
 ![발표 자료 2](./assets/presentation_page2.png)
 ![발표 자료 3](./assets/presentation_page3.png)
@@ -84,3 +104,7 @@ With-u는 WYD2027 행사를 위한 팀 관리 애플리케이션으로, 참가�
 ![발표 자료 12](./assets/presentation_page12.png)
 ![발표 자료 13](./assets/presentation_page13.png)
 ![발표 자료 14](./assets/presentation_page14.png)
+</details>
+
+## 라이센스
+이 프로젝트는 MIT 라이센스 하에 있습니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
