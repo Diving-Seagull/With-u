@@ -38,8 +38,8 @@ With-u는 WYD2027 행사를 위한 팀 관리 애플리케이션으로, 참가�
 
 ## 기술 스택
 - **Design**: Figma, Adobe Illustrator, Adobe Photoshop
-- **Frontend**: Flutter, Kotlin, Swift, Android Studio
-- **Backend**: Spring Boot, Azure Database for MySQL, Intellij
+- **Frontend**: Flutter, Kotlin, Swift
+- **Backend**: Spring Boot, Azure Database for MySQL
 - **Deploy**: AWS, Docker
 
 ## 사용된 API 및 서비스
