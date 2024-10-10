@@ -1,7 +1,57 @@
 # With-u
 ### DIVE 2024_다이빙갈매기
-#### 이 프로젝트는 부산광역시 공공데이터 활용 해커톤 DIVE2024에서 삼정KPMG의 발제를 받아 더 나은 행사 경험을 제공하기 위한 목적으로 개발한 WYD2027 행사 관리 어플리케이션 **With-u** 입니다.
+#### 이 프로젝트는 부산광역시 공공데이터 활용 해커톤 DIVE2024에서 삼정KPMG의 발제를 받아 진행했습니다.
 
+## 프로젝트 소개
+With-u는 WYD2027 행사를 위한 팀 관리 애플리케이션으로, 참가자들에게 더 나은 경험을 제공하고 행사 운영을 효율적으로 지원합니다.
+
+## 주요 기능
+
+1. **구성원 관리**
+    - 팀별 구성원 관리 및 조직화
+
+2. **공지사항 알림 시스템**
+     - FCM(Firebase Cloud Messaging)을 이용한 푸시 알림 기능
+     - 중요 공지사항 실시간 전달
+
+3. **관광지도 서비스**
+     - 부산시 공공데이터를 활용한 주변 관광지 정보 제공
+
+4. **실시간 인원 확인**
+     - 블루투스 기술을 활용한 근거리 팀원 출석 확인 시스템
+
+5. **실시간 위치 정보 공유**
+    - Naver Map API, Google Geocoding API 를 활용한 위치 실시간 공유
+    - 팀장 위치 추적 기능
+
+6. **행사 일정표 관리**
+    - 개인 및 팀별 맞춤 일정 관리 기능
+    - 일정 변경 시 실시간 업데이트 및 알림
+
+7. **다국어 번역 서비스**
+    - Google Cloud Translation API를 활용한 실시간 다국어 번역 기능
+    - 다국적 참가자들의 원활한 의사소통 지원
+
+8. **사용자 경험(UX) 최적화**
+    - 직관적이고 사용하기 쉬운 인터페이스 설계
+    - 사용자 피드백을 반영한 지속적인 기능 개선
+
+## 기술 스택
+- **Design**: Figma, Adobe Illustrator, Adobe Photoshop
+- **Frontend**: Flutter, Kotlin, Swift, Android Studio
+- **Backend**: Spring Boot, Azure Database for MySQL, Intellij
+- **Deploy**: AWS, Docker
+
+## 팀원 소개
+
+## 팀원 소개
+
+## 팀원 소개
+
+| ![이상준](https://avatars.githubusercontent.com/u/55781137?s=64&v=4) | ![안도현](https://avatars.githubusercontent.com/u/31505627?s=64&v=4) | ![이주애](https://avatars.githubusercontent.com/u/182388479?s=64&v=4) |
+|:---:|:---:|:---:|
+| [이상준](https://github.com/J-1ac) | [안도현](https://github.com/JackAhn) | [이주애](https://github.com/LeeJuAe124) |
+| BE 개발 | FE 개발 | 디자인, 기획 |
 --- 
 
 ![발표 자료 1](./assets/presentation_page1.png)
