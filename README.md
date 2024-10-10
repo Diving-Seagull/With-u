@@ -48,11 +48,27 @@ With-u는 WYD2027 행사를 위한 팀 관리 애플리케이션으로, 참가�
 
 ## 팀원 소개
 
-| ![이상준](https://avatars.githubusercontent.com/u/55781137?s=64&v=4) | ![안도현](https://avatars.githubusercontent.com/u/31505627?s=64&v=4) | ![이주애](https://avatars.githubusercontent.com/u/182388479?s=64&v=4) |
-|:---:|:---:|:---:|
-| [이상준](https://github.com/J-1ac) | [안도현](https://github.com/JackAhn) | [이주애](https://github.com/LeeJuAe124) |
-| BE 개발 | FE 개발 | 디자인, 기획 |
---- 
+<div align="center">
+  <table>
+    <tr>
+      <td align="center" width="33%">
+        <img src="https://avatars.githubusercontent.com/u/55781137?v=4" width="100" height="100"><br>
+        <a href="https://github.com/J-1ac">이상준</a><br>
+        BE 개발
+      </td>
+      <td align="center" width="33%">
+        <img src="https://avatars.githubusercontent.com/u/31505627?v=4" width="100" height="100"><br>
+        <a href="https://github.com/JackAhn">안도현</a><br>
+        FE 개발
+      </td>
+      <td align="center" width="33%">
+        <img src="https://avatars.githubusercontent.com/u/182388479?v=4" width="100" height="100"><br>
+        <a href="https://github.com/LeeJuAe124">이주애</a><br>
+        디자인, 기획
+      </td>
+    </tr>
+  </table>
+</div>
 
 ![발표 자료 1](./assets/presentation_page1.png)
 ![발표 자료 2](./assets/presentation_page2.png)
