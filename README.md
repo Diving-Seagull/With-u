@@ -18,5 +18,3 @@
 ![발표 자료 12](./assets/presentation_page12.png)
 ![발표 자료 13](./assets/presentation_page13.png)
 ![발표 자료 14](./assets/presentation_page14.png)
-
-전체 PDF: [다운로드](./assets/presentation.pdf)
