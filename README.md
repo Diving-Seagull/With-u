@@ -75,7 +75,7 @@ API의 상세한 사용법과 엔드포인트에 대한 정보는 아래 링크�
       <td align="center" width="33%">
         <img src="https://avatars.githubusercontent.com/u/182388479?v=4" width="100" height="100"><br>
         <a href="https://github.com/LeeJuAe124">이주애</a><br>
-        디자인, 기획
+        디자인
       </td>
     </tr>
   </table>
